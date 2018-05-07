@@ -30,7 +30,7 @@
 <meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/Fig14.png">
 <meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/Fig15.png">
 <meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/Fig16.png">
-<meta property="og:updated_time" content="2018-05-07T15:30:35.975Z">
+<meta property="og:updated_time" content="2018-05-07T15:54:15.974Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）">
 <meta name="twitter:description" content="介绍FireEye 公司的  Mandiant Red Team 近期公开了罗技 Harmony Hub 的多个漏洞。利用这些漏洞攻击者能够以 root 的身份通过 SSH 登录，并获得完全的控制权。罗技 Harmony Hub 属于 IOT 设备，它被设计用于连接家庭网络中的各种 IOT 设备。从局域网中发起的攻击能够控制与它相连的其他设备，也能利用它作为载体攻击其他设备。Harmony Hub">
@@ -184,7 +184,7 @@
 <p>图 6 ： 在文件系统上 Unstripped Linux 内核对象</p>
 <p>检查 /etc/passwd 发现 root 的密码为空（图 7）。因此，如果能够开启 dropbear SSH  服务，我们就能使用空密码通过 SSH 在Harmony Hub 上获得 root 权限。</p>
 <p><img src="Fig7.png" alt="Fig7"></p>
-<p>图 9 ：/etc/passwd 文件中root 的密码为空</p>
+<p>图 7 ：/etc/passwd 文件中root 的密码为空</p>
 <p>我们观察发现：如果在初始化过程中文件系统中存在 /etc/tdeenable文件，那么 dropbear SSH  服务就会开启（图 8）。</p>
 <p><img src="Fig8.png" alt="Fig8"></p>
 <p>图 8 ：当 /etc/tdeenable文件存在时， dropbear SSH 服务会被 /etc/init.d/rcS 开启</p>
