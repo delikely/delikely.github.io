@@ -538,7 +538,7 @@ body {
   }
 }
 .max-width {
-  max-width: 66rem;
+  max-width: 55rem;
 }
 @media (max-width: 480px) {
   .px3 {
@@ -1069,10 +1069,22 @@ article .content h2:before {
 }
 article .content img,
 article .content video {
-  display: block;
+/* 为了两张图片并列居中  取消此项*/
+/* display: block */
   margin: auto;
   max-width: 100%;
   height: auto;
+}
+article .content table {
+  margin: auto;
+  align: center;
+  width: auto;
+}
+article .content table th {
+  border-bottom: 2px solid #2bbc8a;
+}
+article .content table tr {
+  border-bottom: 2px solid #2bbc8a;
 }
 article .content .video-container {
   position: relative;
@@ -1168,6 +1180,9 @@ article .content .caption {
   .article-tag:before {
     content: "|";
   }
+}
+.half-300 img {
+  width: 300px;
 }
 #archive .post-list {
   padding: 0;

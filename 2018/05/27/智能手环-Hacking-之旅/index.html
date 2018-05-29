@@ -16,7 +16,12 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/bracelet.jpg">
 <meta property="og:image" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/disassembled1.jpg">
-<meta property="og:updated_time" content="2018-05-28T14:43:10.000Z">
+<meta property="og:image" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/nrf51822.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/front_annotated.jpeg">
+<meta property="og:image" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/back_annotated.jpg">
+<meta property="og:image" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/swdfront.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/swdback.png">
+<meta property="og:updated_time" content="2018-05-29T14:38:22.509Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="智能手环 Hacking 之旅">
 <meta name="twitter:description" content="进入现在这个公司第一天上班的那天，有一大堆东西让我痴狂不已。在这堆东西中其中就包含一个可以自己定制的健康监测手环。从技术角度上来看，能随时随地监测健康状态真是太酷了。  很小的尺寸（大约 15mm x 40mm） 低功耗蓝牙（BLE） OLED 显示屏（96 x 32 像素） 可充电电池 支持USB 充电 加速度传感器 振动马达 价格在10 美元左右  在手环外面，除了背部印有“ FCC ID:">
@@ -102,7 +107,7 @@
 
     </div>
     <div id="toc">
-      
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#想办法和它说话"><span class="toc-number">1.</span> <span class="toc-text">想办法和它说话</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -153,7 +158,47 @@
 <li>价格在10 美元左右</li>
 </ul>
 <p>在手环外面，除了背部印有“ FCC ID: 2AHFTID115 ”，就没了其他标识。搜索了一下，发现这个设备的名字是  <a href="https://fccid.io/2AHFTID115" target="_blank" rel="noopener">ID115</a>，另外还有些<a href="https://fccid.io/2AHFTID115/Internal-Photos/Internal-Photos-3215735" target="_blank" rel="noopener">内部构造的图片</a>。仔细观察可以看到那块最大的芯片上写着 “ N51822 ” ，这表明微控制器单元 (MCU) 很可能是 Nordic 的 nRF51822，一块支持低功耗蓝牙的 32 位 ARM Mo CPU。从理论上来讲，这可以编程实现手环现有功能以外的其他事情。</p>
-<p><img src="bracelet.jpg" width="300" align="center">    <img src="disassembled1.jpg" width="300" align="center"></p>
+<center class="half-300"><br>  <img src="bracelet.jpg"><img src="disassembled1.jpg"><br>  手环拆开前后<br></center>
+
+
+<p>原文: <a href="https://rbaron.net/blog/2018/05/27/Hacking-a-cheap-fitness-tracker-bracelet.html" target="_blank" rel="noopener">Hacking a cheap fitness tracker bracelet</a></p>
+<p>在拆卸它之前，我上谷歌搜索到了使用相同芯片类似的手环，不少人成功的拆开了手环。</p>
+<p>拆开它其实并不容易，黑色的塑料盖子粘在了灰色的塑料后盖上。我用电吹风加热让胶水软化，然后用小刀小心翼翼的切开胶水，确保手环不会受到太大的伤害。拆开之后，我确认它确实使用的是 nRF51822。后来，我买了一个看似相似的手环，但是这个手环使用的是德州仪器的 MCU ,这个差异需要的特别注意。</p>
+<center class="half-300"><br>  <img src="nrf51822.png"><br>  nRF51822与圆珠笔大小对比<br></center>
+
+<h2 id="想办法和它说话"><a href="#想办法和它说话" class="headerlink" title="想办法和它说话"></a>想办法和它说话</h2><p>从<a href="https://www.nordicsemi.com/eng/nordic/download_resource/62726/14/3637606/13358" target="_blank" rel="noopener">手册</a>上了得知，芯片上的串口调试<a href="https://developer.arm.com/products/system-ip/coresight-debug-and-trace/coresight-architecture/serial-wire-debug" target="_blank" rel="noopener"> Serial Wire Debug(SWD) </a> 的两个引脚可用于编程/调试。这意味着两件事，如果我们想和对话：</p>
+<ul>
+<li>我们需要一个 “SWD programmer” (例如 <a href="https://www.segger.com/products/debug-probes/j-link/" target="_blank" rel="noopener">segger的 J-Link调试探针</a>)</li>
+<li>我们需要访问 SDW 的两个引脚，即 SDWIO(数据) 和 SWDCLK(时钟)</li>
+</ul>
+<p>幸运的是，板子上有不少裸露的垫片。他们的存在意味着需要进一步的调试/测试/验证。我想一定是有一个很酷的工程师预留着这些垫片，对于像我这样的人来说这简直就是给我们准备的礼物。不是所有的垫片都有标注，我根据我的猜测做了标注。</p>
+<center class="half-300"><br>  <img src="front_annotated.jpeg"><img src="back_annotated.jpg"><br>  PCB 板子的正反面<br></center>
+
+<p>使用一个廉价的 <a href="">USB 显微镜</a>,我拍了一些板子正反的照片，试着追踪从 MCU 到垫片的痕迹。</p>
+<center class="half-300"><br>  <img src="swdfront.png"><img src="swdback.png"><br>  在板子的正反面追踪 SWDIO 和 SWDCLK<br></center>
+
+<p>注意这是一个多层的 PCB, 在它的上面有通孔。所以我们需要追踪板子的正反两面。使用这些图片，我们可以追踪到SWDIO 和 SWDCLK 从芯片连接到了 IO 和 CLK 垫片。这也证实了板子上标注的 “CLK”的引脚 实际上是 SWDCLK。在它的右边的引脚是 SWDIO。我们可以得到第一个映射表。</p>
+<table>
+<thead>
+<tr>
+<th>nRF51822 引脚</th>
+<th>板子</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SWDIO</td>
+<td>IO</td>
+<td>数据引脚</td>
+</tr>
+<tr>
+<td>SWDCLK</td>
+<td>CLK</td>
+<td>时钟引脚</td>
+</tr>
+</tbody>
+</table>
 
   </div>
 </article>
@@ -180,7 +225,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#想办法和它说话"><span class="toc-number">1.</span> <span class="toc-text">想办法和它说话</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
