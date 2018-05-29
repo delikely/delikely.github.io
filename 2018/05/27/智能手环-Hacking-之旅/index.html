@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="进入现在这个公司第一天上班的那天，有一大堆东西让我痴狂不已。在这堆东西中其中就包含一个可以自己定制的健康监测手环。从技术角度上来看，能随时随地监测健康状态真是太酷了。  很小的尺寸（大约 15mm x 40mm） 低功耗蓝牙（BLE） OLED 显示屏（96 x 32 像素） 可充电电池 支持USB 充电 加速度传感器 振动马达 价格在10 美元左右  在手环外面，除了背部印有“ FCC ID:">
+<meta name="keywords" content="IOT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="智能手环 Hacking 之旅">
+<meta property="og:url" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="进入现在这个公司第一天上班的那天，有一大堆东西让我痴狂不已。在这堆东西中其中就包含一个可以自己定制的健康监测手环。从技术角度上来看，能随时随地监测健康状态真是太酷了。  很小的尺寸（大约 15mm x 40mm） 低功耗蓝牙（BLE） OLED 显示屏（96 x 32 像素） 可充电电池 支持USB 充电 加速度传感器 振动马达 价格在10 美元左右  在手环外面，除了背部印有“ FCC ID:">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/bracelet.jpg">
+<meta property="og:image" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/disassembled1.jpg">
+<meta property="og:updated_time" content="2018-05-28T14:43:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="智能手环 Hacking 之旅">
+<meta name="twitter:description" content="进入现在这个公司第一天上班的那天，有一大堆东西让我痴狂不已。在这堆东西中其中就包含一个可以自己定制的健康监测手环。从技术角度上来看，能随时随地监测健康状态真是太酷了。  很小的尺寸（大约 15mm x 40mm） 低功耗蓝牙（BLE） OLED 显示屏（96 x 32 像素） 可充电电池 支持USB 充电 加速度传感器 振动马达 价格在10 美元左右  在手环外面，除了背部印有“ FCC ID:">
+<meta name="twitter:image" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/bracelet.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>智能手环 Hacking 之旅</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="http://github.com/delikely">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2098/12/31/工控安全-漏洞收集/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/&text=智能手环 Hacking 之旅"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/&title=智能手环 Hacking 之旅"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/&is_video=false&description=智能手环 Hacking 之旅"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=智能手环 Hacking 之旅&body=Check out this article: http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/&title=智能手环 Hacking 之旅"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/&title=智能手环 Hacking 之旅"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/&title=智能手环 Hacking 之旅"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/&title=智能手环 Hacking 之旅"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/&name=智能手环 Hacking 之旅&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        智能手环 Hacking 之旅
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-05-28T02:40:42.000Z" itemprop="datePublished">2018-05-28</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/IOT/">IOT</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>进入现在这个公司第一天上班的那天，有一大堆东西让我痴狂不已。在这堆东西中其中就包含一个可以自己定制的健康监测手环。从技术角度上来看，能随时随地监测健康状态真是太酷了。</p>
+<ul>
+<li>很小的尺寸（大约 15mm x 40mm）</li>
+<li>低功耗蓝牙（BLE）</li>
+<li>OLED 显示屏（96 x 32 像素）</li>
+<li>可充电电池</li>
+<li>支持USB 充电</li>
+<li>加速度传感器</li>
+<li>振动马达</li>
+<li>价格在10 美元左右</li>
+</ul>
+<p>在手环外面，除了背部印有“ FCC ID: 2AHFTID115 ”，就没了其他标识。搜索了一下，发现这个设备的名字是  <a href="https://fccid.io/2AHFTID115" target="_blank" rel="noopener">ID115</a>，另外还有些<a href="https://fccid.io/2AHFTID115/Internal-Photos/Internal-Photos-3215735" target="_blank" rel="noopener">内部构造的图片</a>。仔细观察可以看到那块最大的芯片上写着 “ N51822 ” ，这表明微控制器单元 (MCU) 很可能是 Nordic 的 nRF51822，一块支持低功耗蓝牙的 32 位 ARM Mo CPU。从理论上来讲，这可以编程实现手环现有功能以外的其他事情。</p>
+<p><img src="bracelet.jpg" width="300" align="center">    <img src="disassembled1.jpg" width="300" align="center"></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="http://github.com/delikely">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/&text=智能手环 Hacking 之旅"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/&title=智能手环 Hacking 之旅"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/&is_video=false&description=智能手环 Hacking 之旅"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=智能手环 Hacking 之旅&body=Check out this article: http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/&title=智能手环 Hacking 之旅"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/&title=智能手环 Hacking 之旅"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/&title=智能手环 Hacking 之旅"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/&title=智能手环 Hacking 之旅"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/&name=智能手环 Hacking 之旅&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="http://github.com/delikely">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
