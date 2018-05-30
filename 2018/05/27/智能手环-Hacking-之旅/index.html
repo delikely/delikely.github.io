@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/back_annotated.jpg">
 <meta property="og:image" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/swdfront.png">
 <meta property="og:image" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/swdback.png">
-<meta property="og:updated_time" content="2018-05-29T15:17:56.575Z">
+<meta property="og:updated_time" content="2018-05-30T08:35:53.854Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="智能手环 Hacking 之旅">
 <meta name="twitter:description" content="进入现在这个公司第一天上班的那天，有一大堆东西让我痴狂不已。在这堆东西中其中就包含一个可以自己定制的健康监测手环。从技术角度上来看，能随时随地监测健康状态真是太酷了。  很小的尺寸（大约 15mm x 40mm） 低功耗蓝牙（BLE） OLED 显示屏（96 x 32 像素） 可充电电池 支持USB 充电 加速度传感器 振动马达 价格在10 美元左右  在手环外面，除了背部印有“ FCC ID:">
@@ -160,8 +160,6 @@
 <p>在手环外面，除了背部印有“ FCC ID: 2AHFTID115 ”，就没了其他标识。搜索了一下，发现这个设备的名字是  <a href="https://fccid.io/2AHFTID115" target="_blank" rel="noopener">ID115</a>，另外还有些<a href="https://fccid.io/2AHFTID115/Internal-Photos/Internal-Photos-3215735" target="_blank" rel="noopener">内部构造的图片</a>。仔细观察可以看到那块最大的芯片上写着 “ N51822 ” ，这表明微控制器单元 (MCU) 很可能是 Nordic 的 nRF51822，一块支持低功耗蓝牙的 32 位 ARM Mo CPU。从理论上来讲，这可以编程实现手环现有功能以外的其他事情。</p>
 <center class="half-300"><br>  <img src="bracelet.jpg"><img src="disassembled1.jpg"><br>  手环拆开前后<br></center>
 
-
-<p>原文: <a href="https://rbaron.net/blog/2018/05/27/Hacking-a-cheap-fitness-tracker-bracelet.html" target="_blank" rel="noopener">Hacking a cheap fitness tracker bracelet</a></p>
 <p>在拆卸它之前，我上谷歌搜索到了使用相同芯片类似的手环，不少人成功的拆开了手环。</p>
 <p>拆开它其实并不容易，黑色的塑料盖子粘在了灰色的塑料后盖上。我用电吹风加热让胶水软化，然后用小刀小心翼翼的切开胶水，确保手环不会受到太大的伤害。拆开之后，我确认它确实使用的是 nRF51822。后来，我买了一个看似相似的手环，但是这个手环使用的是德州仪器的 MCU ,这个差异需要的特别注意。</p>
 <center class="half-300"><br>  <img src="nrf51822.png"><br>  nRF51822与圆珠笔大小对比<br></center>
@@ -199,6 +197,7 @@
 </tr>
 </tbody>
 </table>
+<p>原文: <a href="https://rbaron.net/blog/2018/05/27/Hacking-a-cheap-fitness-tracker-bracelet.html" target="_blank" rel="noopener">Hacking a cheap fitness tracker bracelet</a></p>
 
   </div>
 </article>
