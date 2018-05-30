@@ -21,7 +21,9 @@
 <meta property="og:image" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/back_annotated.jpg">
 <meta property="og:image" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/swdfront.png">
 <meta property="og:image" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/swdback.png">
-<meta property="og:updated_time" content="2018-05-30T08:35:53.854Z">
+<meta property="og:image" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/surgery2.jpg">
+<meta property="og:image" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/ledshookup.jpg">
+<meta property="og:updated_time" content="2018-05-30T14:38:03.788Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="智能手环 Hacking 之旅">
 <meta name="twitter:description" content="进入现在这个公司第一天上班的那天，有一大堆东西让我痴狂不已。在这堆东西中其中就包含一个可以自己定制的健康监测手环。从技术角度上来看，能随时随地监测健康状态真是太酷了。  很小的尺寸（大约 15mm x 40mm） 低功耗蓝牙（BLE） OLED 显示屏（96 x 32 像素） 可充电电池 支持USB 充电 加速度传感器 振动马达 价格在10 美元左右  在手环外面，除了背部印有“ FCC ID:">
@@ -107,7 +109,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#想办法和它说话"><span class="toc-number">1.</span> <span class="toc-text">想办法和它说话</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#想办法和它说话"><span class="toc-number">1.</span> <span class="toc-text">想办法和它说话</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Open-chip-手术"><span class="toc-number">2.</span> <span class="toc-text">Open-chip 手术</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#闪烁"><span class="toc-number">3.</span> <span class="toc-text">闪烁</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -166,7 +168,7 @@
 
 <h2 id="想办法和它说话"><a href="#想办法和它说话" class="headerlink" title="想办法和它说话"></a>想办法和它说话</h2><p>从<a href="https://www.nordicsemi.com/eng/nordic/download_resource/62726/14/3637606/13358" target="_blank" rel="noopener">手册</a>上了得知，芯片上的串口调试<a href="https://developer.arm.com/products/system-ip/coresight-debug-and-trace/coresight-architecture/serial-wire-debug" target="_blank" rel="noopener"> Serial Wire Debug(SWD) </a> 的两个引脚可用于编程/调试。这意味着两件事，如果我们想和对话：</p>
 <ul>
-<li>我们需要一个 “SWD programmer” (例如 <a href="https://www.segger.com/products/debug-probes/j-link/" target="_blank" rel="noopener">segger的 J-Link调试探针</a>)</li>
+<li>我们需要一个 “SWD programmer” (例如 <a href="https://www.segger.com/products/debug-probes/j-link/" target="_blank" rel="noopener">segger的 J-Link 仿真器</a>)</li>
 <li>我们需要访问 SDW 的两个引脚，即 SDWIO(数据) 和 SWDCLK(时钟)</li>
 </ul>
 <p>幸运的是，板子上有不少裸露的垫片。他们的存在意味着需要进一步的调试/测试/验证。我想一定是有一个很酷的工程师预留着这些垫片，对于像我这样的人来说这简直就是给我们准备的礼物。不是所有的垫片都有标注，我根据我的猜测做了标注。</p>
@@ -197,6 +199,26 @@
 </tr>
 </tbody>
 </table>
+<h2 id="Open-chip-手术"><a href="#Open-chip-手术" class="headerlink" title="Open-chip 手术"></a>Open-chip 手术</h2><p>为了能够访问 SWD 的两个引脚，我在板子上给各个接触垫焊接了很细的线。</p>
+<center class="half-480"><br>  <img src="surgery2.jpg"><br></center>
+
+<h2 id="闪烁"><a href="#闪烁" class="headerlink" title="闪烁"></a>闪烁</h2><p>下一个目标是尝试编程实现一些其他事情。为了运行最简单的程序，我们需要确保：</p>
+<ul>
+<li>我们正确地跟踪了SWDIO/SWDCLK引脚</li>
+<li>SWD 编程器正常运行,能和计算机交互</li>
+<li>使用 <a href="https://www.nordicsemi.com/eng/Products/Bluetooth-low-energy/nRF5-SDK" target="_blank" rel="noopener">Nordic’s sdk</a> 交叉编译Arm 程序</li>
+<li>能够把编译好的程序放到芯片中</li>
+<li>芯片正确的驱动和引导我们的程序</li>
+</ul>
+<p>本案例中 “hello,world” 程序是实现 LDE 发光二极管不间断的闪烁。即使这样其实也不简单，首先板子上没有 LED 发光二极管。如果我们自己额外添加一个，那就必须搞清楚该接在什么地方。这增加了问题的另外一个自由度度。天下没有免费的午餐，我只在 <code>P1</code> 和 <code>P2</code> 上连接了两个 LED,希望我们能够在 MCU 上找到对应的引脚。</p>
+<center class="half-480"><br>  <img src="ledshookup.jpg"><br>  凌乱的连线<br></center>
+
+<p>为了能够使用 J-Link 仿真器,需要从 <a href="https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack" target="_blank" rel="noopener">segger</a> 网站上下载驱动和命令行程序。如果你使用的是 MacOS,那么你就可以 homebrew 进行安装。<code>caskroom/drivers/segger-jlink</code> 提供了支持。安装好之后你就能更使用命令行程序 <code>JLinkExe</code> 与 SWD 仿真器进行通信了。</p>
+<p>随后，我下载并解压了 <a href="https://www.nordicsemi.com/eng/Products/Bluetooth-low-energy/nRF5-SDK" target="_blank" rel="noopener">Nordic‘s nRF5 SDK</a>(我使用的是<a href="http://developer.nordicsemi.com/nRF5_SDK/" target="_blank" rel="noopener">version 12.3.0</a>)。在 SDK 中挖掘示例，很明显我们需要一个知道如何输出 Arm 程序的编译器，于是我安装了<code>gcc-arm-embeded</code>(同样可用通过 homebrew 安装)。</p>
+<p>在 Nordic 的开发者论坛上浏览 SDK 有关的帖子，发现通常使用的开发板是<a href="http://www.nordicsemi.com/eng/Products/nRF51-DK" target="_blank" rel="noopener">这个</a>。SDK 预先配置了一些开发包的变量。要实现直接和 MCU 对话，我们需要修改 SDK 中的一些设置。</p>
+<center><br>  <video width="480" controls="controls"><br>    <source src="blinky.mp4" type="video/mp4"><br>  </video><br>  跑马灯<br></center>
+
+<p>我花了很多时间去了解 nRF5 系统如何让程序跑起来的，最终搞懂了来龙去脉。</p>
 <p>原文: <a href="https://rbaron.net/blog/2018/05/27/Hacking-a-cheap-fitness-tracker-bracelet.html" target="_blank" rel="noopener">Hacking a cheap fitness tracker bracelet</a></p>
 
   </div>
@@ -224,7 +246,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#想办法和它说话"><span class="toc-number">1.</span> <span class="toc-text">想办法和它说话</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#想办法和它说话"><span class="toc-number">1.</span> <span class="toc-text">想办法和它说话</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Open-chip-手术"><span class="toc-number">2.</span> <span class="toc-text">Open-chip 手术</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#闪烁"><span class="toc-number">3.</span> <span class="toc-text">闪烁</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

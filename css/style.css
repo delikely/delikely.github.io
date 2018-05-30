@@ -1184,6 +1184,9 @@ article .content .caption {
 .half-300 img {
   width: 300px;
 }
+.half-480 img {
+  width: 480px;
+}
 #archive .post-list {
   padding: 0;
 }
