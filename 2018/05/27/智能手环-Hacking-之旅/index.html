@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang=zh>
 <head>
-    <!-- so meta -->
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/swdback.png">
 <meta property="og:image" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/surgery2.jpg">
 <meta property="og:image" content="http://delikey.github.io/2018/05/27/智能手环-Hacking-之旅/ledshookup.jpg">
-<meta property="og:updated_time" content="2018-05-30T14:38:03.788Z">
+<meta property="og:updated_time" content="2018-05-31T08:39:16.834Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="智能手环 Hacking 之旅">
 <meta name="twitter:description" content="进入现在这个公司第一天上班的那天，有一大堆东西让我痴狂不已。在这堆东西中其中就包含一个可以自己定制的健康监测手环。从技术角度上来看，能随时随地监测健康状态真是太酷了。  很小的尺寸（大约 15mm x 40mm） 低功耗蓝牙（BLE） OLED 显示屏（96 x 32 像素） 可充电电池 支持USB 充电 加速度传感器 振动马达 价格在10 美元左右  在手环外面，除了背部印有“ FCC ID:">
@@ -50,14 +50,14 @@
     <title>智能手环 Hacking 之旅</title>
     <!-- styles -->
     <link rel="stylesheet" href="/css/style.css">
-    <!-- rss -->
+    <!-- rss --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
     
     
 </head>
 
 <body class="max-width mx-auto px3">
     
-      <div id="header-post">
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
   <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
   <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
   <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
@@ -109,7 +109,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#想办法和它说话"><span class="toc-number">1.</span> <span class="toc-text">想办法和它说话</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Open-chip-手术"><span class="toc-number">2.</span> <span class="toc-text">Open-chip 手术</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#闪烁"><span class="toc-number">3.</span> <span class="toc-text">闪烁</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#想办法和它说话"><span class="toc-number">1.</span> <span class="toc-text">想办法和它说话</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Open-chip-手术"><span class="toc-number">2.</span> <span class="toc-text">Open-chip 手术</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#闪烁"><span class="toc-number">3.</span> <span class="toc-text">闪烁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数字-IO"><span class="toc-number">4.</span> <span class="toc-text">数字 IO</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#printf"><span class="toc-number">5.</span> <span class="toc-text">printf</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OLED"><span class="toc-number">6.</span> <span class="toc-text">OLED</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -218,7 +218,37 @@
 <p>在 Nordic 的开发者论坛上浏览 SDK 有关的帖子，发现通常使用的开发板是<a href="http://www.nordicsemi.com/eng/Products/nRF51-DK" target="_blank" rel="noopener">这个</a>。SDK 预先配置了一些开发包的变量。要实现直接和 MCU 对话，我们需要修改 SDK 中的一些设置。</p>
 <center><br>  <video width="480" controls="controls"><br>    <source src="blinky.mp4" type="video/mp4"><br>  </video><br>  跑马灯<br></center>
 
-<p>我花了很多时间去了解 nRF5 系统如何让程序跑起来的，最终搞懂了来龙去脉。</p>
+<p>我花了很多时间去了解 nRF5 系统如何让程序跑起来的，最终搞懂了来龙去脉。在上面的的视频中可以看到两个闪烁的 LED。于是，我创建了一个 <a href="https://github.com/rbaron/fitless" target="_blank" rel="noopener">github 仓库</a> ，另外还写了 <code>Makefiles</code>。其中一个最大的技巧是找到 nRF51822 的一些变量,例如我的 RAM 只有 16KB。考虑到这些因素，我们需要对<a href="https://github.com/rbaron/fitless/blob/master/blinky/id115/blank/armgcc/blinky_gcc_nrf51.ld" target="_blank" rel="noopener">链接器脚本</a>做些调整。</p>
+<h2 id="数字-IO"><a href="#数字-IO" class="headerlink" title="数字 IO"></a>数字 IO</h2><p>正如我所提到的，让 LED 闪烁还包含着希望和猜测 MCU 的哪个引脚与<code>P1&#39; 和</code>P2<code>相连，</code>P1<code>和</code>P2` 连接着 LEDs。最简单的方法是让数字 IO 引脚不断重复升高和降低输出。让我惊讶的是，两个 LED 都被点亮了。更让我吃惊的是振动马达也能开启和关闭。</p>
+<p>手动进行查找，我确定了以下的映射关系。</p>
+<table>
+<thead>
+<tr>
+<th>nRF51822 引脚</th>
+<th>板子</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P0.30</td>
+<td>P1</td>
+<td>通用数字 IO</td>
+</tr>
+<tr>
+<td>P0.00</td>
+<td>P2</td>
+<td>通用数字 IO</td>
+</tr>
+<tr>
+<td>P0.01</td>
+<td>-</td>
+<td>振动马达</td>
+</tr>
+</tbody>
+</table>
+<h2 id="printf"><a href="#printf" class="headerlink" title="printf"></a>printf</h2><p>在调试时，与计算机进行对话的能力是非常宝贵的。J-Link 仿真器支持 <a href="https://www.segger.com/products/debug-probes/j-link/technology/about-real-time-transfer/" target="_blank" rel="noopener">Real-Time Transfer (RTT)</a>.RTT 芯片与计算机之间发送和接收数据。通过包含头文件<code>#include &quot;SEGGER_RTT.h&quot;</code>,并调用函数 <code>SEGGER_RTT_WriteString()</code> 来使用它。在电脑上读取它需要用到 J-Link 包中的命令行程序 <code>jlinkrttlogger</code>。</p>
+<h2 id="OLED"><a href="#OLED" class="headerlink" title="OLED"></a>OLED</h2><p>另一个极具挑战性的任务是点亮 OLED 显示屏。市场上常见的 OLED 显示屏使用 <a href="https://cdn-shop.adafruit.com/datasheets/SSD1306.pdf" target="_blank" rel="noopener">ssd1306</a> 驱动/控制器,与 MCU 之前串行通信,如 SPI、$I^2C$。</p>
 <p>原文: <a href="https://rbaron.net/blog/2018/05/27/Hacking-a-cheap-fitness-tracker-bracelet.html" target="_blank" rel="noopener">Hacking a cheap fitness tracker bracelet</a></p>
 
   </div>
@@ -246,7 +276,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#想办法和它说话"><span class="toc-number">1.</span> <span class="toc-text">想办法和它说话</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Open-chip-手术"><span class="toc-number">2.</span> <span class="toc-text">Open-chip 手术</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#闪烁"><span class="toc-number">3.</span> <span class="toc-text">闪烁</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#想办法和它说话"><span class="toc-number">1.</span> <span class="toc-text">想办法和它说话</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Open-chip-手术"><span class="toc-number">2.</span> <span class="toc-text">Open-chip 手术</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#闪烁"><span class="toc-number">3.</span> <span class="toc-text">闪烁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数字-IO"><span class="toc-number">4.</span> <span class="toc-text">数字 IO</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#printf"><span class="toc-number">5.</span> <span class="toc-text">printf</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OLED"><span class="toc-number">6.</span> <span class="toc-text">OLED</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
@@ -295,7 +325,7 @@
       </ul>
     </nav>
   </div>
-</footer>
+</footer><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 </body>
 </html>
