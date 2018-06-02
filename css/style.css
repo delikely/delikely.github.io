@@ -1075,17 +1075,6 @@ article .content video {
   max-width: 100%;
   height: auto;
 }
-article .content table {
-  margin: auto;
-  align: center;
-  width: auto;
-}
-article .content table th {
-  border-bottom: 2px solid #2bbc8a;
-}
-article .content table tr {
-  border-bottom: 2px solid #2bbc8a;
-}
 article .content .video-container {
   position: relative;
   overflow: hidden;
