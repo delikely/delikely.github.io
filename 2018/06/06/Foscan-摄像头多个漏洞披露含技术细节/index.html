@@ -6,29 +6,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="–title:Foscan 摄像头多个漏洞披露含技术细节date:2018-06-06 23:15:45 tags:IOT在过去的几个月里，VDDO 安全研究团队一直在物联网安防领域进行广泛的安全研究。在大多数情况下，为了提高效率和透明度，研究是和设备供应商一起进行的。 作为研究的一部分，VDOO 研究团队发现了多个供应商的设备中发现了 0day 漏洞。根据漏洞披露原则，这些漏洞首先向厂商披露，随">
-<meta name="keywords" content="Security">
+    <meta name="description" content="在过去的几个月里，VDDO 安全研究团队一直在物联网安防领域进行广泛的安全研究。在大多数情况下，为了提高效率和透明度，研究是和设备供应商一起进行的。 作为研究的一部分，VDOO 研究团队发现了多个供应商的设备中发现了 0day 漏洞。根据漏洞披露原则，这些漏洞首先向厂商披露，随后会逐步公开。 我们发现 Foscan 是最易受到攻击之一的厂商，我们团队在 Foscan 安全摄像头中发现了一条关键的漏">
+<meta name="keywords" content="IOT">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Delikely&#39;s Blog">
-<meta property="og:url" content="http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/index.html">
+<meta property="og:title" content="Foscan 摄像头多个漏洞披露含技术细节">
+<meta property="og:url" content="http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/index.html">
 <meta property="og:site_name" content="Delikely&#39;s Blog">
-<meta property="og:description" content="–title:Foscan 摄像头多个漏洞披露含技术细节date:2018-06-06 23:15:45 tags:IOT在过去的几个月里，VDDO 安全研究团队一直在物联网安防领域进行广泛的安全研究。在大多数情况下，为了提高效率和透明度，研究是和设备供应商一起进行的。 作为研究的一部分，VDOO 研究团队发现了多个供应商的设备中发现了 0day 漏洞。根据漏洞披露原则，这些漏洞首先向厂商披露，随">
+<meta property="og:description" content="在过去的几个月里，VDDO 安全研究团队一直在物联网安防领域进行广泛的安全研究。在大多数情况下，为了提高效率和透明度，研究是和设备供应商一起进行的。 作为研究的一部分，VDOO 研究团队发现了多个供应商的设备中发现了 0day 漏洞。根据漏洞披露原则，这些漏洞首先向厂商披露，随后会逐步公开。 我们发现 Foscan 是最易受到攻击之一的厂商，我们团队在 Foscan 安全摄像头中发现了一条关键的漏">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/figure_01.png">
-<meta property="og:image" content="http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/figure_02_vd-0801.png">
-<meta property="og:image" content="http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/01_vd-0801_soft_a_600.gif">
-<meta property="og:image" content="http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/figure_3_camera_time_field_2.png">
-<meta property="og:image" content="http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/figure_4_vd-0803_after_initial_patch.png">
-<meta property="og:image" content="http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/data_flow_02_renew1.png">
-<meta property="og:image" content="http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/04_600.gif">
-<meta property="og:image" content="http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/05_600.gif">
-<meta property="og:image" content="http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/08_600.gif">
-<meta property="og:image" content="http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/figure_6_wireshark.png">
-<meta property="og:updated_time" content="2018-06-11T05:27:35.797Z">
+<meta property="og:image" content="http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/figure_01.png">
+<meta property="og:image" content="http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/figure_02_vd-0801.png">
+<meta property="og:image" content="http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/01_vd-0801_soft_a_600.gif">
+<meta property="og:image" content="http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/figure_3_camera_time_field_2.png">
+<meta property="og:image" content="http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/figure_4_vd-0803_after_initial_patch.png">
+<meta property="og:image" content="http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/data_flow_02_renew1.png">
+<meta property="og:image" content="http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/04_600.gif">
+<meta property="og:image" content="http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/05_600.gif">
+<meta property="og:image" content="http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/08_600.gif">
+<meta property="og:image" content="http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/figure_6_wireshark.png">
+<meta property="og:updated_time" content="2018-06-11T05:30:29.647Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Delikely&#39;s Blog">
-<meta name="twitter:description" content="–title:Foscan 摄像头多个漏洞披露含技术细节date:2018-06-06 23:15:45 tags:IOT在过去的几个月里，VDDO 安全研究团队一直在物联网安防领域进行广泛的安全研究。在大多数情况下，为了提高效率和透明度，研究是和设备供应商一起进行的。 作为研究的一部分，VDOO 研究团队发现了多个供应商的设备中发现了 0day 漏洞。根据漏洞披露原则，这些漏洞首先向厂商披露，随">
-<meta name="twitter:image" content="http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/figure_01.png">
+<meta name="twitter:title" content="Foscan 摄像头多个漏洞披露含技术细节">
+<meta name="twitter:description" content="在过去的几个月里，VDDO 安全研究团队一直在物联网安防领域进行广泛的安全研究。在大多数情况下，为了提高效率和透明度，研究是和设备供应商一起进行的。 作为研究的一部分，VDOO 研究团队发现了多个供应商的设备中发现了 0day 漏洞。根据漏洞披露原则，这些漏洞首先向厂商披露，随后会逐步公开。 我们发现 Foscan 是最易受到攻击之一的厂商，我们团队在 Foscan 安全摄像头中发现了一条关键的漏">
+<meta name="twitter:image" content="http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/figure_01.png">
     
     
         
@@ -48,7 +48,7 @@
         
     
     <!-- title -->
-    <title>Delikely&#39;s Blog</title>
+    <title>Foscan 摄像头多个漏洞披露含技术细节</title>
     <!-- styles -->
     <link rel="stylesheet" href="/css/style.css">
     <!-- rss --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
@@ -96,21 +96,21 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/&text="><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/&title="><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/&is_video=false&description="><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=&body=Check out this article: http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/&title="><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/&title="><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/&title="><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/&title="><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/&name=&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/&text=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/&title=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/&is_video=false&description=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Foscan 摄像头多个漏洞披露含技术细节&body=Check out this article: http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/&title=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/&title=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/&title=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/&title=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/&name=Foscan 摄像头多个漏洞披露含技术细节&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#tags-IOT"><span class="toc-number">1.</span> <span class="toc-text">tags:IOT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#技术概要"><span class="toc-number">2.</span> <span class="toc-text">技术概要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#技术深潜"><span class="toc-number">3.</span> <span class="toc-text">技术深潜</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2018-6830-任意文件删除漏洞"><span class="toc-number">3.1.</span> <span class="toc-text">CVE-2018-6830  任意文件删除漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#POC"><span class="toc-number">3.1.1.</span> <span class="toc-text">POC</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2018-6832-基于堆栈的缓冲器"><span class="toc-number">3.2.</span> <span class="toc-text">CVE-2018-6832  基于堆栈的缓冲器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2018-6831-shell-命令注入漏洞"><span class="toc-number">3.3.</span> <span class="toc-text">CVE-2018-6831  shell 命令注入漏洞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POC-1"><span class="toc-number">3.4.</span> <span class="toc-text">POC</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#表1-存在漏洞的最新固件版本"><span class="toc-number">4.</span> <span class="toc-text">表1 - 存在漏洞的最新固件版本</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#技术概要"><span class="toc-number">1.</span> <span class="toc-text">技术概要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#技术深潜"><span class="toc-number">2.</span> <span class="toc-text">技术深潜</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2018-6830-任意文件删除漏洞"><span class="toc-number">2.1.</span> <span class="toc-text">CVE-2018-6830  任意文件删除漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#POC"><span class="toc-number">2.1.1.</span> <span class="toc-text">POC</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2018-6832-基于堆栈的缓冲器"><span class="toc-number">2.2.</span> <span class="toc-text">CVE-2018-6832  基于堆栈的缓冲器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2018-6831-shell-命令注入漏洞"><span class="toc-number">2.3.</span> <span class="toc-text">CVE-2018-6831  shell 命令注入漏洞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POC-1"><span class="toc-number">2.4.</span> <span class="toc-text">POC</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#表1-存在漏洞的最新固件版本"><span class="toc-number">3.</span> <span class="toc-text">表1 - 存在漏洞的最新固件版本</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -122,7 +122,7 @@
   <header>
     
     <h1 class="posttitle" itemprop="name headline">
-        
+        Foscan 摄像头多个漏洞披露含技术细节
     </h1>
 
 
@@ -133,19 +133,23 @@
       </span>
       
     <div class="postdate">
-        <time datetime="2018-06-11T05:27:35.845Z" itemprop="datePublished">2018-06-11</time>
+        <time datetime="2018-06-06T15:15:45.000Z" itemprop="datePublished">2018-06-06</time>
     </div>
 
 
       
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/IOT/">IOT</a>
+    </div>
+
 
     </div>
   </header>
   
 
   <div class="content" itemprop="articleBody">
-    <p>–<br>title:Foscan 摄像头多个漏洞披露含技术细节<br>date:2018-06-06 23:15:45</p>
-<h2 id="tags-IOT"><a href="#tags-IOT" class="headerlink" title="tags:IOT"></a>tags:IOT</h2><p>在过去的几个月里，VDDO 安全研究团队一直在物联网安防领域进行广泛的安全研究。在大多数情况下，为了提高效率和透明度，研究是和设备供应商一起进行的。</p>
+    <p>在过去的几个月里，VDDO 安全研究团队一直在物联网安防领域进行广泛的安全研究。在大多数情况下，为了提高效率和透明度，研究是和设备供应商一起进行的。</p>
 <p>作为研究的一部分，VDOO 研究团队发现了多个供应商的设备中发现了 0day 漏洞。根据漏洞披露原则，这些漏洞首先向厂商披露，随后会逐步公开。</p>
 <p>我们发现 Foscan 是最易受到攻击之一的厂商，我们团队在 Foscan 安全摄像头中发现了一条关键的漏洞链。结合我们发现的这几个漏洞，如果一个攻击者获取到了摄像头的地址，他能够远程获取 root 权限(局域网或互联网)。VDOO 负责的披露这些漏洞（CVE-2018-6830、CVE-2018-6831、CVE-2018-6832）,并与 Focsam 安全团队合作修复这些漏洞。</p>
 <p>据我们所知，这些漏洞并没有在野利用，因此不会对Foscam客户造成任何具体的隐私侵犯或安全威胁。Foscam 团队迅速采取行动，修补这些漏洞，并将其推送到脆弱的产品中。</p>
@@ -460,21 +464,21 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#tags-IOT"><span class="toc-number">1.</span> <span class="toc-text">tags:IOT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#技术概要"><span class="toc-number">2.</span> <span class="toc-text">技术概要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#技术深潜"><span class="toc-number">3.</span> <span class="toc-text">技术深潜</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2018-6830-任意文件删除漏洞"><span class="toc-number">3.1.</span> <span class="toc-text">CVE-2018-6830  任意文件删除漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#POC"><span class="toc-number">3.1.1.</span> <span class="toc-text">POC</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2018-6832-基于堆栈的缓冲器"><span class="toc-number">3.2.</span> <span class="toc-text">CVE-2018-6832  基于堆栈的缓冲器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2018-6831-shell-命令注入漏洞"><span class="toc-number">3.3.</span> <span class="toc-text">CVE-2018-6831  shell 命令注入漏洞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POC-1"><span class="toc-number">3.4.</span> <span class="toc-text">POC</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#表1-存在漏洞的最新固件版本"><span class="toc-number">4.</span> <span class="toc-text">表1 - 存在漏洞的最新固件版本</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#技术概要"><span class="toc-number">1.</span> <span class="toc-text">技术概要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#技术深潜"><span class="toc-number">2.</span> <span class="toc-text">技术深潜</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2018-6830-任意文件删除漏洞"><span class="toc-number">2.1.</span> <span class="toc-text">CVE-2018-6830  任意文件删除漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#POC"><span class="toc-number">2.1.1.</span> <span class="toc-text">POC</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2018-6832-基于堆栈的缓冲器"><span class="toc-number">2.2.</span> <span class="toc-text">CVE-2018-6832  基于堆栈的缓冲器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2018-6831-shell-命令注入漏洞"><span class="toc-number">2.3.</span> <span class="toc-text">CVE-2018-6831  shell 命令注入漏洞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POC-1"><span class="toc-number">2.4.</span> <span class="toc-text">POC</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#表1-存在漏洞的最新固件版本"><span class="toc-number">3.</span> <span class="toc-text">表1 - 存在漏洞的最新固件版本</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/&text="><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/&title="><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/&is_video=false&description="><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=&body=Check out this article: http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/&title="><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/&title="><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/&title="><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/&title="><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2018/06/11/Foscan-摄像头多个漏洞披露含技术细节/&name=&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/&text=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/&title=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/&is_video=false&description=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Foscan 摄像头多个漏洞披露含技术细节&body=Check out this article: http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/&title=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/&title=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/&title=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/&title=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2018/06/06/Foscan-摄像头多个漏洞披露含技术细节/&name=Foscan 摄像头多个漏洞披露含技术细节&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
