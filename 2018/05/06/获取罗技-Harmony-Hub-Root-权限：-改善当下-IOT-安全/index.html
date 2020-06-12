@@ -9,32 +9,32 @@
     <meta name="description" content="介绍FireEye 公司的  Mandiant Red Team 近期公开了罗技 Harmony Hub 的多个漏洞。利用这些漏洞攻击者能够以 root 的身份通过 SSH 登录，并获得完全的控制权。罗技 Harmony Hub 属于 IOT 设备，它被设计用于连接家庭网络中的各种 IOT 设备。从局域网中发起的攻击能够控制与它相连的其他设备，也能利用它作为载体攻击其他设备。Harmony Hub">
 <meta name="keywords" content="IOT">
 <meta property="og:type" content="article">
-<meta property="og:title" content="获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）">
-<meta property="og:url" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/index.html">
+<meta property="og:title" content="获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全">
+<meta property="og:url" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/index.html">
 <meta property="og:site_name" content="Delikely&#39;s Blog">
 <meta property="og:description" content="介绍FireEye 公司的  Mandiant Red Team 近期公开了罗技 Harmony Hub 的多个漏洞。利用这些漏洞攻击者能够以 root 的身份通过 SSH 登录，并获得完全的控制权。罗技 Harmony Hub 属于 IOT 设备，它被设计用于连接家庭网络中的各种 IOT 设备。从局域网中发起的攻击能够控制与它相连的其他设备，也能利用它作为载体攻击其他设备。Harmony Hub">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/Fig1.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/Fig2.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/Fig3.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/Fig4.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/Fig5.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/Fig6.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/Fig7.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/Fig8.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/Fig9.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/Fig10.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/Fig11.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/Fig12.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/Fig13.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/Fig14.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/Fig15.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/Fig16.png">
-<meta property="og:updated_time" content="2018-05-07T15:54:15.000Z">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig1.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig2.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig3.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig4.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig5.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig6.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig7.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig8.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig9.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig10.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig11.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig12.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig13.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig14.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig15.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig16.png">
+<meta property="og:updated_time" content="2020-06-12T02:57:49.192Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）">
+<meta name="twitter:title" content="获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全">
 <meta name="twitter:description" content="介绍FireEye 公司的  Mandiant Red Team 近期公开了罗技 Harmony Hub 的多个漏洞。利用这些漏洞攻击者能够以 root 的身份通过 SSH 登录，并获得完全的控制权。罗技 Harmony Hub 属于 IOT 设备，它被设计用于连接家庭网络中的各种 IOT 设备。从局域网中发起的攻击能够控制与它相连的其他设备，也能利用它作为载体攻击其他设备。Harmony Hub">
-<meta name="twitter:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/Fig1.png">
+<meta name="twitter:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig1.png">
     
     
         
@@ -54,7 +54,7 @@
         
     
     <!-- title -->
-    <title>获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）</title>
+    <title>获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全</title>
     <!-- styles -->
     <link rel="stylesheet" href="/css/style.css">
     <!-- rss --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
@@ -102,16 +102,16 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/&text=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/&is_video=false&description=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）&body=Check out this article: http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/&name=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&text=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&is_video=false&description=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全&body=Check out this article: http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&name=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -128,7 +128,7 @@
   <header>
     
     <h1 class="posttitle" itemprop="name headline">
-        获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）
+        获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全
     </h1>
 
 
@@ -254,16 +254,16 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/&text=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/&is_video=false&description=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）&body=Check out this article: http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全（翻译）/&name=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全（翻译）&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&text=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&is_video=false&description=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全&body=Check out this article: http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&name=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
