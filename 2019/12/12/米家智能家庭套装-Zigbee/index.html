@@ -33,7 +33,8 @@
 <meta property="og:image" content="http://delikey.github.io/2019/12/12/米家智能家庭套装-Zigbee/image-20200330161521346.png">
 <meta property="og:image" content="http://delikey.github.io/2019/12/12/米家智能家庭套装-Zigbee/image-20200330161714624.png">
 <meta property="og:image" content="http://delikey.github.io/2019/12/12/米家智能家庭套装-Zigbee/image-20200330174653495.png">
-<meta property="og:updated_time" content="2020-07-13T05:34:45.955Z">
+<meta property="og:image" content="http://delikey.github.io/2019/12/12/米家智能家庭套装-Zigbee/image-20200713145853503.png">
+<meta property="og:updated_time" content="2020-07-13T07:52:30.035Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="米家智能家庭套装-Zigbee">
 <meta name="twitter:description" content="米家智能家庭套装礼品装包含：米家多功能网关、米家智能插座（Zigbee版)、米家无线开关、米家人体传感器、米家门窗传感器 拆解 米家门窗传感器   网关 网关拆卸比较简单，卸掉三颗螺丝即可，但是使用的螺丝型号为U2.6，不怎么常见，好在之前买的米家螺丝刀里面有。    采用的芯片 Zigbee 模块 zigbee 采用了 NXP 的 JN5169。 门窗传感器 CMMIIT 标准代码为 2015D">
@@ -191,7 +192,7 @@
 <p><img src="image-20200330132459080.png" alt="暴露的调试引脚"></p>
 <p>通过逻辑分析仪获取波特率 115200。</p>
 <p><img src="image-20200330132429517.png" alt="逻辑分析仪引脚与波特率分析"></p>
-<p>使用串口时，不要接 TX 否则网关不会启动,启动之后在连接 Tx 可进行交互。</p>
+<p>使用串口时，不要接 TX 否则网关不会启动,启动之后在连接 Tx 可进行交互,等待灯圈闪烁后连接TX。</p>
 <p><img src="image-20200330134117767.png" alt="串口打印数据"></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">dac_freq_set_ = 44100 , 44100 </span><br><span class="line">03-30  13:17:49.526 </span><br><span class="line">&#123;&quot;id&quot;:29,&quot;sid&quot;:&quot;lumi.158d000232b856&quot;,&quot;model&quot;:&quot;lumi.sensor_motion.v2&quot;,&quot;method&quot;:&quot;props&quot;,&quot;params&quot;:&#123;&quot;device_log&quot;:&quot;[1585545469,[\&quot;event.motion\&quot;,[]]]&quot;&#125;&#125;</span><br><span class="line">03-30  13:17:49.548 </span><br><span class="line">&#123;&quot;id&quot;:30,&quot;method&quot;:&quot;props&quot;,&quot;params&quot;:&#123;&quot;music_op&quot;:&quot;p_door_10&quot;,&quot;from.music_op&quot;:&quot;5,2719655867,1585545469,lumi.158d000232b856.motion&quot;&#125;&#125;</span><br><span class="line">03-30  13:17:49.561 </span><br><span class="line">&#123;&quot;id&quot;:31,&quot;method&quot;:&quot;_sync.upLocalSceneRuningLog&quot;,&quot;params&quot;:[&#123;&quot;us_id&quot;:2719655867,&quot;time&quot;:1585545469,&quot;msg&quot;:[&#123;&quot;n&quot;:1,&quot;e&quot;:0&#125;]&#125;]&#125;</span><br><span class="line">=eSL_WriteMessage= t=9f18,l=0,data=</span><br><span class="line">=recv zigbee message:Free=174816 ,t=9f98;l=54;data= 01 87 20 a5 26 73 1c 71 82 1f d8 fd 9e 8b 54 49 7a 01 01 0f b0 f7 00 03 00 03 a0 21 00 15 8d 00 02 4a eb 9d 00 15 8d 00 02 4a eb 9d 65 46 1c f9 95 61 e4 76 23 11</span><br><span class="line">03-30  13:17:57.003 </span><br><span class="line"></span><br><span class="line">###&#123;&quot;id&quot;:32,&quot;method&quot;:&quot;_async.store&quot;,&quot;params&quot;:&#123;&quot;bak_data&quot;:&#123;&quot;did&quot;:&quot;80969777&quot;,&quot;model&quot;:&quot;lumi.gateway.v3&quot;,&quot;data_type&quot;:&quot;syscfg&quot;,&quot;total&quot;:1,&quot;cur&quot;:0,&quot;flag&quot;:&quot;1585545477_1&quot;,&quot;data&quot;:&quot;&#123;\&quot;spk_v\&quot;:60,\&quot;gtw_v\&quot;:40,\&quot;arm_v\&quot;:80,\&quot;dbl_v\&quot;:60,\&quot;clt_en\&quot;:1,\&quot;nlt_rgb\&quot;:1686077311,\&quot;dms_id_0\&quot;:0,\&quot;dms_id_1\&quot;:10,\&quot;dms_id_2\&quot;:20,\&quot;dms_id_3\&quot;:30,\&quot;dms_id_4\&quot;:40,\&quot;cdl_time\&quot;:60,\&quot;dbps_en\&quot;:0,\&quot;awt_time\&quot;:5,\&quot;alen_time\&quot;:30,\&quot;alt_en\&quot;:1&#125;&quot;,&quot;ver&quot;:15&#125;&#125;&#125;,T=137003</span><br><span class="line">=recv zigbee message:Free=174192 ,t=8000;l=5;data= 00 00 9f 18 00</span><br></pre></td></tr></table></figure>
 <p>其中<code>87 20 a5 26 73 1c 71 82 1f d8 fd 9e 8b 54 49 7a</code>是 NWK KEY，在wireshark中配置密钥，解密流量。</p>
@@ -218,6 +219,8 @@
 <h4 id="无线开关控制无线插座"><a href="#无线开关控制无线插座" class="headerlink" title="无线开关控制无线插座"></a>无线开关控制无线插座</h4><p>单击无线开关实现无线插座的开关，以下是点击无线插座打开无线插座的流量。</p>
 <p>打开插座：上报属性值为 0x000 的开合属性数据，类型为布尔型 0x10，开关指令为 0x01打开。</p>
 <p><img src="image-20200330174653495.png" alt="image-20200330174653495"></p>
+<p>无线开关控制智能插座：无线开关 0x9561 发送消息给网关 0x0000，然后由网关0x0000 转发消息给智能插座 0xfe75。详见附件<a href="data.pcapng">数据包</a> 。</p>
+<p><img src="image-20200713145853503.png" alt="image-20200713145853503"></p>
 <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
 <li><p><a href="https://blog.csdn.net/lissettecarlr/article/details/79942047" target="_blank" rel="noopener">使用CC2531 USB Dongle 抓取小米Zigbee智能硬件数据包</a></p>
 </li>
