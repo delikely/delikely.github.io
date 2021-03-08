@@ -7,34 +7,34 @@
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="介绍FireEye 公司的  Mandiant Red Team 近期公开了罗技 Harmony Hub 的多个漏洞。利用这些漏洞攻击者能够以 root 的身份通过 SSH 登录，并获得完全的控制权。罗技 Harmony Hub 属于 IOT 设备，它被设计用于连接家庭网络中的各种 IOT 设备。从局域网中发起的攻击能够控制与它相连的其他设备，也能利用它作为载体攻击其他设备。Harmony Hub">
-<meta name="keywords" content="IOT">
 <meta property="og:type" content="article">
 <meta property="og:title" content="获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全">
-<meta property="og:url" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/index.html">
+<meta property="og:url" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/index.html">
 <meta property="og:site_name" content="Delikely&#39;s Blog">
 <meta property="og:description" content="介绍FireEye 公司的  Mandiant Red Team 近期公开了罗技 Harmony Hub 的多个漏洞。利用这些漏洞攻击者能够以 root 的身份通过 SSH 登录，并获得完全的控制权。罗技 Harmony Hub 属于 IOT 设备，它被设计用于连接家庭网络中的各种 IOT 设备。从局域网中发起的攻击能够控制与它相连的其他设备，也能利用它作为载体攻击其他设备。Harmony Hub">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig1.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig2.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig3.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig4.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig5.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig6.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig7.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig8.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig9.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig10.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig11.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig12.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig13.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig14.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig15.png">
-<meta property="og:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig16.png">
-<meta property="og:updated_time" content="2020-06-12T02:57:49.192Z">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/Fig1.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/Fig2.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/Fig3.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/Fig4.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/Fig5.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/Fig6.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/Fig7.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/Fig8.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/Fig9.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/Fig10.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/Fig11.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/Fig12.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/Fig13.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/Fig14.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/Fig15.png">
+<meta property="og:image" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/Fig16.png">
+<meta property="article:published_time" content="2018-05-07T03:28:28.000Z">
+<meta property="article:modified_time" content="2020-06-12T02:57:49.192Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="IOT">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全">
-<meta name="twitter:description" content="介绍FireEye 公司的  Mandiant Red Team 近期公开了罗技 Harmony Hub 的多个漏洞。利用这些漏洞攻击者能够以 root 的身份通过 SSH 登录，并获得完全的控制权。罗技 Harmony Hub 属于 IOT 设备，它被设计用于连接家庭网络中的各种 IOT 设备。从局域网中发起的攻击能够控制与它相连的其他设备，也能利用它作为载体攻击其他设备。Harmony Hub">
-<meta name="twitter:image" content="http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/Fig1.png">
+<meta name="twitter:image" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/Fig1.png">
     
     
         
@@ -56,11 +56,13 @@
     <!-- title -->
     <title>获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全</title>
     <!-- styles -->
-    <link rel="stylesheet" href="/css/style.css">
-    <!-- rss --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
     
     
-</head>
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 <body class="max-width mx-auto px3">
     
@@ -78,7 +80,7 @@
          
           <li><a href="/archives/">Writing</a></li>
          
-          <li><a href="https://github.com/delikely">Projects</a></li>
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
         
       </ul>
     </span>
@@ -86,10 +88,10 @@
     <span id="actions">
       <ul>
         
-        <li><a class="icon" href="/2018/05/27/智能手环-Hacking-之旅/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        <li><a class="icon" href="/2018/05/27/%E6%99%BA%E8%83%BD%E6%89%8B%E7%8E%AF-Hacking-%E4%B9%8B%E6%97%85/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" href="/2018/05/04/TBK-DVR-Login-Bypass（CVE-2018-9995）/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" href="/2018/05/04/TBK-DVR-Login-Bypass%EF%BC%88CVE-2018-9995%EF%BC%89/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -102,21 +104,21 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&text=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&is_video=false&description=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全&body=Check out this article: http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&name=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/&text=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/&is_video=false&description=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全&body=Check out this article: http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/&name=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分析设备"><span class="toc-number">2.</span> <span class="toc-text">分析设备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#准备设备"><span class="toc-number">2.1.</span> <span class="toc-text">准备设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#固件获取与提取"><span class="toc-number">2.2.</span> <span class="toc-text">固件获取与提取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#劫持更新过程"><span class="toc-number">2.3.</span> <span class="toc-text">劫持更新过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E8%AE%BE%E5%A4%87"><span class="toc-number">2.</span> <span class="toc-text">分析设备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E8%AE%BE%E5%A4%87"><span class="toc-number">2.1.</span> <span class="toc-text">准备设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6%E8%8E%B7%E5%8F%96%E4%B8%8E%E6%8F%90%E5%8F%96"><span class="toc-number">2.2.</span> <span class="toc-text">固件获取与提取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%AB%E6%8C%81%E6%9B%B4%E6%96%B0%E8%BF%87%E7%A8%8B"><span class="toc-number">2.3.</span> <span class="toc-text">劫持更新过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -146,7 +148,7 @@
       
     <div class="article-tag">
         <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/IOT/">IOT</a>
+        <a class="tag-link-link" href="/tags/IOT/" rel="tag">IOT</a>
     </div>
 
 
@@ -159,7 +161,7 @@
 <p>在 2018 年 1 月份 FireEye 披露了这些漏洞，并与罗技取得联系。罗技积极响应并与 FireEye 合作在固件更新（4.15.96）中公布了这些漏洞。</p>
 <p>The Red Team 发现了如下几个漏洞。</p>
 <ul>
-<li><a href="https://cwe.mitre.org/data/definitions/295.html" target="_blank" rel="noopener">不适当的证书验证（CWE-295）</a></li>
+<li><a target="_blank" rel="noopener" href="https://cwe.mitre.org/data/definitions/295.html">不适当的证书验证（CWE-295）</a></li>
 <li>不安全的更新过程</li>
 <li>开发调试符号遗留在固件映像之中</li>
 <li>root 密码为空</li>
@@ -178,7 +180,7 @@
 <p>图 3 ： Harmony Hub 固件更新检查请求</p>
 <p><img src="Fig4.png" alt="Fig4"></p>
 <p>图 4 ：服务器返回的带固件更新地址的响应消息</p>
-<p>在获取到更新文件后，经过几次解压后可以发现固件 harmony-image.squashfs。它是采用了 lama （嵌入式设备通用的一种压缩格式）进行压缩的  SquashFS 文件系统。 供应商常常使用老版本的、与最近版本不兼容的 squashfstools 来创建固件。我们使用 <a href="https://github.com/rampageX/firmware-mod-kit" target="_blank" rel="noopener">firmware-mod-kit</a> 套件中 的<strong>unsqashfs_all.sh</strong> 脚本自动查找匹配正确的版本来解压文件系统镜像（图 5）。</p>
+<p>在获取到更新文件后，经过几次解压后可以发现固件 harmony-image.squashfs。它是采用了 lama （嵌入式设备通用的一种压缩格式）进行压缩的  SquashFS 文件系统。 供应商常常使用老版本的、与最近版本不兼容的 squashfstools 来创建固件。我们使用 <a target="_blank" rel="noopener" href="https://github.com/rampageX/firmware-mod-kit">firmware-mod-kit</a> 套件中 的<strong>unsqashfs_all.sh</strong> 脚本自动查找匹配正确的版本来解压文件系统镜像（图 5）。</p>
 <p><img src="Fig5.png" alt="Fig5"></p>
 <p>图 5 ：使用 firmware-mod-kit 解压文件系统</p>
 <p>在解压得到文件系统内容后，我们研究了  Harmony Hub 系统的一些配置细节。检查发现很多的调试信息出现在了正式的镜像中，例如内核模块的“  not stripped ”（图 6）。</p>
@@ -219,10 +221,10 @@
 <blockquote>
 <p>At Logitech, we take our customers’ security and privacy very seriously. In late January 2018, security research firm FireEye pointed out vulnerabilities that could impact Logitech Harmony Hub-based products*.</p>
 <p>If a malicious hacker had already gained access to a Hub-users network, these vulnerabilities could be exploited. We appreciate the work that professional security research firms like FireEye provide when identifying these types of vulnerabilities on IoT devices.</p>
-<p>As soon as FireEye shared their research findings with us, we reviewed internally and immediately started to develop firmware to address it. As of April 10, we have released firmware that addresses all of the vulnerabilities that were identified. For any customers who haven’t yet updated to firmware version 4.15.96, we recommend you check the MyHarmony software and sync your Hub-based remote and receive it. Complete directions on updating your firmware can be found <a href="https://support.myharmony.com/en-us/how-to-update-your-firmware" target="_blank" rel="noopener">here</a>.</p>
+<p>As soon as FireEye shared their research findings with us, we reviewed internally and immediately started to develop firmware to address it. As of April 10, we have released firmware that addresses all of the vulnerabilities that were identified. For any customers who haven’t yet updated to firmware version 4.15.96, we recommend you check the MyHarmony software and sync your Hub-based remote and receive it. Complete directions on updating your firmware can be found <a target="_blank" rel="noopener" href="https://support.myharmony.com/en-us/how-to-update-your-firmware">here</a>.</p>
 <p>*Hub-based products include: Harmony Elite, Harmony Home Hub, Harmony Ultimate Hub, harmony Hub, Harmony Home Control, Harmony Pro, Harmony Smart Control, Harmony Companion, Harmony Smart Keyboard, Harmony Ultimate and Ultimate Home.</p>
 </blockquote>
-<p><strong>原文见:</strong> <a href="https://www.fireeye.com/blog/threat-research/2018/05/rooting-logitech-harmony-hub-improving-iot-security.html" target="_blank" rel="noopener">Rooting a Logitech Harmony Hub: Improving Security in Today’s IoT World</a></p>
+<p><strong>原文见:</strong> <a target="_blank" rel="noopener" href="https://www.fireeye.com/blog/threat-research/2018/05/rooting-logitech-harmony-hub-improving-iot-security.html">Rooting a Logitech Harmony Hub: Improving Security in Today’s IoT World</a></p>
 
   </div>
 </article>
@@ -243,27 +245,27 @@
          
           <li><a href="/archives/">Writing</a></li>
          
-          <li><a href="https://github.com/delikely">Projects</a></li>
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
         
       </ul>
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分析设备"><span class="toc-number">2.</span> <span class="toc-text">分析设备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#准备设备"><span class="toc-number">2.1.</span> <span class="toc-text">准备设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#固件获取与提取"><span class="toc-number">2.2.</span> <span class="toc-text">固件获取与提取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#劫持更新过程"><span class="toc-number">2.3.</span> <span class="toc-text">劫持更新过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E8%AE%BE%E5%A4%87"><span class="toc-number">2.</span> <span class="toc-text">分析设备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E8%AE%BE%E5%A4%87"><span class="toc-number">2.1.</span> <span class="toc-text">准备设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6%E8%8E%B7%E5%8F%96%E4%B8%8E%E6%8F%90%E5%8F%96"><span class="toc-number">2.2.</span> <span class="toc-text">固件获取与提取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%AB%E6%8C%81%E6%9B%B4%E6%96%B0%E8%BF%87%E7%A8%8B"><span class="toc-number">2.3.</span> <span class="toc-text">劫持更新过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&text=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&is_video=false&description=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全&body=Check out this article: http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2018/05/06/获取罗技-Harmony-Hub-Root-权限：-改善当下-IOT-安全/&name=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/&text=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/&is_video=false&description=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全&body=Check out this article: http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/&title=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/&name=获取罗技 Harmony Hub Root 权限： 改善当下 IOT 安全&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -293,23 +295,50 @@
          
           <li><a href="/archives/">Writing</a></li>
          
-          <li><a href="https://github.com/delikely">Projects</a></li>
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
         
       </ul>
     </nav>
   </div>
-</footer><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 
 </body>
 </html>
 <!-- styles -->
+
 <link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
 <link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
 
+
 <!-- jquery -->
+
 <script src="/lib/jquery/jquery.min.js"></script>
+
+
 <script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 <!-- search -->
 
 <!-- Google Analytics -->

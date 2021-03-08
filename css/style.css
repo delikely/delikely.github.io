@@ -1116,7 +1116,8 @@ article .content blockquote footer {
   font-size: 11px;
 }
 article .content blockquote footer a {
-  background-image: linear-gradient(transparent, transparent 5px, #666 5px, #666);
+/* background-image: linear-gradient(transparent, transparent 5px, $color-meta 5px, $color-meta)
+          */
   color: #666;
 }
 article .content blockquote footer a:hover {
