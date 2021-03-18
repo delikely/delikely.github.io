@@ -32,7 +32,7 @@
 <meta property="og:image" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/免拆芯片提取固件.assets/image-20200312102429744.png">
 <meta property="og:image" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/免拆芯片提取固件.assets/image-20200506170508280.png">
 <meta property="article:published_time" content="2021-01-11T07:00:00.000Z">
-<meta property="article:modified_time" content="2021-01-11T09:17:01.512Z">
+<meta property="article:modified_time" content="2021-03-11T13:38:28.115Z">
 <meta property="article:author" content="Delikely">
 <meta property="article:tag" content="IOT">
 <meta name="twitter:card" content="summary">
@@ -168,9 +168,56 @@
 <li><p>SOP8/16</p>
 <p>SOP(Small Out-Line Package,小外形封装) 针脚从封装两侧引出呈海鸥翼状(L 字形)，一般用于针脚不太多的芯片上 。SOP8/16 封装的 Flash 在路由器、摄像头等 IOT 设备厂较为常见。针脚有8根或16根，且一个角上有小圆点（每个芯片都有一个小圆点，小圆点所在的位置是第一针脚,然后逆时针排布第二针脚,第三针脚等）,型号代码一般是24或25开头。SOP8/16 SPI Flash 一般的针脚定义如下。</p>
 <p><img src="免拆芯片提取固件.assets/image-20201226235326781.png" alt="SOP8/SOP16"></p>
-<p>| 引脚   | 定义     |<br>| —— | ——– |<br>| /CS    | 片选     |<br>| DO     | 数据输出 |<br>| /WP    | 写保护   |<br>| GND    | 电源地   |<br>| VCC    | 电源正极 |<br>| /HOLD  | 输入保持 |<br>| /RESET | 复位     |<br>| CLK    | 时钟     |<br>| DI     | 数据输入 |</p>
-<p><img src="免拆芯片提取固件.assets/image-20201227104618453.png" alt="SPI FALSH"></p>
 </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>引脚</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/CS</td>
+<td>片选</td>
+</tr>
+<tr>
+<td>DO</td>
+<td>数据输出</td>
+</tr>
+<tr>
+<td>/WP</td>
+<td>写保护</td>
+</tr>
+<tr>
+<td>GND</td>
+<td>电源地</td>
+</tr>
+<tr>
+<td>VCC</td>
+<td>电源正极</td>
+</tr>
+<tr>
+<td>/HOLD</td>
+<td>输入保持</td>
+</tr>
+<tr>
+<td>/RESET</td>
+<td>复位</td>
+</tr>
+<tr>
+<td>CLK</td>
+<td>时钟</td>
+</tr>
+<tr>
+<td>DI</td>
+<td>数据输入</td>
+</tr>
+</tbody>
+</table>
+<p>  <img src="免拆芯片提取固件.assets/image-20201227104618453.png" alt="SPI FALSH"></p>
+<ul>
 <li><p>QFP</p>
 <p>QFP(Plastic Quad Flat Package，方型扁平式封装技术）针脚从四个侧面引出呈海鸥翼(L)型。实现的芯片针脚之间距离很小，管脚很细，一般大规模或超大规模集成电路采用这种封装形式，其针脚数一般都在64以上。在小型IOT设备中可作为主控或协处理器。下图中的芯片就是采用 QFP 封装。</p>
 <p><img src="免拆芯片提取固件.assets/image-20201227002246357.png" alt="QFP MCU" style="zoom: 50%;" /></p>

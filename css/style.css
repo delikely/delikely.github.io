@@ -339,23 +339,23 @@
   text-transform: none;
   letter-spacing: normal;
   font-weight: bold;
-  font-size: 1rem;
+  font-size: 1.3rem;
 }
 .content h3 {
   color: #eee;
   text-decoration: underline;
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
 }
 .content h4,
 .content h5,
 .content h6 {
   display: inline;
-  border-bottom: 1px dashed #ccc;
+/* border-bottom: 1px dashed $color-accent-3 */
   color: #ccc;
   text-decoration: none;
   font-weight: normal;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
 }
 .content h3,
 .content h4,
@@ -460,6 +460,11 @@ body {
 }
 .content {
   flex: 1;
+/* underline(5px, $color-text) 
+
+    &:hover
+      background-image: linear-gradient(transparent, transparent 4px, $color-link 4px, $color-link)
+    */
 }
 .content p {
   hyphens: auto;
@@ -474,15 +479,11 @@ body {
   -webkit-hyphens: manual;
 }
 .content a {
-  color: #c9cacc;
+  color: #2bbc8a;
   text-decoration: none;
-  background-image: linear-gradient(transparent, transparent 5px, #c9cacc 5px, #c9cacc);
-  background-position: bottom;
-  background-size: 100% 6px;
-  background-repeat: repeat-x;
 }
 .content a:hover {
-  background-image: linear-gradient(transparent, transparent 4px, #d480aa 4px, #d480aa);
+  text-decoration: underline;
 }
 .content a.icon {
   background: none;
@@ -512,6 +513,11 @@ body {
   background-position: bottom;
   background-size: 100% 6px;
   background-repeat: repeat-x;
+}
+.content h3,
+.content h4,
+.content h5 {
+  text-decoration: none;
 }
 .content h6 a {
   background: none;
@@ -584,10 +590,10 @@ body {
   width: 50px;
   height: 50px;
   border-radius: 5px;
-  filter: grayscale(100%);
+  filter: grayscale(0%);
   background-size: 50px 50px;
   background-repeat: no-repeat;
-  -webkit-filter: grayscale(100%);
+  -webkit-filter: grayscale(0%);
 }
 #header #nav {
   color: #2bbc8a;
@@ -1063,7 +1069,7 @@ article .content h2:before {
   top: -4px;
   left: -1rem;
   color: #2bbc8a;
-  content: "#";
+  content: "";
   font-weight: bold;
   font-size: 1.2rem;
 }
