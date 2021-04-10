@@ -13,6 +13,10 @@ if (!!$.prototype.justifiedGallery) {
 
 $(document).ready(function() {
 
+  var img = document.getElementsByTagName("img");
+  for(var i=0;i<img.length;i++){
+    document.getElementsByTagName("img")[i].parentNode.style.textAlign="center";
+  }
   /**
    * Shows the responsive navigation menu on mobile.
    */
