@@ -803,10 +803,6 @@ body {
   max-width: 28em;
   max-height: calc(95vh - 7rem);
   text-align: left;
-/*
-    .toc-number
-      display: none
-    */
 }
 #header-post #toc a:hover {
   color: #d480aa;
@@ -835,6 +831,9 @@ body {
   font-size: 0.7rem;
 }
 #header-post #toc .toc-level-6 {
+  display: none;
+}
+#header-post #toc .toc-number {
   display: none;
 }
 @media screen and (max-width: 500px) {
