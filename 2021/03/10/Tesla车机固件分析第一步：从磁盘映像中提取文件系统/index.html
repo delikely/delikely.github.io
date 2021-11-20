@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang=zh>
+<html lang=en>
 <head>
     <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
     <meta charset="utf-8">
@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://delikey.github.io/2021/03/10/Tesla%E8%BD%A6%E6%9C%BA%E5%9B%BA%E4%BB%B6%E5%88%86%E6%9E%90%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E4%BB%8E%E7%A3%81%E7%9B%98%E6%98%A0%E5%83%8F%E4%B8%AD%E6%8F%90%E5%8F%96%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/index.html">
 <meta property="og:site_name" content="Delikely&#39;s Blog">
 <meta property="og:description" content="Tesla车机固件分析第一步：从磁盘映像中提取文件系统提取磁盘映像文件近期拿到了一个车机的磁盘映像文件，文件是从 Flash 上提取出来的。文件大小为 59.2G，估计是个 64G 的 Flash。 平常分析的设备 Flash 小的就几百KB，大的也不会超过百兆。一朋友想 binwalk 一把梭，这得提取到猴年马月，拿回来的东西还能看吗（结构可能混乱）。 拿到手 64G，然后是个车机的，根据车型可">
-<meta property="og:locale">
+<meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://delikey.github.io/2021/03/10/Tesla%E8%BD%A6%E6%9C%BA%E5%9B%BA%E4%BB%B6%E5%88%86%E6%9E%90%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E4%BB%8E%E7%A3%81%E7%9B%98%E6%98%A0%E5%83%8F%E4%B8%AD%E6%8F%90%E5%8F%96%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/image-20210221171753886.png">
 <meta property="og:image" content="http://delikey.github.io/2021/03/10/Tesla%E8%BD%A6%E6%9C%BA%E5%9B%BA%E4%BB%B6%E5%88%86%E6%9E%90%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E4%BB%8E%E7%A3%81%E7%9B%98%E6%98%A0%E5%83%8F%E4%B8%AD%E6%8F%90%E5%8F%96%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/image-20210221224245419.png">
 <meta property="og:image" content="http://delikey.github.io/2021/03/10/Tesla%E8%BD%A6%E6%9C%BA%E5%9B%BA%E4%BB%B6%E5%88%86%E6%9E%90%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E4%BB%8E%E7%A3%81%E7%9B%98%E6%98%A0%E5%83%8F%E4%B8%AD%E6%8F%90%E5%8F%96%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/image-20210221223841984.png">
@@ -63,13 +63,13 @@
     <span id="nav">
       <ul>
          
-          <li><a href="/">Inicio</a></li>
+          <li><a href="/">Home</a></li>
          
-          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+          <li><a href="/2018/04/11/about/">About</a></li>
          
-          <li><a href="/archives/">Articulos</a></li>
+          <li><a href="/archives/">Writing</a></li>
          
-          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
         
       </ul>
     </span>
@@ -85,10 +85,10 @@
         <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
       </ul>
-      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
-      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
-      <span id="i-top" class="info" style="display:none;">Arriba</span>
-      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
     </span>
     <br/>
     <div id="share" style="display: none">
@@ -205,13 +205,13 @@
     <div id="nav-footer" style="display: none">
       <ul>
          
-          <li><a href="/">Inicio</a></li>
+          <li><a href="/">Home</a></li>
          
-          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+          <li><a href="/2018/04/11/about/">About</a></li>
          
-          <li><a href="/archives/">Articulos</a></li>
+          <li><a href="/archives/">Writing</a></li>
          
-          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
         
       </ul>
     </div>
@@ -239,7 +239,7 @@
     <div id="actions-footer">
         <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
         <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
-        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
         <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
     </div>
 
@@ -255,13 +255,13 @@
     <nav>
       <ul>
          
-          <li><a href="/">Inicio</a></li>
+          <li><a href="/">Home</a></li>
          
-          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+          <li><a href="/2018/04/11/about/">About</a></li>
          
-          <li><a href="/archives/">Articulos</a></li>
+          <li><a href="/archives/">Writing</a></li>
          
-          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
         
       </ul>
     </nav>

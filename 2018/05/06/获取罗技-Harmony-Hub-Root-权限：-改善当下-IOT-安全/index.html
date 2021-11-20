@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang=zh>
+<html lang=en>
 <head>
     <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
     <meta charset="utf-8">
@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/index.html">
 <meta property="og:site_name" content="Delikely&#39;s Blog">
 <meta property="og:description" content="介绍FireEye 公司的  Mandiant Red Team 近期公开了罗技 Harmony Hub 的多个漏洞。利用这些漏洞攻击者能够以 root 的身份通过 SSH 登录，并获得完全的控制权。罗技 Harmony Hub 属于 IOT 设备，它被设计用于连接家庭网络中的各种 IOT 设备。从局域网中发起的攻击能够控制与它相连的其他设备，也能利用它作为载体攻击其他设备。Harmony Hub">
-<meta property="og:locale">
+<meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/Fig1.png">
 <meta property="og:image" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/Fig2.png">
 <meta property="og:image" content="http://delikey.github.io/2018/05/06/%E8%8E%B7%E5%8F%96%E7%BD%97%E6%8A%80-Harmony-Hub-Root-%E6%9D%83%E9%99%90%EF%BC%9A-%E6%94%B9%E5%96%84%E5%BD%93%E4%B8%8B-IOT-%E5%AE%89%E5%85%A8/Fig3.png">
@@ -74,13 +74,13 @@
     <span id="nav">
       <ul>
          
-          <li><a href="/">Inicio</a></li>
+          <li><a href="/">Home</a></li>
          
-          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+          <li><a href="/2018/04/11/about/">About</a></li>
          
-          <li><a href="/archives/">Articulos</a></li>
+          <li><a href="/archives/">Writing</a></li>
          
-          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
         
       </ul>
     </span>
@@ -96,10 +96,10 @@
         <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
       </ul>
-      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
-      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
-      <span id="i-top" class="info" style="display:none;">Arriba</span>
-      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
     </span>
     <br/>
     <div id="share" style="display: none">
@@ -239,13 +239,13 @@
     <div id="nav-footer" style="display: none">
       <ul>
          
-          <li><a href="/">Inicio</a></li>
+          <li><a href="/">Home</a></li>
          
-          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+          <li><a href="/2018/04/11/about/">About</a></li>
          
-          <li><a href="/archives/">Articulos</a></li>
+          <li><a href="/archives/">Writing</a></li>
          
-          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
         
       </ul>
     </div>
@@ -273,7 +273,7 @@
     <div id="actions-footer">
         <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
         <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
-        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
         <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
     </div>
 
@@ -289,13 +289,13 @@
     <nav>
       <ul>
          
-          <li><a href="/">Inicio</a></li>
+          <li><a href="/">Home</a></li>
          
-          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+          <li><a href="/2018/04/11/about/">About</a></li>
          
-          <li><a href="/archives/">Articulos</a></li>
+          <li><a href="/archives/">Writing</a></li>
          
-          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
         
       </ul>
     </nav>

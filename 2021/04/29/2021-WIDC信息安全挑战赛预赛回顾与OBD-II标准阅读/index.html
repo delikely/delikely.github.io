@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang=zh>
+<html lang=en>
 <head>
     <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
     <meta charset="utf-8">
@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/index.html">
 <meta property="og:site_name" content="Delikely&#39;s Blog">
 <meta property="og:description" content="2021WIDC信息安全挑战赛预赛回顾与OBD-II标准阅读周五参加了世界智能驾驶挑战赛(WIDC)信息安全挑战赛并通过了预赛，5月中旬将进行线下比拼。一共有 50多只队伍参赛，其中前13名晋级复赛。预赛为线上赛，比赛分为“基础理论”和“实操题”  。赛前根据主办方提供的竞赛范围，做了一些准备，主要是实操题中的车辆信息读取。没想到没用着，实操题做得并不好，没有理解出题人的出题思路，和技术支持聊聊，">
-<meta property="og:locale">
+<meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/image-20210425121503713.png">
 <meta property="og:image" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/image-20210425130928782.png">
 <meta property="og:image" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/image-20210425142035297.png">
@@ -75,13 +75,13 @@
     <span id="nav">
       <ul>
          
-          <li><a href="/">Inicio</a></li>
+          <li><a href="/">Home</a></li>
          
-          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+          <li><a href="/2018/04/11/about/">About</a></li>
          
-          <li><a href="/archives/">Articulos</a></li>
+          <li><a href="/archives/">Writing</a></li>
          
-          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
         
       </ul>
     </span>
@@ -97,10 +97,10 @@
         <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
       </ul>
-      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
-      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
-      <span id="i-top" class="info" style="display:none;">Arriba</span>
-      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
     </span>
     <br/>
     <div id="share" style="display: none">
@@ -311,13 +311,13 @@
     <div id="nav-footer" style="display: none">
       <ul>
          
-          <li><a href="/">Inicio</a></li>
+          <li><a href="/">Home</a></li>
          
-          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+          <li><a href="/2018/04/11/about/">About</a></li>
          
-          <li><a href="/archives/">Articulos</a></li>
+          <li><a href="/archives/">Writing</a></li>
          
-          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
         
       </ul>
     </div>
@@ -345,7 +345,7 @@
     <div id="actions-footer">
         <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
         <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
-        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
         <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
     </div>
 
@@ -361,13 +361,13 @@
     <nav>
       <ul>
          
-          <li><a href="/">Inicio</a></li>
+          <li><a href="/">Home</a></li>
          
-          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+          <li><a href="/2018/04/11/about/">About</a></li>
          
-          <li><a href="/archives/">Articulos</a></li>
+          <li><a href="/archives/">Writing</a></li>
          
-          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
         
       </ul>
     </nav>
