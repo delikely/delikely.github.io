@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="米家智能家庭套装礼品装包含：米家多功能网关、米家智能插座（Zigbee版)、米家无线开关、米家人体传感器、米家门窗传感器 拆解 米家门窗传感器   网关 网关拆卸比较简单，卸掉三颗螺丝即可，但是使用的螺丝型号为U2.6，不怎么常见，好在之前买的米家螺丝刀里面有。    采用的芯片 Zigbee 模块 zigbee 采用了 NXP 的 JN5169。 门窗传感器 CMMIIT 标准代码为 2015D">
+<meta property="og:type" content="article">
+<meta property="og:title" content="米家智能家庭套装 Zigbee">
+<meta property="og:url" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="米家智能家庭套装礼品装包含：米家多功能网关、米家智能插座（Zigbee版)、米家无线开关、米家人体传感器、米家门窗传感器 拆解 米家门窗传感器   网关 网关拆卸比较简单，卸掉三颗螺丝即可，但是使用的螺丝型号为U2.6，不怎么常见，好在之前买的米家螺丝刀里面有。    采用的芯片 Zigbee 模块 zigbee 采用了 NXP 的 JN5169。 门窗传感器 CMMIIT 标准代码为 2015D">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/pms_1554283984.36653636.jpg">
+<meta property="og:image" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/image-20200305234630485.png">
+<meta property="og:image" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/image-20200306004255669.png">
+<meta property="og:image" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/image-20200306010251535.png">
+<meta property="og:image" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/image-20200306005229372.png">
+<meta property="og:image" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/image-20200305182142595.png">
+<meta property="og:image" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/image-20200331155652653.png">
+<meta property="og:image" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/image-20200330132828172.png">
+<meta property="og:image" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/image-20200330132459080.png">
+<meta property="og:image" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/image-20200330132429517.png">
+<meta property="og:image" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/image-20200330134117767.png">
+<meta property="og:image" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/image-20200331154606723.png">
+<meta property="og:image" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/image-20200331154947544.png">
+<meta property="og:image" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/image-20200331161003289.png">
+<meta property="og:image" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/image-20200331162212281.png">
+<meta property="og:image" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/image-20200330162734237.png">
+<meta property="og:image" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/image-20200330161521346.png">
+<meta property="og:image" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/image-20200330161714624.png">
+<meta property="og:image" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/image-20200330174653495.png">
+<meta property="og:image" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/image-20200713145853503.png">
+<meta property="article:published_time" content="2019-12-12T17:24:58.000Z">
+<meta property="article:modified_time" content="2021-06-26T13:52:23.000Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="IOT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/pms_1554283984.36653636.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>米家智能家庭套装 Zigbee</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/02/11/OpenWrt-LuCi-%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%9B%E5%BB%BA%E6%BC%8F%E6%B4%9E/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
+      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
+      <span id="i-top" class="info" style="display:none;">Arriba</span>
+      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/&text=米家智能家庭套装 Zigbee"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/&title=米家智能家庭套装 Zigbee"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/&is_video=false&description=米家智能家庭套装 Zigbee"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=米家智能家庭套装 Zigbee&body=Check out this article: http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/&title=米家智能家庭套装 Zigbee"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/&title=米家智能家庭套装 Zigbee"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/&title=米家智能家庭套装 Zigbee"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/&title=米家智能家庭套装 Zigbee"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/&name=米家智能家庭套装 Zigbee&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">米家智能家庭套装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%86%E8%A7%A3"><span class="toc-number">1.1.</span> <span class="toc-text">拆解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%87%E7%94%A8%E7%9A%84%E8%8A%AF%E7%89%87"><span class="toc-number">1.2.</span> <span class="toc-text">采用的芯片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">获取固件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%B2%E5%8F%A3"><span class="toc-number">1.4.</span> <span class="toc-text">串口</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%B2%E5%8F%A3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.1.</span> <span class="toc-text">串口命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SWD-OpenOCD-%E8%B0%83%E8%AF%95"><span class="toc-number">1.5.</span> <span class="toc-text">SWD - OpenOCD 调试</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#OpenOCD-%E9%85%8D%E7%BD%AE"><span class="toc-number">1.5.1.</span> <span class="toc-text">OpenOCD 配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6dump"><span class="toc-number">1.5.2.</span> <span class="toc-text">固件dump</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6%E5%88%86%E6%9E%90"><span class="toc-number">1.5.3.</span> <span class="toc-text">固件分析</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Zigbee-%E6%8A%93%E5%8C%85"><span class="toc-number">1.6.</span> <span class="toc-text">Zigbee 抓包</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E4%BF%A1%E9%81%93"><span class="toc-number">1.6.1.</span> <span class="toc-text">获取信道</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEwireshark"><span class="toc-number">1.6.2.</span> <span class="toc-text">配置wireshark</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%AF%86%E9%92%A5"><span class="toc-number">1.6.3.</span> <span class="toc-text">添加密钥</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A0%E7%BA%BF%E5%BC%80%E5%85%B3%E6%8E%A7%E5%88%B6%E6%97%A0%E7%BA%BF%E6%8F%92%E5%BA%A7"><span class="toc-number">1.6.4.</span> <span class="toc-text">无线开关控制无线插座</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.7.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        米家智能家庭套装 Zigbee
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-12-12T17:24:58.000Z" itemprop="datePublished">2019-12-13</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/IOT/" rel="tag">IOT</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="米家智能家庭套装"><a href="#米家智能家庭套装" class="headerlink" title="米家智能家庭套装"></a>米家智能家庭套装</h2><p>礼品装包含：米家多功能网关、米家智能插座（Zigbee版)、米家无线开关、米家人体传感器、米家门窗传感器<br><img src="pms_1554283984.36653636.jpg" alt="米家智能家庭套装"></p>
+<h3 id="拆解"><a href="#拆解" class="headerlink" title="拆解"></a>拆解</h3><ul>
+<li><p>米家门窗传感器</p>
+<p><img src="image-20200305234630485.png" alt="image-20200305234630485"></p>
+</li>
+<li><p>网关</p>
+<p>网关拆卸比较简单，卸掉三颗螺丝即可，但是使用的螺丝型号为U2.6，不怎么常见，好在之前买的米家螺丝刀里面有。</p>
+<p><img src="image-20200306004255669.png" alt="image-20200306004255669"></p>
+</li>
+</ul>
+<h3 id="采用的芯片"><a href="#采用的芯片" class="headerlink" title="采用的芯片"></a>采用的芯片</h3><ul>
+<li><p>Zigbee 模块</p>
+<p>zigbee 采用了 NXP 的 <a target="_blank" rel="noopener" href="https://www.nxp.com/products/wireless/zigbee/zigbee-and-ieee802.15.4-wireless-microcontroller-with-512-kb-flash-32-kb-ram:JN5169">JN5169</a>。</p>
+<p>门窗传感器 CMMIIT 标准代码为 2015DP0290；无线开关 CMMIIT 标准代码为 2015DP0291；人体传感器 CMMIIT 标准代码为 2015DP0292；智能插座 CMMIIT 标准代码为2016DP3419。都是绿联生产的 2400-2475.5MHz 的 Zigbee 无线产品。</p>
+<p><img src="image-20200306010251535.png" alt="image-20200306010251535"></p>
+</li>
+<li><p>网关主控</p>
+<p>WiFi 模块加了散热罩，CMMIIT 标准代码为 2015DP3043(M)。可以在<a target="_blank" rel="noopener" href="http://www.srrc.org.cn/WP_Search.aspx">国家无线电监测中心网站</a>上查询到。</p>
+<p><img src="image-20200306005229372.png" alt="image-20200306005229372"></p>
+</li>
+</ul>
+<h3 id="获取固件"><a href="#获取固件" class="headerlink" title="获取固件"></a>获取固件</h3><p>将网关接入笔记本建立的热点进行抓包。发现固件升级采用 HTTP 明文传输，网关升级固件，包含 upd 固件和 MCU 固件两部分。</p>
+<p><img src="image-20200305182142595.png" alt="截取固件"></p>
+<p><img src="image-20200331155652653.png" alt="导出固件"></p>
+<p>从流量中提取的固件地址复制到浏览器可以下载固件，一段时间后会失效。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://cdn.cnbj0.fds.api.mi-img.com/miio_fw/212a951cb4fc5e5bdc62cecf206b412c_upd_lumi.gateway.v3.bin?GalaxyAccessKeyId=5721718224520&amp;Expires=1583821054000&amp;Signature=sykGFSopTsUcq2gamWtFS8BwQIA=&amp;uniqRequestId=56175643">http://cdn.cnbj0.fds.api.mi-img.com/miio_fw/212a951cb4fc5e5bdc62cecf206b412c_upd_lumi.gateway.v3.bin?GalaxyAccessKeyId=5721718224520&amp;Expires=1583821054000&amp;Signature=sykGFSopTsUcq2gamWtFS8BwQIA=&amp;uniqRequestId=56175643</a></p>
+<p><a target="_blank" rel="noopener" href="http://cdn.cnbj0.fds.api.mi-img.com/miio_fw/afa534fabcfb5d5230ee1f7715dad74e_mcu_lumi.gateway.v3.bin?Expires=1660464869000&amp;GalaxyAccessKeyId=5721718224520&amp;Signature=8N3Gj4oi5pZ/ar9O0CDUOxdH5bM=&amp;uniqRequestId=56175643">http://cdn.cnbj0.fds.api.mi-img.com/miio_fw/afa534fabcfb5d5230ee1f7715dad74e_mcu_lumi.gateway.v3.bin?Expires=1660464869000&amp;GalaxyAccessKeyId=5721718224520&amp;Signature=8N3Gj4oi5pZ/ar9O0CDUOxdH5bM=&amp;uniqRequestId=56175643</a></p>
+</blockquote>
+<h3 id="串口"><a href="#串口" class="headerlink" title="串口"></a>串口</h3><p><img src="image-20200330132828172.png" alt="调试接口"></p>
+<p><img src="image-20200330132459080.png" alt="暴露的调试引脚"></p>
+<p>通过逻辑分析仪获取波特率 115200。</p>
+<p><img src="image-20200330132429517.png" alt="逻辑分析仪引脚与波特率分析"></p>
+<p>使用串口时，不要接 TX 否则网关不会启动,启动之后在连接 Tx 可进行交互,等待灯圈闪烁后连接TX。</p>
+<p><img src="image-20200330134117767.png" alt="串口打印数据"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">dac_freq_set_ &#x3D; 44100 , 44100 </span><br><span class="line">03-30  13:17:49.526 </span><br><span class="line">&#123;&quot;id&quot;:29,&quot;sid&quot;:&quot;lumi.158d000232b856&quot;,&quot;model&quot;:&quot;lumi.sensor_motion.v2&quot;,&quot;method&quot;:&quot;props&quot;,&quot;params&quot;:&#123;&quot;device_log&quot;:&quot;[1585545469,[\&quot;event.motion\&quot;,[]]]&quot;&#125;&#125;</span><br><span class="line">03-30  13:17:49.548 </span><br><span class="line">&#123;&quot;id&quot;:30,&quot;method&quot;:&quot;props&quot;,&quot;params&quot;:&#123;&quot;music_op&quot;:&quot;p_door_10&quot;,&quot;from.music_op&quot;:&quot;5,2719655867,1585545469,lumi.158d000232b856.motion&quot;&#125;&#125;</span><br><span class="line">03-30  13:17:49.561 </span><br><span class="line">&#123;&quot;id&quot;:31,&quot;method&quot;:&quot;_sync.upLocalSceneRuningLog&quot;,&quot;params&quot;:[&#123;&quot;us_id&quot;:2719655867,&quot;time&quot;:1585545469,&quot;msg&quot;:[&#123;&quot;n&quot;:1,&quot;e&quot;:0&#125;]&#125;]&#125;</span><br><span class="line">&#x3D;eSL_WriteMessage&#x3D; t&#x3D;9f18,l&#x3D;0,data&#x3D;</span><br><span class="line">&#x3D;recv zigbee message:Free&#x3D;174816 ,t&#x3D;9f98;l&#x3D;54;data&#x3D; 01 87 20 a5 26 73 1c 71 82 1f d8 fd 9e 8b 54 49 7a 01 01 0f b0 f7 00 03 00 03 a0 21 00 15 8d 00 02 4a eb 9d 00 15 8d 00 02 4a eb 9d 65 46 1c f9 95 61 e4 76 23 11</span><br><span class="line">03-30  13:17:57.003 </span><br><span class="line"></span><br><span class="line">###&#123;&quot;id&quot;:32,&quot;method&quot;:&quot;_async.store&quot;,&quot;params&quot;:&#123;&quot;bak_data&quot;:&#123;&quot;did&quot;:&quot;80969777&quot;,&quot;model&quot;:&quot;lumi.gateway.v3&quot;,&quot;data_type&quot;:&quot;syscfg&quot;,&quot;total&quot;:1,&quot;cur&quot;:0,&quot;flag&quot;:&quot;1585545477_1&quot;,&quot;data&quot;:&quot;&#123;\&quot;spk_v\&quot;:60,\&quot;gtw_v\&quot;:40,\&quot;arm_v\&quot;:80,\&quot;dbl_v\&quot;:60,\&quot;clt_en\&quot;:1,\&quot;nlt_rgb\&quot;:1686077311,\&quot;dms_id_0\&quot;:0,\&quot;dms_id_1\&quot;:10,\&quot;dms_id_2\&quot;:20,\&quot;dms_id_3\&quot;:30,\&quot;dms_id_4\&quot;:40,\&quot;cdl_time\&quot;:60,\&quot;dbps_en\&quot;:0,\&quot;awt_time\&quot;:5,\&quot;alen_time\&quot;:30,\&quot;alt_en\&quot;:1&#125;&quot;,&quot;ver&quot;:15&#125;&#125;&#125;,T&#x3D;137003</span><br><span class="line">&#x3D;recv zigbee message:Free&#x3D;174192 ,t&#x3D;8000;l&#x3D;5;data&#x3D; 00 00 9f 18 00</span><br></pre></td></tr></table></figure>
+<p>其中<code>87 20 a5 26 73 1c 71 82 1f d8 fd 9e 8b 54 49 7a</code>是 NWK KEY，在wireshark中配置密钥，解密流量。</p>
+<h4 id="串口命令"><a href="#串口命令" class="headerlink" title="串口命令"></a>串口命令</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">help </span><br><span class="line">system-conf </span><br><span class="line">echo &lt;on&#x2F;off&gt;</span><br><span class="line">psm-get -p [optional partition name] &lt;variable&gt;</span><br><span class="line">psm-set -p [optional partition name] &lt;variable&gt; &lt;value&gt;</span><br><span class="line">psm-delete -p [optional partition name] &lt;variable&gt;</span><br><span class="line">psm-erase -p [optional partition name]</span><br><span class="line">psm-dump -p [optional partition name]</span><br><span class="line">reboot reboot</span><br><span class="line">miio-test (enter factory mode)</span><br><span class="line">get_model model</span><br><span class="line">ver app version</span><br><span class="line">mac mac</span><br><span class="line">LED01 LED RED ON</span><br><span class="line">LED11 LED Green ON</span><br><span class="line">LED21 LED BLUE ON</span><br><span class="line">LED3 LED white ON</span><br><span class="line">LED00 LED  OFF</span><br><span class="line">LUMEN illumination value</span><br><span class="line">speaker </span><br><span class="line">removezigbee </span><br><span class="line">cmd_chk_zig </span><br><span class="line">m_play m_play m_3</span><br><span class="line">start_zigbee </span><br><span class="line">erase_zigbee_psm </span><br><span class="line">clear_zigbee_all </span><br><span class="line">test_zigbee_rf test_zigbee_rf 26</span><br><span class="line">set_sn set_sn sn123456</span><br><span class="line">set_hd_ver set_hd_ver ver123</span><br><span class="line">get_sn </span><br><span class="line">get_hd_ver </span><br><span class="line">toggle_print </span><br><span class="line">wifi </span><br><span class="line">set_led_mode </span><br><span class="line">cali_temp cali_temp 25</span><br><span class="line">get_zig_temp get_zig_temp</span><br><span class="line">get_net_stat get_net_stat</span><br><span class="line">test_flash test_flash</span><br><span class="line">exit_factory exit_factory</span><br><span class="line">get_acomp get_acomp</span><br><span class="line">get_reg get_reg</span><br><span class="line">set_reg set_reg</span><br><span class="line">set_sale_mode set_sale_mode</span><br><span class="line">get_sale_mode get_sale_mode</span><br><span class="line">reset_lumi_bind reset_lumi_bind</span><br><span class="line">set_zigbee_channel set_zigbee_channel</span><br><span class="line">sound-play &lt;filename&gt;</span><br><span class="line">fm &lt;3:KEY_PAUSE;4:KEY_PREV;5:KEY_NEXT&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># system-conf </span><br><span class="line">SDK version: 3.5</span><br><span class="line">Compiler version: 4.9.3 20150529 (release) [ARM&#x2F;embedded-4_9-branch revision 227977]</span><br><span class="line">CPU clock frequency: 200000000Hz</span><br><span class="line">Code execution mode: XIP</span><br></pre></td></tr></table></figure>
+<h3 id="SWD-OpenOCD-调试"><a href="#SWD-OpenOCD-调试" class="headerlink" title="SWD - OpenOCD 调试"></a>SWD - OpenOCD 调试</h3><h4 id="OpenOCD-配置"><a href="#OpenOCD-配置" class="headerlink" title="OpenOCD 配置"></a>OpenOCD 配置</h4><p>在网上找到 Marvell-88MW302 芯片的 OpenOCD 调试配置文件 wmcore.cfg，然后使用 FT232H dump固件或在线调试。</p>
+<p><img src="image-20200331154606723.png" alt="Openocd"></p>
+<h4 id="固件dump"><a href="#固件dump" class="headerlink" title="固件dump"></a>固件dump</h4><p>在芯片手册中找到 memory map，根据 memory map dump出固件等信息。</p>
+<p><img src="image-20200331154947544.png" alt="memory map"></p>
+<p>Flash 大小为 16M。dump Flash的时候可能会中断几次，此时需要根据实际情况，分段进行下载并拼接起来。然后将 raw 等区段dump出来，以供静态分析。</p>
+<p><img src="image-20200331161003289.png" alt="dump 中断，分段下载"></p>
+<h4 id="固件分析"><a href="#固件分析" class="headerlink" title="固件分析"></a>固件分析</h4><p>通过对比发现 flash的前字节与 upd 固件升级包相同，后续还有较多的数据，暂不知是什么用途，余下的部分该如何升级等。</p>
+<p><img src="image-20200331162212281.png" alt="对比固件"></p>
+<p>把剩余的部分拿出分析。0x1000000（16M）- 613824(0x95dc0 uhd固件的大小) = 16163392，使用 dd 进行分离。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@ul00:~/iot/lumi<span class="comment"># dd if=gateway_flash.bin bs=1 skip=613824 count=16163392 of=tmp.bin</span></span><br><span class="line">16163392+0 records <span class="keyword">in</span></span><br><span class="line">16163392+0 records out</span><br><span class="line">16163392 bytes (16 MB, 15 MiB) copied, 37.6301 s, 430 kB/s</span><br></pre></td></tr></table></figure>
+<p>strings 查看字符串，libfaac 1.26.1 多次出现时，libfaac 用于音频编码。多次出现的 LAME3.99.5。<a target="_blank" rel="noopener" href="http://www.linuxfromscratch.org/blfs/view/7.7/multimedia/lame.html">LAME</a> 是一种的 MP3 编码器，网关中有提示音和广播，这些部分是音频数据。mcu 关键的特征值（可读字符串）在 Flash 中没有找到，其块中也没找到，也应该在这块，猜测被加密了无法直接读取。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line">libfaac 1.26.1 (Dec 24 2008) UNSTABLE</span><br><span class="line">libfaac 1.26.1 (Dec 24 2008) UNSTABLE</span><br><span class="line">DR1175r1v1UNENCRYPTED00000JN5169</span><br><span class="line">DR1175r1v1UNENCRYPTED00000JN5169</span><br><span class="line">xxxx&#96;|tddddXXXP@\TLDDD8880  &lt;</span><br><span class="line">truebLBT_IsEqObjectValue</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&#x3D;             (C) COPYRIGHT 2016 Lumi Tech                            &#x3D;</span><br><span class="line">&#x3D;                                                                     &#x3D;</span><br><span class="line">&#x3D;                   System infomation                                 &#x3D;</span><br><span class="line">&#x3D;                   APP_VERSION--&gt; V%d.%d.%02d                            &#x3D;</span><br><span class="line">&#x3D;                   ModelID--&gt; %s                              &#x3D;</span><br><span class="line">&#x3D;          Fireware BuildTime: %s %s                    &#x3D;</span><br><span class="line">&#x3D;                                           By Lumi tech  Team        &#x3D;</span><br><span class="line">sizeof(tsFactoryParam) &#x3D; %d </span><br><span class="line">sFactoryParam.u8FactoryTestOK &#x3D; %d </span><br><span class="line">sFactoryParam.u16RelayOffDelay &#x3D; %d </span><br><span class="line">sFactoryParam.u16PowerSlope &#x3D; %d </span><br><span class="line">sFactoryParam.i16PowerOffset &#x3D; %d </span><br><span class="line">sFactoryParam.u16VoltageSlope &#x3D; %d </span><br><span class="line">sFactoryParam.i16TempOffset &#x3D; %d </span><br><span class="line">sFactoryParam.bProtectEnable &#x3D; %d </span><br><span class="line">sFactoryParam.u8ProtectPower100w &#x3D; %d </span><br><span class="line">sFactoryParam.u8ProtectTempC &#x3D; %d </span><br><span class="line">sFactoryParam.u8HardwareVersion &#x3D; %d </span><br><span class="line">NT Size: %d u8NTNum %d u8ChildNum %d</span><br><span class="line">EPCR &#x3D; %x : EEAR &#x3D; %x</span><br><span class="line">pLoigicInputEvent-&gt;u16AttribteId&#x3D; %x ,psHeaderV..u16AttribteId &#x3D; %x</span><br><span class="line">pLoigicInputEvent-&gt;u16Cluster&#x3D; %x ,psHeaderV..u16PointType &#x3D; %x</span><br><span class="line">pLoigicInputEvent-&gt;u8EndPoint&#x3D; %x ,psHeaderV..u8PointId &#x3D; %x</span><br><span class="line">pLoigicInputEvent-&gt;u16NetworkID&#x3D; %x ,psHeaderV..u16ShortID &#x3D; %x</span><br><span class="line">u64TempLaunchId_2 &#x3D; 0x%012llx , u8IfNumber &#x3D; %d</span><br><span class="line">Is Finded Launch ID </span><br><span class="line">%s Source DataType Undefine!</span><br><span class="line">%s Constant DataType Undefine!</span><br><span class="line">%s u8Operate Undefine!</span><br><span class="line">Find The Launch &#x3D; 0x%012llx</span><br><span class="line">No Finded Launch ID </span><br><span class="line">u8AddressType Unkown! </span><br><span class="line">sizeof(te_LumiNVMData_t) &#x3D; %d </span><br><span class="line">LumiNVMData.u8PrevOtaVersion: %x</span><br><span class="line">u8SegDataLen&#x3D; %d , sizeof(tsLBT_MapsStorage)&#x3D; %d </span><br><span class="line">PDM read bytes &#x3D; %d </span><br><span class="line">eStatusLBTReload&#x3D;%d </span><br><span class="line">vLoadLogicBindTableFromPDM() &#x3D;&#x3D; FALSE </span><br><span class="line">u8LUMI_GetNVM_u8ReStartReasonMask</span><br><span class="line">sDeviceDesc.eNodeState  &#x3D; E_STARTUP  </span><br><span class="line">sDeviceDesc.eNodeState  &#x3D; E_REJOINING </span><br><span class="line">sDeviceDesc.eNodeState  &#x3D; E_RUNNING  </span><br><span class="line">sDeviceDesc.eNodeState  &#x3D; E_UNKOWN </span><br><span class="line">Radio Channel--&gt; %d </span><br><span class="line">EPAN Id--&gt; 0x%016llx  </span><br><span class="line">Short Network Id--&gt; 0x%x </span><br><span class="line">IEEE Addr Id--&gt; 0x%016llx  </span><br><span class="line">AvailbeNTSize--&gt; 0x%04x </span><br><span class="line">APP_ZCL_vInitialise Finished </span><br><span class="line">App_Initialise Finished </span><br><span class="line">Getting into BackOff State </span><br><span class="line">Scan is over Channel </span><br><span class="line">APP: APP_ReportTelegrame Task--&gt; bOnOff:%d  TriggerSource:%d</span><br><span class="line">%s--&gt; %d-%02d-%02d  %02d:%02d:%02d %s</span><br><span class="line">APP_ReportTelegrame_Task</span><br><span class="line">Caution! Unpadded Extra [%02x]</span><br><span class="line"> u32CalculatedCrc &#x3D; %08x </span><br><span class="line"> u32ReceivedCrc &#x3D; %08x </span><br><span class="line">got same sequence command!</span><br><span class="line">---&gt;bLumi_IsProtectFaultNow, Please don&#39;t Turn On</span><br><span class="line">---&gt;bLumi_IsProtectFaultNow, Please don&#39;t Turn On </span><br><span class="line">---&gt; bLUMI_ProtectFunction  &#x3D; %d </span><br><span class="line">start up and send haertbeat</span><br><span class="line">bLUMI_ChargeProtectCounter-&gt; Now</span><br><span class="line"> save PDM when 150 heartbeat reach!</span><br><span class="line">LBT_Find_u16ShortAddress %04x</span><br><span class="line">Send Ping Device Request : 0x%016llx</span><br><span class="line">Address Request failed: 0x%02x</span><br><span class="line">%s : (0x%04x)Included In GroupTable </span><br><span class="line">sRxFrame_Ifthen.asCondition[%d] u8Offset &#x3D; %d </span><br><span class="line">sRxFrame_Ifthen.asCondition</span><br><span class="line">sRxFrame_Ifthen.sAction.sHV_A1</span><br><span class="line">sRxFrame_Ifthen.sAction.sHV_A2</span><br><span class="line">sRxFrame_Launch.asIf</span><br><span class="line">bLUMI_RegisterGroupID</span><br><span class="line">APP: Light Power Up &#x3D; %d </span><br><span class="line">APP: Watchdog timer has reset device! </span><br><span class="line"> OS_ISR(vISR_Timer4)---------------------------&gt;</span><br><span class="line"> OS_ISR(vISR_Timer3)---------------------------&gt;</span><br><span class="line">EP EVT: Invalid evt type 0x%x</span><br><span class="line">eLUMI_ReportSystemParameter2</span><br><span class="line">eLUMI_ReportSystemParameter</span><br><span class="line">eLUMI_ReportManufactoryParameter</span><br><span class="line">eLUMI_AckLumiProtocol</span><br><span class="line">APP_E_EVENT_BINDTABLE_ACTION --&gt;EndPoint &#x3D; %d, u16ClusterID&#x3D;0x04%x, u16AtrributeID &#x3D; 0x04%x, u8Cmd &#x3D; %d</span><br><span class="line">press 3s, Deleting the PDM </span><br><span class="line">press 5s, Deleting the PDM </span><br><span class="line">press 10s, Deleting the PDM  </span><br><span class="line">sAfZdpEvent.u16ClusterId %04x</span><br><span class="line">IEE u16NwkAddrRemoteDev &#x3D; 0x%04x  0x%016llx</span><br><span class="line">Unhandle--&gt;sAfZdpEvent.u16ClusterId:0x%04x</span><br><span class="line">MgmtLeave - Rejoin: %d</span><br><span class="line">MgmtLeave - Rejoin: 1</span><br><span class="line">MgmtLeave - Rejoin: 2</span><br><span class="line">sDeviceDesc.eNodeState &#x3D; %d</span><br><span class="line">%s: Got a message for DstAddr: 0x%04x Endpoint: %d	   &lt;---&gt; SrcAddr: 0x%04x Endpoint: %d u32TestAgentCount:%d</span><br><span class="line">Handle_Report_Atrribute</span><br><span class="line">SendReportingAttrGroup</span><br><span class="line">eLUMI_ReportHeartBeat</span><br><span class="line">libfaac 1.26.1 (Dec 24 2008) UNSTABLE</span><br><span class="line">libfaac 1.26.1 (Dec 24 2008) UNSTABLE</span><br><span class="line">LAME3.99.5UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUULAME3.99.5UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU</span><br><span class="line">UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU</span><br><span class="line">ILAME3.99.5UUUUUUUUUUUUUUUUUUUUUU</span><br><span class="line">z:QLAME3.99.5UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUd5</span><br><span class="line">LAME3.99.5UUUUUUUUUUUUUUUUUUUUUUU</span><br><span class="line">Y5LAME3.99.5UUUUUUUUUUUU(</span><br><span class="line">LAME3.99.5UUUUUUUUU%P</span><br><span class="line">LAME3.99.5UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU</span><br><span class="line">UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUULAME3.99.5UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU</span><br></pre></td></tr></table></figure>
+<h3 id="Zigbee-抓包"><a href="#Zigbee-抓包" class="headerlink" title="Zigbee 抓包"></a>Zigbee 抓包</h3><h4 id="获取信道"><a href="#获取信道" class="headerlink" title="获取信道"></a>获取信道</h4><p>将小米多功能网关上电，通过米家APP连接后，选择”网关”，然后在右上角点击三个点的图标，选择”关于”,进入新界面后多次点击底部的版本后，进入开发者模式。从多出来的 “网关信息” 中得到信道为 15。</p>
+<p><img src="image-20200330162734237.png" alt="image-20200330162734237"></p>
+<h4 id="配置wireshark"><a href="#配置wireshark" class="headerlink" title="配置wireshark"></a>配置wireshark</h4><p>将 CC2531 USB Donglg 插入电脑，并安装好<a target="_blank" rel="noopener" href="https://download.csdn.net/download/u013075443/16490601">驱动</a>。 然后下载并安装<a target="_blank" rel="noopener" href="http://www.ti.com/tool/TIMAC">TIMAC</a>套件或<a target="_blank" rel="noopener" href="https://www.ti.com.cn/tool/cn/PACKET-SNIFFER">PACKET-SNIFFER</a>，打开 TiWsPc 对设备进行配置，选择 “Device Configuration” 将信道设置为 15，并点击 start。以上的目的是配置 CC2531 USB Donglg 抓取 15 信道的数据，并创建管道，将数据传递传递出来。最后在 Wireshark 快捷方式属性中的目标中添加<code>-i\\.\pipe\tiwspc_data -k</code>，使用 TiWsPc 创建的管道抓取 15信道上的 Zigbee 数据。</p>
+<p><img src="image-20200330161521346.png" alt="image-20200330161521346"></p>
+<h4 id="添加密钥"><a href="#添加密钥" class="headerlink" title="添加密钥"></a>添加密钥</h4><p>双击 Wireshark就可以使用了，但现在数据还是加密的。由于小米多功能网关的密钥在串口打印出来了，我们可以用来解密流量，使用快捷键 CTRL+SHIFT+P 弹出首选项，在协议中选择 Zigbee，并配置密钥。在下图的 Key 中添加密钥。</p>
+<p><img src="image-20200330161714624.png" alt="image-20200330161714624"></p>
+<h4 id="无线开关控制无线插座"><a href="#无线开关控制无线插座" class="headerlink" title="无线开关控制无线插座"></a>无线开关控制无线插座</h4><p>单击无线开关实现无线插座的开关，以下是点击无线插座打开无线插座的流量。</p>
+<p>打开插座：上报属性值为 0x000 的开合属性数据，类型为布尔型 0x10，开关指令为 0x01打开。</p>
+<p><img src="image-20200330174653495.png" alt="image-20200330174653495"></p>
+<p>无线开关控制智能插座：无线开关 0x9561 发送消息给网关 0x0000，然后由网关0x0000 转发消息给智能插座 0xfe75。详见附件<a href="data.pcapng">数据包</a> 。</p>
+<p><img src="image-20200713145853503.png" alt="image-20200713145853503"></p>
+<p><a target="_blank" rel="noopener" href="https://www.ubilogix.com/ubiqua/">Ubiqua</a> 比 Wireshark 更好用,但需要授权。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/lissettecarlr/article/details/79942047">使用CC2531 USB Dongle 抓取小米Zigbee智能硬件数据包</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/186619">小米智能家庭ZigBee从硬件到固件分析</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/alibaba/genie-bt-mesh-stack/blob/ac21cb66c9dc253ce7a2bea4078c7ac49ff7e962/build/OpenOCD/Linux64/mw3xx/wmcore.cfg">wmcore.cfg</a></p>
+</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">米家智能家庭套装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%86%E8%A7%A3"><span class="toc-number">1.1.</span> <span class="toc-text">拆解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%87%E7%94%A8%E7%9A%84%E8%8A%AF%E7%89%87"><span class="toc-number">1.2.</span> <span class="toc-text">采用的芯片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">获取固件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%B2%E5%8F%A3"><span class="toc-number">1.4.</span> <span class="toc-text">串口</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%B2%E5%8F%A3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.1.</span> <span class="toc-text">串口命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SWD-OpenOCD-%E8%B0%83%E8%AF%95"><span class="toc-number">1.5.</span> <span class="toc-text">SWD - OpenOCD 调试</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#OpenOCD-%E9%85%8D%E7%BD%AE"><span class="toc-number">1.5.1.</span> <span class="toc-text">OpenOCD 配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6dump"><span class="toc-number">1.5.2.</span> <span class="toc-text">固件dump</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6%E5%88%86%E6%9E%90"><span class="toc-number">1.5.3.</span> <span class="toc-text">固件分析</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Zigbee-%E6%8A%93%E5%8C%85"><span class="toc-number">1.6.</span> <span class="toc-text">Zigbee 抓包</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E4%BF%A1%E9%81%93"><span class="toc-number">1.6.1.</span> <span class="toc-text">获取信道</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEwireshark"><span class="toc-number">1.6.2.</span> <span class="toc-text">配置wireshark</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%AF%86%E9%92%A5"><span class="toc-number">1.6.3.</span> <span class="toc-text">添加密钥</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A0%E7%BA%BF%E5%BC%80%E5%85%B3%E6%8E%A7%E5%88%B6%E6%97%A0%E7%BA%BF%E6%8F%92%E5%BA%A7"><span class="toc-number">1.6.4.</span> <span class="toc-text">无线开关控制无线插座</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.7.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/&text=米家智能家庭套装 Zigbee"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/&title=米家智能家庭套装 Zigbee"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/&is_video=false&description=米家智能家庭套装 Zigbee"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=米家智能家庭套装 Zigbee&body=Check out this article: http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/&title=米家智能家庭套装 Zigbee"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/&title=米家智能家庭套装 Zigbee"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/&title=米家智能家庭套装 Zigbee"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/&title=米家智能家庭套装 Zigbee"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/&name=米家智能家庭套装 Zigbee&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+

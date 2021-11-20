@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="智能电视漏洞挖掘初探之从文件系统分析到提权上一篇文章讲到，通过工程模式等方法获取到了 Android ADB 的 shell，现在就来讲讲后续。 研究智能电视和分析其他 IOT 设备相似，ADB 进来之后，首先看运行的程序、 开放的端口信息。当输入命令 netstat -antp 我都愣住了，长期使用 root 权限的我，从来没见过这阵仗，PID&#x2F;Program Name 中全是 -，这就很尴尬了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="智能电视漏洞挖掘初探之从文件系统分析到提权">
+<meta property="og:url" content="http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="智能电视漏洞挖掘初探之从文件系统分析到提权上一篇文章讲到，通过工程模式等方法获取到了 Android ADB 的 shell，现在就来讲讲后续。 研究智能电视和分析其他 IOT 设备相似，ADB 进来之后，首先看运行的程序、 开放的端口信息。当输入命令 netstat -antp 我都愣住了，长期使用 root 权限的我，从来没见过这阵仗，PID&#x2F;Program Name 中全是 -，这就很尴尬了">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/image-20210416102733258.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/image-20210416104114570.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/image-20210415170638241.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/SELinux-context.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/image-20210415195657809.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/a.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/image-20210415202933592.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/image-20210406180043320.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/image-20210416152928675.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/image-20210416145820678.png">
+<meta property="article:published_time" content="2021-04-23T04:31:17.000Z">
+<meta property="article:modified_time" content="2021-04-30T03:16:41.000Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="IOT">
+<meta property="article:tag" content="TV">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/image-20210416102733258.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>智能电视漏洞挖掘初探之从文件系统分析到提权</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
+      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
+      <span id="i-top" class="info" style="display:none;">Arriba</span>
+      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/&text=智能电视漏洞挖掘初探之从文件系统分析到提权"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/&title=智能电视漏洞挖掘初探之从文件系统分析到提权"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/&is_video=false&description=智能电视漏洞挖掘初探之从文件系统分析到提权"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=智能电视漏洞挖掘初探之从文件系统分析到提权&body=Check out this article: http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/&title=智能电视漏洞挖掘初探之从文件系统分析到提权"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/&title=智能电视漏洞挖掘初探之从文件系统分析到提权"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/&title=智能电视漏洞挖掘初探之从文件系统分析到提权"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/&title=智能电视漏洞挖掘初探之从文件系统分析到提权"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/&name=智能电视漏洞挖掘初探之从文件系统分析到提权&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83"><span class="toc-number">1.</span> <span class="toc-text">智能电视漏洞挖掘初探之从文件系统分析到提权</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">文件系统结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E6%9C%89%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">特有结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83"><span class="toc-number">1.3.</span> <span class="toc-text">文件系统分析到提权</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E8%84%9A%E6%9C%AC%E5%8F%91%E7%8E%B0%E5%90%8E%E9%97%A8"><span class="toc-number">1.3.1.</span> <span class="toc-text">在初始化脚本发现后门</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%8E%E9%97%A8%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E5%88%86%E6%9E%90"><span class="toc-number">1.3.2.</span> <span class="toc-text">后门服务调用分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SELinux-%E9%98%BB%E6%96%AD%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-number">1.3.3.</span> <span class="toc-text">SELinux 阻断漏洞利用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%BB%E6%89%BE%E4%B8%B2%E5%8F%A3%E7%BB%95%E8%BF%87-SELinux-%E5%AE%9E%E7%8E%B0%E6%8F%90%E6%9D%83"><span class="toc-number">1.3.4.</span> <span class="toc-text">寻找串口绕过 SELinux 实现提权</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.5.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        智能电视漏洞挖掘初探之从文件系统分析到提权
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2021-04-23T04:31:17.000Z" itemprop="datePublished">2021-04-23</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/IOT/" rel="tag">IOT</a>, <a class="tag-link-link" href="/tags/TV/" rel="tag">TV</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="智能电视漏洞挖掘初探之从文件系统分析到提权"><a href="#智能电视漏洞挖掘初探之从文件系统分析到提权" class="headerlink" title="智能电视漏洞挖掘初探之从文件系统分析到提权"></a>智能电视漏洞挖掘初探之从文件系统分析到提权</h2><p>上一篇文章讲到，通过工程模式等方法获取到了 Android ADB 的 shell，现在就来讲讲后续。</p>
+<p>研究智能电视和分析其他 IOT 设备相似，ADB 进来之后，首先看运行的程序、 开放的端口信息。当输入命令 <code>netstat -antp</code> 我都愣住了，长期使用 root 权限的我，从来没见过这阵仗，PID/Program Name 中全是 <code>-</code>，这就很尴尬了。不知道是什么程序启用的端口。</p>
+<p><img src="image-20210416102733258.png" alt="image-20210416102733258"></p>
+<p>使用浏览器访问其中的一个 WEB 端口，尝试了好些路径都是 404 Not Found。</p>
+<p><img src="image-20210416104114570.png" alt="image-20210416104114570"></p>
+<p>按传统的 Web 套路，那得 Fuzz 路径。但电视上 Web 服务路径的基本都不是常规路径，那只得分析占用这个端口的应用。netstat 又看不到进程，系统中的文件又是何其的多。单个端口从海量的应用中去分析调用者，费时费力。分析查看不到的原因是，由于 adb 的权限为 shell 权限低，看不到端口对应的进程信息。电视开放了多个端口，一劳永逸的方法仍旧只有提权一条路。</p>
+<p>遵循 Linux “一切皆文件” 的思想本质，归根到底还是要回到文件。分析文件之前需要对文件系统有个整体的把握。之前零散的玩过几个 Android 电视，发现文件系统与 Android 的大体相似，但也存在着一些差异。这些电视的文件系统有些共性的东西，正好乘着这次机会把文件系统结构梳理一下。</p>
+<h3 id="文件系统结构"><a href="#文件系统结构" class="headerlink" title="文件系统结构"></a>文件系统结构</h3><p>Android 智能电视的文件系统结构和 Android 高度相似，但也有些特有的结构。</p>
+<ul>
+<li><strong>Customer -&gt; /tvcustomer/Customer</strong>：电视厂商自定义文件，有的电视把开机动画放在这里</li>
+<li><strong>Database -&gt; /tvdatabase/Database</strong>: 数据库目录</li>
+<li><p><strong>DatabaseBackup -&gt; /tvdatabase/DatabaseBackup</strong>:</p>
+</li>
+<li><p><strong>bin</strong> : 少量可执行文件，目录下的文件大多来自 /system/bin/ </p>
+</li>
+<li><strong>cache </strong>: 缓存临时文件夹，访问需要 root 权限</li>
+<li><strong>charger -&gt; /sbin/charger</strong> : 指向 /sbin/charger</li>
+<li><strong>config </strong>:  配置文件</li>
+<li><strong>data</strong> : 用户软件和各种数据。</li>
+<li><strong>local/tmp</strong>　　临时目录，无权限要求，在这里可以给上传的的文件 chmod 加上执行权限<ul>
+<li><strong>app</strong>  普通程序安装目录</li>
+<li><strong>data</strong><ul>
+<li><strong>&lt;package_name&gt;</strong><ul>
+<li><strong>files</strong>  应用安装目录</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>default.prop -&gt; system/etc/prop.default </strong>: 默认系统属性配置文件</li>
+<li><strong>dev</strong> : 存放设备节点文件，如串口等。</li>
+<li><strong>etc -&gt; /system/etc </strong>:  /etc 指向 /system/etc  配置文件目录 </li>
+<li><strong>init </strong>: 系统启动的第一个用户程序</li>
+<li><strong>init.usb.rc</strong> : 初始化配置文件，厂商自定义功能和名称，一般有多个，这个是针对 USB 的</li>
+<li><strong>lib -&gt; /mnt/vendor/tvservice/glibc</strong> :指向 glibc</li>
+<li><strong>lost+found </strong>: 回收站</li>
+<li><strong>mnt</strong> : 外部存储设备挂载路径，如 U 盘，手机中文件管理器的读取的就在这个路径下 /mnt/sdcard</li>
+<li><strong>odm </strong>: odm 的文件，目录下的文件链接自  /vendor/odm/</li>
+<li><strong>oem</strong> : oem 的文件，目录下的文件链接自  /vendor/oem/</li>
+<li><strong>proc </strong>: 运行时文件，全局系统信息</li>
+<li><strong>product -&gt; /system/product </strong>: 指向 /system/product</li>
+<li><strong>sbin</strong> : 其中有少量可执行程序</li>
+<li><strong>sdcard -&gt; /storage/self/primary</strong> : SD卡中的 FAT32 文件系统挂载的目录</li>
+<li><strong>storage</strong> : 内部存储目录</li>
+<li><strong>sys</strong> : 内核对象</li>
+<li><strong>system</strong> : 系统中<strong>最要用</strong>的一个目录，大部分内容在这个目录。<ul>
+<li><strong>app</strong>: 应用目录</li>
+<li><strong>etc</strong>: 配置文件</li>
+<li><strong>lib</strong>: 库文件</li>
+<li><strong>product</strong>:  一些工厂应用</li>
+<li><strong>bin</strong>: 可执行文件</li>
+<li><strong>fake-libs</strong>: ART虚拟机库文件 libart.so </li>
+<li><strong>lib64</strong>: 库文件</li>
+<li><strong>recovery-from-boot.p</strong>: 系统刷写使用</li>
+<li><strong>build.prop</strong>: 系统配置文件</li>
+<li><strong>fonts</strong>: 字体库</li>
+<li><strong>media</strong>: 媒体文件</li>
+<li><strong>usr</strong>: 用户文件夹</li>
+<li><strong>compatibility_matrix.xml</strong>:</li>
+<li><strong>framework </strong>: 框架文件 jar 包</li>
+<li><strong>priv-app </strong>: 特权应用，不能使用 kill 命令关闭</li>
+<li><strong>vendor -&gt; /vendor</strong>: 指向 /vendor</li>
+</ul>
+</li>
+<li><strong>tmp -&gt; /var/tmp</strong> : 临时文件，指向 /var/tmp</li>
+<li><strong>var</strong> : 储存各种变化的文件</li>
+<li><strong>vendor </strong>: 供应商的程序目录<ul>
+<li><strong>bin</strong>: 可执行程序</li>
+<li><strong>config -&gt; /vendor/tvconfig/config</strong>: 电视的配置文件，多与硬件相关</li>
+<li><strong>default.prop</strong>:  默认系统属性配置文件</li>
+<li><strong>etc</strong>: 配置文件</li>
+<li><strong>firmware</strong>: 存放Wi-Fi 等模块的固件目录</li>
+<li><strong>lib</strong>: 库文件</li>
+<li><strong>lib64</strong>: 库文件</li>
+<li><strong>lost+found</strong>: 回收站</li>
+<li><strong>manifest.xml</strong>: 供应商接口文件</li>
+<li><strong>tvcertificate</strong>: 电视证书目录</li>
+<li><strong>tvconfig</strong>: 电视配置文件</li>
+</ul>
+</li>
+</ul>
+<p><strong>Tips：</strong>系统中最重要的目录是 /system/ 和 /vendor/，普通权限也能获取其中大部分的文件。直接 adb pull 有些文件拉不下来，可以先 tar 打包到 /mnt/sdcard 然后在用 adb 下载到本地。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar czvf /mnt/sdcard/filesystem.tar.gz /vendor/ /system/</span><br><span class="line">adb pull /mnt/sdcard/filesystem.tar.gz .</span><br></pre></td></tr></table></figure>
+<h3 id="特有结构"><a href="#特有结构" class="headerlink" title="特有结构"></a>特有结构</h3><p>智能电视的根文件系统中有一些特有的文件目录，如 odm、oem、tvconfig、tvservice、tvcustomer、tvdatabase等。</p>
+<p>电视也是供应链的产品，也有贴牌的产品。首先把 OEM、ODM、OBM 的定义搞清楚，这几个词。</p>
+<ul>
+<li>OEM（Original Equipment Manufacturer）即原始设备制造商，A方看中B方的生产能力，让B方生产A方设计的产品，用A方商标。对B方来说，这叫OEM。</li>
+<li>ODM（Original Design Manufacturer）即原始设计制造商，A方的技术和设计，被B方看中，B方引进生产，贴上B方标签，对A方来说，这叫ODM；</li>
+<li>OBM（Original Brand Manufacturer），即原始品牌制造商，A自行创立A品牌，B生产、销售拥有A品牌的产品。对A来说，称为OBM。</li>
+</ul>
+<p>分析了多个品牌的电视固件后发现，处理器多采用 MTK 平台。电视使用的处理器是 MTK 旗下的 Mstar(晨星)半导体的。刚开始比较纳闷，这俩什么关系，也就刚写东西去查了才知道，2012年 MTK 收购了 Mstar。Mstar 提供智能电视的解决方案，属于 ODM，所以在 /odm 和 /vendor 目录下可以看到他们的文件。</p>
+<ul>
+<li><strong>/odm</strong> : 芯片解决方案提供的基础代码，/odm 目录下的文件会链接 /vendor 目录下的同名文件。</li>
+<li><strong>/oem</strong>: 多数情况下为空 </li>
+<li><strong>/vendor/tvconfig</strong>：电视启动阶段的配置文件，多与硬件设备有关。有的电视不使用 /tvdatabase、/tvcustomer,而将这些文件放在这个目录下。</li>
+<li><strong>/vendor/tvservice</strong>: 一些电视服务相关的可执行文件和库文件。</li>
+<li><strong>/tvcustomer</strong>:  电视厂商自定义文件夹，有的厂商使用存在开机需要的文件，如开机视频等。</li>
+<li><strong>/tvdatabase</strong>: 数据库目录,如电视的RGB值、HDMI、音频等。</li>
+</ul>
+<h3 id="文件系统分析到提权"><a href="#文件系统分析到提权" class="headerlink" title="文件系统分析到提权"></a>文件系统分析到提权</h3><p>理清整个文件系统的结构之后，就开始分析系统中文件了。首先看的是系统的初始化脚本，其中定义很多服务，还有很多初始化命令。去寻找有没有什么可以利用的。运气还不错，看到了一个后门服务。</p>
+<h4 id="在初始化脚本发现后门"><a href="#在初始化脚本发现后门" class="headerlink" title="在初始化脚本发现后门"></a>在初始化脚本发现后门</h4><p>init.rc 是用户空间执行的第一个程序 init 的配置文件。除了 init.rc，还有形如 init.[名称].rc。这些文件在 Android (MIUI) 普通用户是<strong>不可读</strong>的，在智能电视中往往是<strong>可读</strong>的。</p>
+<p><img src="image-20210415170638241.png" alt="image-20210415170638241"></p>
+<p>init.rc 首先会使用 import 把其他的 rc 文件导入进来，拓展当前的配置。import 属于类型声明中的 Command（命令），另外三个分别是 Actions（行为）、Services（服务）和Options（选项）。下面举几个例子，熟悉一下 init.rc 的语法。</p>
+<ul>
+<li><p>Service</p>
+<p>Service 的语法格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">service &lt;name&gt; &lt;pathname&gt; [ &lt;argument&gt; ]*</span><br><span class="line">    &lt;option&gt;</span><br><span class="line">    &lt;option&gt;</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">service console &#x2F;system&#x2F;bin&#x2F;sh</span><br><span class="line">    class core</span><br><span class="line">    console</span><br><span class="line">    disabled</span><br><span class="line">    user shell</span><br><span class="line">    group shell log readproc</span><br><span class="line">    seclabel u:r:shell:s0</span><br><span class="line">    setenv HOSTNAME console</span><br></pre></td></tr></table></figure>
+<p>示例解析：</p>
+<ul>
+<li>第一行：这里声明了一个名为 console 的服务，console 服务调用 /system/bin/sh 创建一个子进程。</li>
+<li>第二行：指定服务类为 core。</li>
+<li>第三行：disable 表示默认不启动。</li>
+<li>第四行：指定程序运行的用户权限，这里为 shell。</li>
+<li>第五行：指定程序的所属组，赋予所属组的权限。这里有shell、log以及eadproc。</li>
+<li>第六行：安全标签，在执行服务之前改变安全级别。<code>u:r:shell:s0</code> 是 SELinux 的安全上下文。</li>
+<li>第七行：设置系统环境变量 HOSTNAME 为 console。</li>
+</ul>
+</li>
+<li><p>Action</p>
+<p>Action 的语法格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">on &lt;trigger&gt;  </span><br><span class="line">   &lt;command&gt;  </span><br><span class="line">   &lt;command&gt;  </span><br><span class="line">   &lt;command&gt;</span><br></pre></td></tr></table></figure>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">on property:ro.debuggable&#x3D;1</span><br><span class="line">   # Give writes to anyone for the trace folder on debug builds.</span><br><span class="line">   # The folder is used to store method traces.</span><br><span class="line">   chmod 0773 &#x2F;data&#x2F;misc&#x2F;trace</span><br><span class="line">   # Give reads to anyone for the window trace folder on debug builds.</span><br><span class="line">   chmod 0775 &#x2F;data&#x2F;misc&#x2F;wmtrace</span><br><span class="line">   start console</span><br></pre></td></tr></table></figure>
+<p>示例解析：其中 trigger 是触发条件，当触发条件满足时将依次执行 command。当属性值 ro.debuggable 等于 1 时，启动上述的 console 服务。</p>
+</li>
+</ul>
+<h4 id="后门服务调用分析"><a href="#后门服务调用分析" class="headerlink" title="后门服务调用分析"></a>后门服务调用分析</h4><p>在某次漏洞挖局中，在 init.factory.rc(漏洞点已做匿名化处理) 中看到过厂商预留的一个后门服务。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">on property:factory.debug&#x3D;1</span><br><span class="line">    start factory.debug</span><br><span class="line">    start adbd</span><br><span class="line">    </span><br><span class="line">service factory &#x2F;system&#x2F;bin&#x2F;factory_app</span><br><span class="line">    user root</span><br><span class="line">    group root</span><br><span class="line">    seclabel u:r:su:s0</span><br></pre></td></tr></table></figure>
+<p>当 factory.debug = 1 时，会启动一个后门服务 factory，factory 会调用可知文件 /system/bin/factory_app 。从配置可以看到 factory_app 运行时具有 root 权限，利用这个后门执行任意命令提升权限。但编写利用脚本的漏洞时，没有注意 factory 中的 seclabel 选项，直接被 SELinux 阻断了。</p>
+<h4 id="SELinux-阻断漏洞利用"><a href="#SELinux-阻断漏洞利用" class="headerlink" title="SELinux 阻断漏洞利用"></a>SELinux 阻断漏洞利用</h4><p>在看漏洞利用程序被 SELinux 阻断之前，先来简单了解一下 SELinux。SELinux 主要作用就是最大限度地减小系统中服务进程可访问的资源（最小权限原则）。SELinux 管理过程中，进程是否可以正确地访问文件资源，取决于它们的安全上下文。</p>
+<p>安全上下的结构为: <code>用户：类型：灵敏度：[类别]</code>。</p>
+<p><img src="SELinux-context.png" alt="SELinux-context.png"></p>
+<ul>
+<li><strong>用户（User）</strong>：类似 UID，提供身份识别，用来记录身份。</li>
+<li><strong>角色（Role）</strong>：标识用户、进程、文件、目录、设备的角色。</li>
+<li><strong>类型（Type）</strong>：用来将主体(subject)和客体(object)划分为不同的组，给每个主体和系统中的客体定义了一个类型；为进程运行提供最低的权限环境；</li>
+<li><strong>级别（Level）</strong>：用 s0、s1、s2 来命名的，数值越大级别越高。</li>
+</ul>
+<p>首先看SELinux的状态，Enforcing 代表开启了强模式。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ getenforce</span><br><span class="line">Enforcing</span><br></pre></td></tr></table></figure>
+<p>再来看当前用户的安全上下文。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ id -Z</span><br><span class="line">context=u:r:shell:s0</span><br></pre></td></tr></table></figure>
+<p>查看文件的安全上下文。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls -Z /system/bin/factory_app                                       </span><br><span class="line">u:object_r:system_file:s0 /system/bin/factory_app</span><br></pre></td></tr></table></figure>
+<p>回到电视的漏洞挖掘总，在这个后门的利用中，由于权限不满足 SELinux 直接阻止了 unix_domain_socket 的连接。好不容易找到的一个提权点就这样报废了。</p>
+<p><img src="image-20210415195657809.png" alt="image-20210415195657809"></p>
+<p><strong>Tips</strong>：一般到 /etc/ 目录去看配置文件，除了看自启文件和各种配置外。需要重点专注的 SELinux 的策略，被伤过的才记忆深刻。Android 电视中的 SELinux 策略配置的挺严格的，阻断了我的好几个利用链路。</p>
+<p><img src="a.jpg" alt="img" style="zoom: 25%;" /></p>
+<h4 id="寻找串口绕过-SELinux-实现提权"><a href="#寻找串口绕过-SELinux-实现提权" class="headerlink" title="寻找串口绕过 SELinux 实现提权"></a>寻找串口绕过 SELinux 实现提权</h4><p>漏洞利用被阻断，心有不甘。于是想到关闭 SELinux 之后，不就可以执行任意命令了，但是要怎么关闭呢。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ setenforce 0</span><br><span class="line">setenforce: Couldn<span class="string">&#x27;t set enforcing status to &#x27;</span>0<span class="string">&#x27;: Permission denied</span></span><br></pre></td></tr></table></figure>
+<p>setenforce 必定是没有权限的，系统级别无法关闭，那就在更早阶段禁用 SELinux。最后发现可以通过 Bootloader 环境变量 bootargs 来禁用 SELinux。修改 UBoot 中的参数，前提是需要进入Uboot。接入 UBoot 找个串口 ，但电视有没拆怎么知道电视有没有串口呢，直接 cat /dev/ttyS0看不了没权限。</p>
+<p><img src="image-20210415202933592.png" alt="image-20210415202933592"></p>
+<p>查看 /vendor/etc/set_env 中 bootargs 的值。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cat /vendor/etc/set_env |grep bootargs</span><br><span class="line">setenv bootargs console=ttyS0,115200 androidboot.console=ttyS0 loglevel=0 root=/dev/ram rw rootwait init=/init CORE_DUMP_PATH=/var/core_dump.%%p.gz KDebug=1 delaylogo=<span class="literal">true</span> androidboot.SELinux=permissive</span><br></pre></td></tr></table></figure>
+<p>可以看到使用了串口 ttyS0，波特率为 115200。关键是最后，androidboot.SELinux=permissive，指明了 SELinux 开启了。此时需要拆开电视找到串口，修改 bootargs 的值。</p>
+<p>拆开电视正好看到了预留的调试接口，使用万用表找到 GND，使用逻辑分析仪找到 Tx。</p>
+<p><img src="image-20210406180043320.png" alt="image-20210406180043320"></p>
+<p>使用串口工具连接电视串口与电脑。波特率设置为 115200，进入 BootLoader 修改 androidboot.SELinux 的值就能关闭 SELinux。然后使用上面的被 SELinux 拦截的程序就能获得 Root 权限。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setenv bootargs console=ttyS0,115200 androidboot.console=ttyS0 loglevel=0 root=/dev/ram rw rootwait init=/init CORE_DUMP_PATH=/var/core_dump.%%p.gz KDebug=1 delaylogo=<span class="literal">true</span> androidboot.SELinux=disabled enforcing=0  androidboot.dm_verity=disabled</span><br></pre></td></tr></table></figure>
+<p>设置好环境变量后，使用 saveenv 保存修改的值。最后使用 reset 命令重启电视。</p>
+<p><img src="image-20210416152928675.png" alt="image-20210416152928675" style="zoom:80%;" /></p>
+<p>拿到 Root 权限后就能更方便的分析应用了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">console:/ <span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=0(root) groups=1003(graphics),1004(input),1007(<span class="built_in">log</span>),1011(adb),1015(sdcard_rw),1028(sdcard_r),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats)</span><br></pre></td></tr></table></figure>
+<p><strong>TIPS：</strong> 电视串口直连电脑时，我们大多使用杜邦线之类的，调试线的长度比较有限。调试的时候不得不离开舒适的电脑椅，甚至要席地而坐，半天下来身心疲惫。此时可以用树莓派连接串口，我们就能回到舒适的电脑椅上继续肝了。</p>
+<p><img src="image-20210416145820678.png" alt="image-20210416145820678" style="zoom:50%;" /></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>本文是智能电视漏洞挖掘的第三篇，这一篇从初始智能电视文件系统到权限提升，但仍旧是漏洞挖掘的起点，有了 Root 权限才能对应用和服务进行深入的研究，后面会再分享一些对应用和固件等方面的研究。有点其他事情，会断更一段时间，静候。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><p><a target="_blank" rel="noopener" href="https://android.googlesource.com/platform/system/core/+/master/init/README.md">Android Init Language</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://source.android.com/devices/architecture/vintf">Vendor Interface Object</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/21584df4387b">init.rc 语法与解析</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/SELinuxProject/selinux-notebook/blob/main/src/security_context.md#security-context">SELinux Security Context</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Des_lucioles/article/details/49514519">SELinux安全上下文的认识</a></p>
+</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83"><span class="toc-number">1.</span> <span class="toc-text">智能电视漏洞挖掘初探之从文件系统分析到提权</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">文件系统结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E6%9C%89%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">特有结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83"><span class="toc-number">1.3.</span> <span class="toc-text">文件系统分析到提权</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E8%84%9A%E6%9C%AC%E5%8F%91%E7%8E%B0%E5%90%8E%E9%97%A8"><span class="toc-number">1.3.1.</span> <span class="toc-text">在初始化脚本发现后门</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%8E%E9%97%A8%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E5%88%86%E6%9E%90"><span class="toc-number">1.3.2.</span> <span class="toc-text">后门服务调用分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SELinux-%E9%98%BB%E6%96%AD%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-number">1.3.3.</span> <span class="toc-text">SELinux 阻断漏洞利用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%BB%E6%89%BE%E4%B8%B2%E5%8F%A3%E7%BB%95%E8%BF%87-SELinux-%E5%AE%9E%E7%8E%B0%E6%8F%90%E6%9D%83"><span class="toc-number">1.3.4.</span> <span class="toc-text">寻找串口绕过 SELinux 实现提权</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.5.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/&text=智能电视漏洞挖掘初探之从文件系统分析到提权"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/&title=智能电视漏洞挖掘初探之从文件系统分析到提权"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/&is_video=false&description=智能电视漏洞挖掘初探之从文件系统分析到提权"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=智能电视漏洞挖掘初探之从文件系统分析到提权&body=Check out this article: http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/&title=智能电视漏洞挖掘初探之从文件系统分析到提权"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/&title=智能电视漏洞挖掘初探之从文件系统分析到提权"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/&title=智能电视漏洞挖掘初探之从文件系统分析到提权"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/&title=智能电视漏洞挖掘初探之从文件系统分析到提权"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/&name=智能电视漏洞挖掘初探之从文件系统分析到提权&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+

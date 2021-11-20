@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="在过去的几个月里，VDDO 安全研究团队一直在物联网安防领域进行广泛的安全研究。在大多数情况下，为了提高效率和透明度，研究是和设备供应商一起进行的。 作为研究的一部分，VDOO 研究团队发现了多个供应商的设备中发现了 0day 漏洞。根据漏洞披露原则，这些漏洞首先向厂商披露，随后会逐步公开。 我们发现 Foscan 是最易受到攻击之一的厂商，我们团队在 Foscan 安全摄像头中发现了一条关键的漏">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Foscan 摄像头多个漏洞披露含技术细节">
+<meta property="og:url" content="http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="在过去的几个月里，VDDO 安全研究团队一直在物联网安防领域进行广泛的安全研究。在大多数情况下，为了提高效率和透明度，研究是和设备供应商一起进行的。 作为研究的一部分，VDOO 研究团队发现了多个供应商的设备中发现了 0day 漏洞。根据漏洞披露原则，这些漏洞首先向厂商披露，随后会逐步公开。 我们发现 Foscan 是最易受到攻击之一的厂商，我们团队在 Foscan 安全摄像头中发现了一条关键的漏">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/figure_01.png">
+<meta property="og:image" content="http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/figure_02_vd-0801.png">
+<meta property="og:image" content="http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/01_vd-0801_soft_a_600.gif">
+<meta property="og:image" content="http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/figure_3_camera_time_field_2.png">
+<meta property="og:image" content="http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/figure_4_vd-0803_after_initial_patch.png">
+<meta property="og:image" content="http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/data_flow_02_renew1.png">
+<meta property="og:image" content="http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/04_600.gif">
+<meta property="og:image" content="http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/05_600.gif">
+<meta property="og:image" content="http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/08_600.gif">
+<meta property="og:image" content="http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/figure_6_wireshark.png">
+<meta property="article:published_time" content="2018-06-06T15:15:45.000Z">
+<meta property="article:modified_time" content="2018-06-11T05:30:29.000Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="IOT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/figure_01.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>Foscan 摄像头多个漏洞披露含技术细节</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/08/18/VDOO-%E6%8A%AB%E9%9C%B2-Axis-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/05/27/%E6%99%BA%E8%83%BD%E6%89%8B%E7%8E%AF-Hacking-%E4%B9%8B%E6%97%85/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
+      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
+      <span id="i-top" class="info" style="display:none;">Arriba</span>
+      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/&text=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/&title=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/&is_video=false&description=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Foscan 摄像头多个漏洞披露含技术细节&body=Check out this article: http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/&title=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/&title=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/&title=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/&title=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/&name=Foscan 摄像头多个漏洞披露含技术细节&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E6%A6%82%E8%A6%81"><span class="toc-number">1.</span> <span class="toc-text">技术概要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E6%B7%B1%E6%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">技术深潜</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2018-6830-%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.1.</span> <span class="toc-text">CVE-2018-6830  任意文件删除漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#POC"><span class="toc-number">2.1.1.</span> <span class="toc-text">POC</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2018-6832-%E5%9F%BA%E4%BA%8E%E5%A0%86%E6%A0%88%E7%9A%84%E7%BC%93%E5%86%B2%E5%99%A8"><span class="toc-number">2.2.</span> <span class="toc-text">CVE-2018-6832  基于堆栈的缓冲器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2018-6831-shell-%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.3.</span> <span class="toc-text">CVE-2018-6831  shell 命令注入漏洞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POC-1"><span class="toc-number">2.4.</span> <span class="toc-text">POC</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%A81-%E5%AD%98%E5%9C%A8%E6%BC%8F%E6%B4%9E%E7%9A%84%E6%9C%80%E6%96%B0%E5%9B%BA%E4%BB%B6%E7%89%88%E6%9C%AC"><span class="toc-number">3.</span> <span class="toc-text">表1 - 存在漏洞的最新固件版本</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Foscan 摄像头多个漏洞披露含技术细节
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-06-06T15:15:45.000Z" itemprop="datePublished">2018-06-06</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/IOT/" rel="tag">IOT</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>在过去的几个月里，VDDO 安全研究团队一直在物联网安防领域进行广泛的安全研究。在大多数情况下，为了提高效率和透明度，研究是和设备供应商一起进行的。</p>
+<p>作为研究的一部分，VDOO 研究团队发现了多个供应商的设备中发现了 0day 漏洞。根据漏洞披露原则，这些漏洞首先向厂商披露，随后会逐步公开。</p>
+<p>我们发现 Foscan 是最易受到攻击之一的厂商，我们团队在 Foscan 安全摄像头中发现了一条关键的漏洞链。结合我们发现的这几个漏洞，如果一个攻击者获取到了摄像头的地址，他能够远程获取 root 权限(局域网或互联网)。VDOO 负责的披露这些漏洞（CVE-2018-6830、CVE-2018-6831、CVE-2018-6832）,并与 Focsam 安全团队合作修复这些漏洞。</p>
+<p>据我们所知，这些漏洞并没有在野利用，因此不会对Foscam客户造成任何具体的隐私侵犯或安全威胁。Foscam 团队迅速采取行动，修补这些漏洞，并将其推送到脆弱的产品中。</p>
+<h2 id="技术概要"><a href="#技术概要" class="headerlink" title="技术概要"></a>技术概要</h2><p>摄像头采用了 Linux 操作系统，所有的程序均以 root 权限运行。web 服务器是厂商做了修改的 <a target="_blank" rel="noopener" href="http://www.lighttpd.net/"><strong>lighttpd</strong></a>,它使用 FastCGI 协议将 API 请求转发到内部的 <strong>CGIPorxy.fcgi</strong> 程序。随后 CGIProxy.fcgi 将请求转发(使用专有的 IPC 机制)给 <strong>webservice</strong>。在这里会验证用户的凭证（如果需要）并运行 API 命令的处理程序。根据命令不同，处理程序可能会从 <strong>devMng</strong> 调用额外的代码，通常会使用 <strong>system()</strong> 或 <strong>popen()</strong> 库调用来执行 shell 命令，用于配置系统服务。<strong>watchdog</strong> 守护进程会重新启动哪些被终止了的重要的进程。<br><img src="figure_01.png" alt="摄像头进程调用图"></p>
+<p>攻击场景如下：</p>
+<ul>
+<li><p><strong>第一步：</strong>首先必须获取到摄像头的 IP 地址和 DNS。这可以通过以下几种方式获取</p>
+<ul>
+<li>如果摄像头和网络是用户自行配置的，比如摄像头与互联网直联，那么它的地址可能使用一些扫描器获取。</li>
+<li>如果攻击者通过未授权（远程或本地）的方式访问摄像头的网络，他可能能够找到摄像头的本地地址。</li>
+<li>如果用户启用了动态 DNS，攻击者可能会找到方法解析出设备名称。</li>
+</ul>
+</li>
+<li><p><strong>第二步：</strong>攻击者使用任意文件删除漏洞（<strong>CVE-2018-6830</strong>）删除某些重要的文件。当 <strong>webservice</strong> 进程重启时，这些文件将导致身份验证被绕过。</p>
+</li>
+<li><p><strong>第三步:</strong>攻击者使用 <strong>webService</strong> 进程中的一个堆栈溢出漏洞(<strong>CVE-2018-6832</strong>) 使 <strong>webService</strong> 进程崩溃。在<strong>webService</strong> 奔溃后，守护进程会自动重启 <strong>webServie</strong> 进程。在进程 reload 期间，第二步的操作会生效。现在，攻击者就能够获取管理员凭证了。</p>
+</li>
+<li><p><strong>第四步：</strong>利用命令注入漏洞（<strong>CVE-2018-6831</strong>）以 root 权限执行命令，这一步需要管理员的凭证。在上面一步中已经获取到了管理员的凭证，因此攻击者就能以 root 权限执行命令。技术详细如下。</p>
+</li>
+</ul>
+<h2 id="技术深潜"><a href="#技术深潜" class="headerlink" title="技术深潜"></a>技术深潜</h2><p>本节提供每个漏洞的细节，并解释完整的攻击序列。</p>
+<h3 id="CVE-2018-6830-任意文件删除漏洞"><a href="#CVE-2018-6830-任意文件删除漏洞" class="headerlink" title="CVE-2018-6830  任意文件删除漏洞"></a>CVE-2018-6830  任意文件删除漏洞</h3><p>此漏洞允许攻击者删除摄像头文件系统中的任意文件，只需要发送一个特定的 GET 请求到摄像头的 Web 管理接口。在这个请求中不需要用户的凭证。</p>
+<p>问题出在厂商在开源 web 服务器 <strong>lighttpd</strong> 中添加的代码中。这段代码的功能是使用 <strong>snapPicture</strong> API 命令删除从摄像头发送到用户的临时快照照片(<strong>exportConfig</strong> API 中也有相同的功能)。</p>
+<p>当一个 GET 请求被发送到 web 服务器（通过 88 端口），在请求处理之后，会在 URI 路径组件（<strong>con-&gt;request.uri-&gt;ptr</strong>）中搜索字符串 <strong>/config/export</strong> 或 <strong>snapPic</strong>。如果请求中包含这两个字符串中的任何一个，服务器会使用 <strong>strncat</strong> 函数将文档根路径 <strong>/tmp/www</strong> 与 URL 路径组件组合起来，形成完整的路径。然后会判断文件是否存在(通过调用 <strong>access(path,F_OK)</strong>),如果存在将调用 <strong>remove(path)</strong> 函数删除这个文件。<br><img src="figure_02_vd-0801.png" alt="assmebly IDA"><br>这段代码有一个路径遍历漏洞。攻击者可以在 GET 请求中用使用 <code>../</code>，这会终止 <strong>con-&gt;request.uri-&gt;ptr</strong> 组件。由于 <strong>/snapPic/</strong> 已经存在 web 服务目录下，攻击者可以使用包含 <strong>/snapPic/</strong> URI 作为有效路径，这也将触发代码的分支执行。攻击者接着添加 <code>../</code> 向上遍历到根目录（‘/’）,然后添加要删除的文件路径。例如，URI <strong>/snapPic/../../../tmp/abc</strong> 意味着 <strong>/tmp/abc</strong>,如果文件存在，则删除。</p>
+<h4 id="POC"><a href="#POC" class="headerlink" title="POC"></a>POC</h4><p>这个 POC 用来展示如何使用这个漏洞删除设备上的任意文件。<br>shell 变量 <strong>_FILE_TO_DELETE shell</strong> 保存在需要删除的文件的绝对路径。<br><img src="01_vd-0801_soft_a_600.gif" alt="poc1"></p>
+<h3 id="CVE-2018-6832-基于堆栈的缓冲器"><a href="#CVE-2018-6832-基于堆栈的缓冲器" class="headerlink" title="CVE-2018-6832  基于堆栈的缓冲器"></a>CVE-2018-6832  基于堆栈的缓冲器</h3><p>这个漏洞允许攻击者击溃 <strong>WebService</strong> 进程。触发这个漏洞只需要发送一个特定的 GET 请求到摄像头的 Web 管理接口，同样不需要用户凭证。</p>
+<p>摄像头的 Web 服务提供一个含有很多命令的 FastCGI API。其中的一个命令 <strong>getSWFlag</strong> 通过发送一个未授权的 HTTP GET 请求到 <strong>/CGIProxy.fcgi?cmd=getSWFlag</strong> 来调用。GET 请求的参数从 <strong>CGIProxy.fcgi</strong> 转发到 <strong>webService</strong> 的 <strong>getSWFlag</strong> 函数（让我们称它为 <strong>GetSWFlag_func</strong>）。<strong>GetSWFlag_func</strong> 可以选择接收名为 <strong>callbackJson</strong> 的查询字符串参数。</p>
+<p><strong>getSWFlag_func</strong> 首先将 <strong>callbackJson</strong> 参数的值读入堆栈上大小为 0x400 字节的局部变量 <strong>callbackJson_var</strong>。这是通过调用 <strong>get_param</strong> 函数并引用 <strong>callbackJson_var</strong> 来实现的，其大小限制为 0x400 个字符。</p>
+<p>之后，<strong>getSWFlag</strong> 调用引用了 <strong>callbackJson_var</strong> 的 <strong>prepare_reply_func</strong> 函数。这个函数会准备一些将发送回用户的 HTTP 响应。</p>
+<p>如果 <strong>callbackJson_var</strong> 不为空，<strong>prepare_reply_func</strong> 使用 <strong>strcat</strong> 将一些字符串附加到 <strong>callbackJson_var</strong> 字符串的适当位置（在 <strong>getSWFlag_func</strong> 堆栈上的原始位置）。大约会添加 0x48 个字符（添加的字符串是：<code>&#39;(&#123;“key”:”&lt;CGI_Result&gt;&lt;result&gt;0&lt;/result&gt;&lt;flag&gt;0011&lt;/flag&gt;&lt;/CGI_Result&gt;”&#125;)’)</code>）。</p>
+<p>因此，如果攻击者设置查询的字符串的参数 <strong>callbackJson</strong> 的值可以容纳多个字符（超过某个阈值），而 <strong>prepare_reply_func</strong> 生成的结果将导致 <strong>getSWFlag_func</strong> 堆栈中的 <strong>callbackJson_var</strong> 溢出。编写大量字节将导致重写已保存的堆栈寄存器(包括PC寄存器)并导致程序崩溃。因此，攻击者可以破坏 <strong>webService</strong> 进程，这将导致在几秒后由 <strong>/usr/bin/watchdog</strong> 进程重新启动这个进程。</p>
+<h3 id="CVE-2018-6831-shell-命令注入漏洞"><a href="#CVE-2018-6831-shell-命令注入漏洞" class="headerlink" title="CVE-2018-6831  shell 命令注入漏洞"></a>CVE-2018-6831  shell 命令注入漏洞</h3><p>利用这个漏洞需要用到前几个阶段获取到的管理员凭证，攻击者可以以 root 权限执行命令。它绕过了 Cisco Talos 在 2017 年 6 月披露的漏洞 <a target="_blank" rel="noopener" href="https://www.talosintelligence.com/reports/TALOS-2017-0351/">CVE-2017-2879</a> 的补丁。</p>
+<p><img src="figure_3_camera_time_field_2.png" alt="camera_time_field"></p>
+<p>摄像头的 Web 服务器 <strong>FastCGI</strong> API 包含一个自定义 NTP 服务器的命令（<strong>/CGIProxy.fcgi?cmd=setSystemTime</strong>）。执行这个命令需要管理员权限。这个命令需要的参数 <strong>ntpServer</strong> 用于设置 <strong>NTP_Server_URL</strong>。该参数没有进行任何净化处理，甚至可以使用空格和分号。</p>
+<p>当 API 命令 <strong>setSystemTime</strong> 被调用时，<strong>CGIProxy.fcgi</strong> 转发请求给 <strong>webService</strong> 进程，该进程读取其参数并发送一条 IPC 消息，此消息调用 <strong>devMng</strong> 函数的 <strong>OnDevMngMsgSetSystemTime</strong>(命令  0x6034)。</p>
+<p>此外，<strong>OnDevMngMsgSetSystemTime</strong> 将新的 <strong>NTP_Server_URL</strong> 设置为全局结构体。</p>
+<p>一个使用了 <strong>devMng</strong> 的独立的线程 <strong> NTP更新线程 </strong>，每一秒运行一次 <strong>setSystemTimeNTP</strong> 并无限循环。</p>
+<p><strong>setSystemTimeNTP</strong> 从全局结构体中获取 <strong>NTP_Server_URL</strong> 的值（先前设置的），然后调用 <strong>gethostbyname(NTP_Server_URL)</strong> 函数使用。如果 hostname 被成功解析它会调用以下存在漏洞的代码：<code>sprintf(buf, “ntpclient -h %s -c 3 -s”, NTP_Server_URL);</code> 和 <code>popen(buf, “r”);</code>(见下面的 IDA 截图)。</p>
+<p><img src="figure_4_vd-0803_after_initial_patch.png" alt="after_initial_patch.png"></p>
+<p><strong>popen</strong> 函数使用 <code>sh -c</code> 执行 shell 命令，而提供的字符串将作为参数。如果我们在设置 <strong>NTP_Server_URL</strong> 添加一些命令（<strong>SOME_COMMAND</strong>），可以绕过 <strong>gethostbyname(NTP_Server_URL)</strong> 而调用 <strong>popen</strong> ，并执行 <code>ntpclient -h ;SOME_COMMAND; -c 3 -s</code>。分号有助于突破 shell 命令，导致命令执行。因为 <strong>devMng</strong> 进程以 root 权限运行，于是我们就能够用以 root 的身份执行任意命令。</p>
+<p>如前所示，我们认为 CVE-2017-2879 的补丁是，只有在成功的调用了 <strong>gethostbyname()</strong> 才会执行命令<code>sh -c “ntpclient -h ;SOME_COMMAND; -c 3 -s</code>。我们的推测是补丁作者假定使用 <strong>gethostbyname()</strong> 调用可以有效地净化 <strong>NTP_Server_URL</strong> 的输入。我们驳斥了这一假设，<em>因为我们注意到 uclibc(摄像头的 C 标准库) <strong>gethostbyname()</strong> 的实现并没有解决 hostname 解析时， hostname 中包含分号或空格的问题。</em></p>
+<p>为了绕过 <strong>gethostbyname</strong> 调用，我们执行以下几步（结合下图 “CVE-2018-6831 步骤” 中相应的步骤编号 ）。</p>
+<ol start="0">
+<li>我们配置了带有预定义静态 IP 地址（例如 1.2.3.4）一个 DNS 服务器，并使其响应所有的 DNS 查询（甚至包含分号和空格）。</li>
+<li>然后，我们使用 <strong>/CGIProxy.fcgi?cmd=setIpInfo</strong> API 命令把摄像头的 DNS 地址设置为我们自己的 DNS 服务器。</li>
+<li>然后，我们使用含有 <strong>;SOME COMMAND;</strong> 的 <strong>NTP_Server_URL</strong>参数对 API 命令 <strong>setSystemTime</strong>发起恶意请求，从而触发此漏洞。</li>
+<li>在这个阶段，<strong>gethostbyname</strong> 运行导致摄像头发送一个带有 <strong>;SOME_COMMAND;</strong> 的 DNS 请求。</li>
+<li>我们的 DNS 发送一个有效的响应，使 <strong>gethostbyname</strong> 调用成功。</li>
+<li>命令注入成功，攻击者可以 root 权限执行任意命令。</li>
+</ol>
+<p><img src="data_flow_02_renew1.png" alt="data_flow_02_renew1"></p>
+<h3 id="POC-1"><a href="#POC-1" class="headerlink" title="POC"></a>POC</h3><ol start="0">
+<li>漏洞利用准备 - 按以下配置安装一个 Bind9 DNS 服务器<br><img src="04_600.gif" alt="DNS configuration"></li>
+<li>把摄像头的 DNS 服务器设置我们的 DNS 服务器（使用管理员的用户名和密码）<br><img src="05_600.gif" alt="set DNS Server"></li>
+<li>触发漏洞（我们选择执行 telnet 并连接它 ）<br><img src="08_600.gif" alt="Command Inject  Enable Telnet"></li>
+</ol>
+<p>下图是 wireshark 的截图 —— 显示了整个攻击过程中发出的 DNS 流量。<br><img src="figure_6_wireshark.png" alt="DNS Traffic"></p>
+<h2 id="表1-存在漏洞的最新固件版本"><a href="#表1-存在漏洞的最新固件版本" class="headerlink" title="表1 - 存在漏洞的最新固件版本"></a>表1 - 存在漏洞的最新固件版本</h2><table>
+<thead>
+<tr>
+<th>摄像头型号</th>
+<th>固件版本号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C1 Lite V3</td>
+<td>2.82.2.33</td>
+</tr>
+<tr>
+<td>C1 V3</td>
+<td>2.82.2.33</td>
+</tr>
+<tr>
+<td>FI9800P V3</td>
+<td>2.84.2.33</td>
+</tr>
+<tr>
+<td>FI9803P V4</td>
+<td>2.84.2.33</td>
+</tr>
+<tr>
+<td>FI9816P V3</td>
+<td>2.81.2.33</td>
+</tr>
+<tr>
+<td>FI9821EP V2</td>
+<td>2.81.2.33</td>
+</tr>
+<tr>
+<td>FI9821P V3</td>
+<td>2.81.2.33</td>
+</tr>
+<tr>
+<td>FI9826P V3</td>
+<td>2.81.2.33</td>
+</tr>
+<tr>
+<td>FI9831P V3</td>
+<td>2.81.2.33</td>
+</tr>
+<tr>
+<td>FI9851P V3</td>
+<td>2.84.2.33</td>
+</tr>
+<tr>
+<td>FI9853EP V2</td>
+<td>2.84.2.33</td>
+</tr>
+<tr>
+<td>C1</td>
+<td>2.52.2.47</td>
+</tr>
+<tr>
+<td>C1 V2</td>
+<td>2.52.2.47</td>
+</tr>
+<tr>
+<td>C1 Lite</td>
+<td>2.52.2.47</td>
+</tr>
+<tr>
+<td>C1 Lite V2</td>
+<td>2.52.2.47</td>
+</tr>
+<tr>
+<td>FI9800P</td>
+<td>2.54.2.47</td>
+</tr>
+<tr>
+<td>FI9800P V2</td>
+<td>2.54.2.47</td>
+</tr>
+<tr>
+<td>FI9803P V2</td>
+<td>2.54.2.47</td>
+</tr>
+<tr>
+<td>FI9803P V3</td>
+<td>2.54.2.47</td>
+</tr>
+<tr>
+<td>FI9815P</td>
+<td>2.51.2.47</td>
+</tr>
+<tr>
+<td>FI9815P V2</td>
+<td>2.51.2.47</td>
+</tr>
+<tr>
+<td>FI9816P</td>
+<td>2.51.2.47</td>
+</tr>
+<tr>
+<td>FI9816P V2</td>
+<td>2.51.2.47</td>
+</tr>
+<tr>
+<td>FI9851P V2</td>
+<td>2.54.2.47</td>
+</tr>
+<tr>
+<td>R2</td>
+<td>2.71.1.59</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>2.72.1.59</td>
+</tr>
+<tr>
+<td>R4</td>
+<td>2.71.1.59</td>
+</tr>
+<tr>
+<td>FI9900EP</td>
+<td>2.74.1.59</td>
+</tr>
+<tr>
+<td>FI9900P</td>
+<td>2.74.1.59</td>
+</tr>
+<tr>
+<td>FI9901EP</td>
+<td>2.74.1.59</td>
+</tr>
+<tr>
+<td>FI9961EP</td>
+<td>2.72.1.59</td>
+</tr>
+<tr>
+<td>FI9928P</td>
+<td>2.74.1.58</td>
+</tr>
+<tr>
+<td>FI9803EP</td>
+<td>2.22.2.31</td>
+</tr>
+<tr>
+<td>FI9803P</td>
+<td>2.24.2.31</td>
+</tr>
+<tr>
+<td>FI9853EP</td>
+<td>2.22.2.31</td>
+</tr>
+<tr>
+<td>FI9851P</td>
+<td>2.24.2.31</td>
+</tr>
+<tr>
+<td>FI9821P V2</td>
+<td>2.21.2.31</td>
+</tr>
+<tr>
+<td>FI9826P V2</td>
+<td>2.21.2.31</td>
+</tr>
+<tr>
+<td>FI9831P V2</td>
+<td>2.21.2.31</td>
+</tr>
+<tr>
+<td>FI9821EP</td>
+<td>2.21.2.31</td>
+</tr>
+<tr>
+<td>FI9821W V2</td>
+<td>2.11.1.120</td>
+</tr>
+<tr>
+<td>FI9818W V2</td>
+<td>2.13.2.120</td>
+</tr>
+<tr>
+<td>FI9831W</td>
+<td>2.11.1.120</td>
+</tr>
+<tr>
+<td>FI9826W</td>
+<td>2.11.1.120</td>
+</tr>
+<tr>
+<td>FI9821P</td>
+<td>2.11.1.120</td>
+</tr>
+<tr>
+<td>FI9831P</td>
+<td>2.11.1.120</td>
+</tr>
+<tr>
+<td>FI9826P</td>
+<td>2.11.1.120</td>
+</tr>
+<tr>
+<td>FI9805W</td>
+<td>2.14.1.120</td>
+</tr>
+<tr>
+<td>FI9804W</td>
+<td>2.14.1.120</td>
+</tr>
+<tr>
+<td>FI9804P</td>
+<td>2.14.1.120</td>
+</tr>
+<tr>
+<td>FI9805E</td>
+<td>2.14.1.120</td>
+</tr>
+<tr>
+<td>FI9805P</td>
+<td>2.14.1.120</td>
+</tr>
+<tr>
+<td>FI9828P</td>
+<td>2.13.1.120</td>
+</tr>
+<tr>
+<td>FI9828W</td>
+<td>2.13.1.120</td>
+</tr>
+<tr>
+<td>FI9828P V2</td>
+<td>2.11.1.133</td>
+</tr>
+</tbody>
+</table>
+<p>原文: <a target="_blank" rel="noopener" href="https://blog.vdoo.com/2018/06/06/vdoo-has-found-major-vulnerabilities-in-foscam-cameras/">Major Vulnerabilities in Foscam Cameras</a></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E6%A6%82%E8%A6%81"><span class="toc-number">1.</span> <span class="toc-text">技术概要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E6%B7%B1%E6%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">技术深潜</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2018-6830-%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.1.</span> <span class="toc-text">CVE-2018-6830  任意文件删除漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#POC"><span class="toc-number">2.1.1.</span> <span class="toc-text">POC</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2018-6832-%E5%9F%BA%E4%BA%8E%E5%A0%86%E6%A0%88%E7%9A%84%E7%BC%93%E5%86%B2%E5%99%A8"><span class="toc-number">2.2.</span> <span class="toc-text">CVE-2018-6832  基于堆栈的缓冲器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2018-6831-shell-%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.3.</span> <span class="toc-text">CVE-2018-6831  shell 命令注入漏洞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POC-1"><span class="toc-number">2.4.</span> <span class="toc-text">POC</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%A81-%E5%AD%98%E5%9C%A8%E6%BC%8F%E6%B4%9E%E7%9A%84%E6%9C%80%E6%96%B0%E5%9B%BA%E4%BB%B6%E7%89%88%E6%9C%AC"><span class="toc-number">3.</span> <span class="toc-text">表1 - 存在漏洞的最新固件版本</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/&text=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/&title=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/&is_video=false&description=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Foscan 摄像头多个漏洞披露含技术细节&body=Check out this article: http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/&title=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/&title=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/&title=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/&title=Foscan 摄像头多个漏洞披露含技术细节"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2018/06/06/Foscan-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%8A%AB%E9%9C%B2%E5%90%AB%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/&name=Foscan 摄像头多个漏洞披露含技术细节&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="hvv 外勤人员新姿势前两年 hvv 红队伪装成维修人员、监察部门进入机房等还比较新鲜，但随着防守方意识的不断增强，线下社工难度越来也大。本文提出一种无须进入室内接入企业内网的姿势，为广大 hvv 外勤人员拓展新思路。同时，也给广大防守方提个醒，不仅仅要关注办公电脑、机房设备，还需要关注如摄像机、打卡器等边缘设备。 部分大型企业的安防系统也是接入内部网络的，怎么实现不进入室内也能接入到企业内网。开">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hvv 红队何必进机房">
+<meta property="og:url" content="http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="hvv 外勤人员新姿势前两年 hvv 红队伪装成维修人员、监察部门进入机房等还比较新鲜，但随着防守方意识的不断增强，线下社工难度越来也大。本文提出一种无须进入室内接入企业内网的姿势，为广大 hvv 外勤人员拓展新思路。同时，也给广大防守方提个醒，不仅仅要关注办公电脑、机房设备，还需要关注如摄像机、打卡器等边缘设备。 部分大型企业的安防系统也是接入内部网络的，怎么实现不进入室内也能接入到企业内网。开">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/image-20210310160129825.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/image-20210319121848623.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/image-20210319144131482.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/P1090928_2000x.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/image-20210322165956882.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/%E8%BE%B9%E7%BC%98%E8%AE%BE%E5%A4%87%E6%B8%97%E9%80%8F.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/image-20210324111519202.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/image-20210324104801835.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/image-20210324105140026.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/image-20210324113149804.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/image-20210324112445155.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/image-20210324110607233.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/image-20210324113855787.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/image-20210324114525888.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/image-20210322163645044.png">
+<meta property="article:published_time" content="2021-04-01T04:43:35.000Z">
+<meta property="article:modified_time" content="2021-04-10T10:40:23.000Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="IOT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/image-20210310160129825.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>hvv 红队何必进机房</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/03/20/add-support-to-flashrom-for-XM25Q/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
+      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
+      <span id="i-top" class="info" style="display:none;">Arriba</span>
+      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/&text=hvv 红队何必进机房"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/&title=hvv 红队何必进机房"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/&is_video=false&description=hvv 红队何必进机房"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=hvv 红队何必进机房&body=Check out this article: http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/&title=hvv 红队何必进机房"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/&title=hvv 红队何必进机房"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/&title=hvv 红队何必进机房"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/&title=hvv 红队何必进机房"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/&name=hvv 红队何必进机房&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#hvv-%E5%A4%96%E5%8B%A4%E4%BA%BA%E5%91%98%E6%96%B0%E5%A7%BF%E5%8A%BF"><span class="toc-number">1.</span> <span class="toc-text">hvv 外勤人员新姿势</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8"><span class="toc-number">1.1.</span> <span class="toc-text">工欲善其事，必先利其器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">网络结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%8C%E5%8A%A8"><span class="toc-number">1.3.</span> <span class="toc-text">行动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E8%AF%AD"><span class="toc-number">1.4.</span> <span class="toc-text">结语</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        hvv 红队何必进机房
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2021-04-01T04:43:35.000Z" itemprop="datePublished">2021-04-01</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/IOT/" rel="tag">IOT</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="hvv-外勤人员新姿势"><a href="#hvv-外勤人员新姿势" class="headerlink" title="hvv 外勤人员新姿势"></a>hvv 外勤人员新姿势</h2><p>前两年 hvv 红队伪装成维修人员、监察部门进入机房等还比较新鲜，但随着防守方意识的不断增强，线下社工难度越来也大。本文提出一种无须进入室内接入企业内网的姿势，为广大 hvv 外勤人员拓展新思路。同时，也给广大防守方提个醒，不仅仅要关注办公电脑、机房设备，还需要关注如摄像机、打卡器等边缘设备。</p>
+<p>部分大型企业的安防系统也是接入内部网络的，怎么实现不进入室内也能接入到企业内网。开干之前需要准备些设备。</p>
+<h3 id="工欲善其事，必先利其器"><a href="#工欲善其事，必先利其器" class="headerlink" title="工欲善其事，必先利其器"></a>工欲善其事，必先利其器</h3><ul>
+<li><p><a target="_blank" rel="noopener" href="https://detail.tmall.com/item.htm?spm=a230r.1.14.23.76913eb42BG8YG&amp;id=42395631279&amp;ns=1&amp;abbucket=12">POE分离器</a></p>
+<p>POE分离器与POE供电器是相对的。POE供电器是将数据信号和电力合在一起，所以POE供电器又称POE合路器。POE分离器的工作过程正好相反，是将数据信号和电力分离。</p>
+<p>当笔记本需要借助 POE 网线接入网络时，可以使用 POE 分离器 分理处电源与常规网线，使用转接出来的网线即可接入网络。</p>
+<p>此外，大多数 POE 无线网桥使用的是 Passive POE，使用标准的 POE 交换机是不能供电的。于是就可以使用这个分离器来转接。</p>
+</li>
+</ul>
+<p><img src="image-20210310160129825.png" alt="image-20210310160129825" style="zoom:50%;" /></p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://item.taobao.com/item.htm?spm=a230r.1.14.49.192c73d31pohEu&amp;id=626711979084&amp;ns=1&amp;abbucket=3#detail">POE中继器</a></p>
+<p>将标准 POE 一分为二，使得 POE 交换机的一个端口能够接入两个设备。使用 POE 中继器的目的是，需要在维持原有的摄像机正常工作状态下，利用原有的一根 POE 网线， 多接入一个设备（无线网桥、笔记本、无线路由等）。</p>
+<p><img src="image-20210319121848623.png" alt="image-20210319121848623"></p>
+</li>
+<li><p>POE 无线网桥</p>
+<p>利用传统监控行业的使用较多的无线网桥中继网络，让远在数千米外的电脑也能访问内部网络。正因为没有额外的外部的电源，所以需要使用 POE 供电的无线网桥。</p>
+<p><img src="image-20210319144131482.png" alt="image-20210319144131482"></p>
+</li>
+<li><p>THROWING STAR LAN TAP</p>
+<p>在 RJ45 以太网上做中间人，嗅探上下行数据。在静态的网络中，想要知道网络中的IP段，又不想主动去探测扫描（容易被发现）。可以用 THROWING STAR LAN TAP被动监听，针对 POE 网线，硬件设备需要微调后，打板制作。</p>
+</li>
+</ul>
+<p><img src="P1090928_2000x.jpg" alt="P1090928_2000x" style="zoom: 25%;" /></p>
+<ul>
+<li><p>网线</p>
+<p>低于超五类的网线不能用于 POE 供电，所以需要使用超五类（线上标识为 CAT5E）或六类网线（线上标识为 CAT6）。</p>
+<p><img src="image-20210322165956882.png" alt="image-20210322165956882"></p>
+</li>
+</ul>
+<h3 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h3><p>按照如下网络拓扑结构，将网桥和POE中继器等设备接入到内网中。</p>
+<p><img src="%E8%BE%B9%E7%BC%98%E8%AE%BE%E5%A4%87%E6%B8%97%E9%80%8F.png" alt="边缘设备渗透"></p>
+<h3 id="行动"><a href="#行动" class="headerlink" title="行动"></a>行动</h3><p>夜黑风高夜，寻一静谧处，得一探头，绕其后背，拔掉网线，然后就是一顿猛如虎的操作。</p>
+<p>下面来动手搭建了一个测试环境。由于没有 POE 监控环境，于是买了一个 POE 交换机，接入到了路由器上。然后将 POE 摄像头（注，手头没有摄像头采用其他设备代替，不影响本次测试）接入到 POE 交换机上。实验的基础环境就搭建好了。</p>
+<p><img src="image-20210324111519202.png" alt="image-20210324111519202"></p>
+<p>然后就是实战部分，需要的设备就是上面介绍的POE分离器、 POE 中继器、POE 无线网桥以及数条网线。</p>
+<ol>
+<li><p>短按 REST 键，将两个网桥进行配对。</p>
+<p>将其中一个设置为主网桥，一个设置为子网桥。</p>
+<p><img src="image-20210324104801835.png" alt="image-20210324104801835"></p>
+</li>
+<li><p>初始化</p>
+<p>进入网桥管理后台，配置无线参数，SSID、密码等。主网桥设置无线网络的目的是方便配置网络，但为了避免被发现需要关闭 SSID 广播。子网桥配置无线网络方便电脑接入网络，展开下一步行动。</p>
+<p><img src="image-20210324105140026.png" alt="主网桥关闭SSID广播"></p>
+</li>
+<li><p>拔掉摄像头与POE交换机（或NVR、NVR） 之间的网线。</p>
+</li>
+<li><p>使用 POE 中继器将网线一分为二。</p>
+<p><img src="image-20210324113149804.png" alt="image-20210324113149804"></p>
+</li>
+<li><p>在网线与摄像头之间插入 THROWING STAR LAN TAP 获取网段。</p>
+<p>如果知道内部网络网段，可以跳过这一步。</p>
+<p>笔记本接入到摄像头与上层通信的网络中，采用被动的方式获取 IP 网段。由于大型企业内部多采用静态 IP, 主动式的扫描很容易被发现，于是使用 THROWING STAR LAN TAP 进行被动监听。</p>
+<p><img src="image-20210324112445155.png" alt="image-20210324112445155"></p>
+<p>使用 Wireshark 抓包获得摄像头的IP地址为 192.168.1.108，然后通过流量中的其他信息（如NVR IP地址）等猜测出网关地址，并使用笔记本接入网络中验证 。</p>
+<p><img src="image-20210324110607233.png" alt="image-20210324110607233"></p>
+</li>
+<li><p>POE 中继器的另一个网口连接到 POE 无线网桥网桥。</p>
+<p>到这里，物理连接已经完成。</p>
+<p><img src="image-20210324113855787.png" alt="image-20210324113855787"></p>
+</li>
+<li><p>连接主网桥网线网络，配置网络。</p>
+<p>现在可以找个不太引人注目的地儿，但还在主网桥的无线网络覆盖范围内。根据获取的信息给主网桥设置 IP 地址、网关、DNS服务器。 </p>
+<p><img src="image-20210324114525888.png" alt="image-20210324114525888"></p>
+</li>
+<li><p>功成身退。</p>
+<p>主网桥配置好了，就可以撤退了，避免挨打。</p>
+</li>
+<li><p>连接子网桥网线网络，配置网络。</p>
+<p>与主网桥相似的配置方式配置子网桥，设置 IP 地址、网关、DNS服务器。 </p>
+</li>
+<li><p>开始内网漫游。</p>
+<p>网络配置完成，网桥之间的连接建立成功。就可以开始内网漫游了。</p>
+<p>访问路由器，在后台看到了两个新增的匿名主机以及当前笔记本的连接信息，即表明使用 POE 无线网桥成功接入了内部网络。</p>
+<p><img src="image-20210322163645044.png" alt="image-20210322163645044"></p>
+</li>
+</ol>
+<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>本文采用 POE 无线网桥是基于现有设备，底成本、高效率的一个方案。更好的方案是自己打板设计一个采用蜂窝网络通信的嵌入式Linux设备，能够在任何地点连接使用。</p>
+<p>于防守方，网络中边缘设备需要合理的管控，防止设备被替换或接入其他恶意的终端。</p>
+<p>以上来自从未参与某大型活动，却屡屡听闻活动中各种趣事的 IOT 安全研究员的 YY。如文章有欠妥之处，欢迎指正。</p>
+<p>首发于：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/gIQF_0ZGRY9NSxEGq3uahA">火线Zone</a></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#hvv-%E5%A4%96%E5%8B%A4%E4%BA%BA%E5%91%98%E6%96%B0%E5%A7%BF%E5%8A%BF"><span class="toc-number">1.</span> <span class="toc-text">hvv 外勤人员新姿势</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8"><span class="toc-number">1.1.</span> <span class="toc-text">工欲善其事，必先利其器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">网络结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%8C%E5%8A%A8"><span class="toc-number">1.3.</span> <span class="toc-text">行动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E8%AF%AD"><span class="toc-number">1.4.</span> <span class="toc-text">结语</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/&text=hvv 红队何必进机房"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/&title=hvv 红队何必进机房"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/&is_video=false&description=hvv 红队何必进机房"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=hvv 红队何必进机房&body=Check out this article: http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/&title=hvv 红队何必进机房"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/&title=hvv 红队何必进机房"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/&title=hvv 红队何必进机房"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/&title=hvv 红队何必进机房"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/&name=hvv 红队何必进机房&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+

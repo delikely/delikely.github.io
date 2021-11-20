@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="前言在不久之后实验室计划拆车，研究车辆的组成结构。拆车是很容易的，但拆完之后能原封不动的装回去且能正常运行还是需要功夫的。正好拿到了一辆车完整的电路图，于是准备研究一下，为后面拆车做准备，免得到时一头雾水。之前也有对插线端子进行过逆向分析，在一堆接口中寻找CAN 、UART 、USB 等接口。在没有手册的条件下，完整逆向出来还是有一定难度的。此外，在自己搭建测试台架中也需要熟悉各个 ECU 和各线">
+<meta property="og:type" content="article">
+<meta property="og:title" content="车联网安全基础知识之从插线端子分析车内通信网络结构">
+<meta property="og:url" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="前言在不久之后实验室计划拆车，研究车辆的组成结构。拆车是很容易的，但拆完之后能原封不动的装回去且能正常运行还是需要功夫的。正好拿到了一辆车完整的电路图，于是准备研究一下，为后面拆车做准备，免得到时一头雾水。之前也有对插线端子进行过逆向分析，在一堆接口中寻找CAN 、UART 、USB 等接口。在没有手册的条件下，完整逆向出来还是有一定难度的。此外，在自己搭建测试台架中也需要熟悉各个 ECU 和各线">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111230110482.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111225448841.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112110531547-16367183183121.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112104532040.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112115057877.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112113135506.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112113631841.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112114605397.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112111732143.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112112301791.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112122759622.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112123726218.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112124106173.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112120425461.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112121243656.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112121443053.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112122140688.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112000231431.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112000835375.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111233345398.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111232400288.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211113234220158.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111233735818.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111234419237.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111230713168.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111234950790.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111232117359.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111235251029.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112131248725.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112131454826.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/网络拓扑-北汽EU5%20网络结构.png">
+<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111150913360.png">
+<meta property="article:published_time" content="2021-11-19T02:14:59.000Z">
+<meta property="article:modified_time" content="2021-11-20T04:33:24.475Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="Automotive">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111230110482.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>车联网安全基础知识之从插线端子分析车内通信网络结构</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2099/01/01/genius-vulns/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/10/20/Charging-infrastructure/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
+      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
+      <span id="i-top" class="info" style="display:none;">Arriba</span>
+      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&text=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&is_video=false&description=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=车联网安全基础知识之从插线端子分析车内通信网络结构&body=Check out this article: http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&name=车联网安全基础知识之从插线端子分析车内通信网络结构&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E7%BA%BF%E7%AB%AF%E5%AD%90"><span class="toc-number">2.</span> <span class="toc-text">插线端子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E5%85%B3"><span class="toc-number">2.1.</span> <span class="toc-text">网关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TBUS-%E8%BF%9C%E7%A8%8B%E8%AF%8A%E6%96%AD%E7%BD%91%E7%BB%9C"><span class="toc-number">2.2.</span> <span class="toc-text">TBUS 远程诊断网络</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#EVBUS-%E8%83%BD%E9%87%8F%E5%9F%9F-%E5%8A%A8%E5%8A%9B%E5%9F%9F"><span class="toc-number">2.3.</span> <span class="toc-text">EVBUS 能量域&#x2F;动力域</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#BMS-%E7%94%B5%E6%B1%A0%E7%AE%A1%E7%90%86%E3%80%81%E5%BF%AB%E5%85%85%E3%80%81%E6%85%A2%E5%85%85%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.3.1.</span> <span class="toc-text">BMS 电池管理、快充、慢充系统</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#WEP-FD-%E7%94%B5%E6%9C%BA%E6%B0%B4%E6%B3%B5%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">2.3.2.</span> <span class="toc-text">WEP-FD 电机水泵控制器</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CBUS-%E5%BA%95%E7%9B%98%E5%9F%9F"><span class="toc-number">2.4.</span> <span class="toc-text">CBUS 底盘域</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#ABS-%E9%98%B2%E6%8A%B1%E6%AD%BB%E5%88%B6%E5%8A%A8%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.4.1.</span> <span class="toc-text">ABS 防抱死制动系统</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#EPB-%E7%94%B5%E5%AD%90%E9%A9%BB%E8%BD%A6%E5%88%B6%E5%8A%A8%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">2.4.2.</span> <span class="toc-text">EPB 电子驻车制动控制器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#EPS-%E7%94%B5%E5%8A%A8%E5%8A%A9%E5%8A%9B%E8%BD%AC%E5%90%91%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.4.3.</span> <span class="toc-text">EPS  电动助力转向系统</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#P-%E6%A1%A3%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">2.4.4.</span> <span class="toc-text">P 档控制器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ESK-%E6%A1%A3%E4%BD%8D%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">2.4.5.</span> <span class="toc-text">ESK 档位控制器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#VBP-%E7%9C%9F%E7%A9%BA%E6%B3%B5%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">2.4.6.</span> <span class="toc-text">VBP 真空泵控制器</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IBUS-%E4%BF%A1%E6%81%AF%E5%9F%9F-%E6%99%BA%E8%83%BD%E5%BA%A7%E8%88%B1%E5%9F%9F"><span class="toc-number">2.5.</span> <span class="toc-text">IBUS 信息域&#x2F;智能座舱域</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%AD%E6%8E%A7%E5%A8%B1%E4%B9%90%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.5.1.</span> <span class="toc-text">中控娱乐系统</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%9F%B3%E5%93%8D%E4%B8%BB%E6%9C%BAC"><span class="toc-number">2.5.2.</span> <span class="toc-text">音响主机C</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%BB%84%E5%90%88%E4%BB%AA%E8%A1%A8"><span class="toc-number">2.5.3.</span> <span class="toc-text">组合仪表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ACP-%E7%A9%BA%E8%B0%83%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">2.5.4.</span> <span class="toc-text">ACP 空调控制器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#EAS-%E7%94%B5%E5%8A%A8%E5%8E%8B%E7%BC%A9%E6%9C%BA%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">2.5.5.</span> <span class="toc-text">EAS 电动压缩机控制器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#PTC-%E7%94%B5%E5%8A%A0%E7%83%AD%E6%8E%A7%E5%88%B6"><span class="toc-number">2.5.6.</span> <span class="toc-text">PTC 电加热控制</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BD%8E%E9%80%9F%E8%A1%8C%E4%BA%BA%E8%AD%A6%E7%A4%BA%E5%99%A8"><span class="toc-number">2.5.7.</span> <span class="toc-text">低速行人警示器</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#EBUS-%E8%BD%A6%E8%BA%AB%E5%9F%9F"><span class="toc-number">2.6.</span> <span class="toc-text">EBUS 车身域</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#BCM-%E8%BD%A6%E8%BA%AB%E6%8E%A7%E5%88%B6%E6%A8%A1%E5%9D%97"><span class="toc-number">2.6.1.</span> <span class="toc-text">BCM 车身控制模块</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#PEPS-%E6%97%A0%E9%92%A5%E5%8C%99%E8%BF%9B%E5%85%A5%E4%B8%8E%E4%B8%80%E9%94%AE%E5%90%AF%E5%8A%A8"><span class="toc-number">2.6.2.</span> <span class="toc-text">PEPS 无钥匙进入与一键启动</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#TPMS-%E8%83%8E%E5%8E%8B%E6%A3%80%E6%B5%8B"><span class="toc-number">2.6.3.</span> <span class="toc-text">TPMS 胎压检测</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#PAS-%E6%B3%8A%E8%BD%A6%E8%BE%85%E5%8A%A9%E9%9B%B7%E8%BE%BE"><span class="toc-number">2.6.4.</span> <span class="toc-text">PAS 泊车辅助雷达</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#AVM-%E5%85%A8%E6%99%AF%E6%91%84%E5%83%8F%E6%A8%A1%E5%9D%97"><span class="toc-number">2.6.5.</span> <span class="toc-text">AVM 全景摄像模块</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#SDM-%E5%AE%89%E5%85%A8%E6%B0%94%E5%9B%8A%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">2.6.6.</span> <span class="toc-text">SDM 安全气囊控制器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ESCL-%E8%BD%AC%E5%90%91%E6%9F%B1%E9%94%81"><span class="toc-number">2.6.7.</span> <span class="toc-text">ESCL 转向柱锁</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#DVR-%E8%A1%8C%E8%BD%A6%E8%AE%B0%E5%BD%95%E4%BB%AA"><span class="toc-number">2.6.8.</span> <span class="toc-text">DVR 行车记录仪</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">2.7.</span> <span class="toc-text">其他</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%90%8E%E6%8E%92%E6%A0%87%E5%87%86USB%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.7.1.</span> <span class="toc-text">后排标准USB接口</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%82%B9%E7%83%9F%E5%99%A8"><span class="toc-number">2.7.2.</span> <span class="toc-text">点烟器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#PEU-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">2.7.3.</span> <span class="toc-text">PEU 电机控制器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%8B%93%E6%89%91"><span class="toc-number">3.</span> <span class="toc-text">网络拓扑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B4%E8%BD%A6%E7%BA%BF%E6%9D%9F"><span class="toc-number">4.</span> <span class="toc-text">整车线束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E7%BA%BF%E7%AB%AF%E5%AD%90%E5%9C%A8%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E4%B8%8A%E7%9A%84%E6%80%9D%E8%80%83"><span class="toc-number">5.</span> <span class="toc-text">插线端子在车联网安全上的思考</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        车联网安全基础知识之从插线端子分析车内通信网络结构
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2021-11-19T02:14:59.000Z" itemprop="datePublished">2021-11-19</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Automotive/" rel="tag">Automotive</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在不久之后实验室计划拆车，研究车辆的组成结构。拆车是很容易的，但拆完之后能原封不动的装回去且能正常运行还是需要功夫的。正好拿到了一辆车完整的电路图，于是准备研究一下，为后面拆车做准备，免得到时一头雾水。之前也有对插线端子进行过逆向分析，在一堆接口中寻找CAN 、UART 、USB 等接口。在没有手册的条件下，完整逆向出来还是有一定难度的。此外，在自己搭建测试台架中也需要熟悉各个 ECU 和各线束上的接线端子，接下来就请跟随我进入到汽车内部看一看 ECU 的接线端子。</p>
+<h3 id="插线端子"><a href="#插线端子" class="headerlink" title="插线端子"></a>插线端子</h3><p>通过插线端子看车内的网络结构，向下看各 ECU 与其他 ECU 或传感器之间的连接方式、通信方案等;向上分析个 ECU 所在的网络域，梳理车内网络结构。</p>
+<p>下面以不同网络为分类，解读各 ECU 的插线端子的用途，最后以 CAN 网络为主线梳理出整车网络拓扑。</p>
+<h4 id="网关"><a href="#网关" class="headerlink" title="网关"></a>网关</h4><p>网关是整个网络中的核心，控制多路CAN、以太网网络的各类消息的处理和转发。网关最重要的功能是将不同的网络域进行隔离。从网关的插线端子来看，内部CAN网络被划分了为 6 个网络。分别是 DiagBUS(诊断)CAN、TBUS(远程监控)CAN、CBUS(底盘)CAN、EBUS(车身)CAN、IBUS(信息娱乐)CAN、EVBUS(能量)CAN。下面按照这 6 个网络分析车内网络结构。</p>
+<p><img src="image-20211111230110482.png" alt="image-20211111230110482"></p>
+<h4 id="TBUS-远程诊断网络"><a href="#TBUS-远程诊断网络" class="headerlink" title="TBUS 远程诊断网络"></a>TBUS 远程诊断网络</h4><p>TBUS 中只有 T-BOX 一个ECU。T-BOX 是车端智能网联中最核心的部件之一，集成 GPS、外部通信接口、电子处理单元、微控制器、移动通信单元和存储器等功能模块。提供的功能有网络接入、OTA、远程控制、位置查询/车辆追踪、电池管理、位置提醒、eCall、远程诊断、平台监控/国家监管等。下图中插线端子上 CAN、SPK、MIC、唤醒信号灯等接口。T-BOX 通过 TBUS CAN 与网关相连；T-BOX 上的 SPK(扬声器) 与 MIC(麦克风) 用于<a target="_blank" rel="noopener" href="https://delikely.github.io/2021/08/15/TBOX-Main-Function/#eCall">紧急呼叫</a> 等服务。除了下图的接口外，其他车的 T-BOX 可能还有用于模拟以太网的 USB 端子、用于调试的 UART 串口等。</p>
+<p><img src="image-20211111225448841.png" alt="image-20211111225448841"></p>
+<h4 id="EVBUS-能量域-动力域"><a href="#EVBUS-能量域-动力域" class="headerlink" title="EVBUS 能量域/动力域"></a>EVBUS 能量域/动力域</h4><p>EVBUS 能量域是电动汽车新能源的叫法，对应传统网络中的动力域。能量域主要的功能是给车载电池充电以及控制驱动电机为车辆供能。能量域中有 BMS 电池管理系统、MCU 驱动电机控制器、OBC 车载充电控制器、CMU 交流充电控制单元、电子水泵控制器等。</p>
+<h5 id="BMS-电池管理、快充、慢充系统"><a href="#BMS-电池管理、快充、慢充系统" class="headerlink" title="BMS 电池管理、快充、慢充系统"></a>BMS 电池管理、快充、慢充系统</h5><p>电动汽车的动力输出依靠电池，而电池管理系统BMS(Battery Management System)则是其中的核心，负责控制电池的充电和放电以及实现电池状态估算等功能。电池管理系统与电动汽车的动力电池紧密结合在一起，通过温度传感器进行实时检测，还进行热管理；通过 EVBUS 与车载总控制器、电机控制器、能量控制系统、车载显示系统等进行实时通信。充电方式有快充（直流)和慢充（直流)两种。在快充网络中，BMS 充当 EVBUS 与 FCBUS 之间的网关；在慢充网络中，BMS 通过控制 CMU 控制对电池的慢充。</p>
+<p><img src="image-20211112110531547-16367183183121.png" alt="image-20211112110531547"></p>
+<h5 id="WEP-FD-电机水泵控制器"><a href="#WEP-FD-电机水泵控制器" class="headerlink" title="WEP-FD 电机水泵控制器"></a>WEP-FD 电机水泵控制器</h5><p>电机水泵控制器控制电机水泵为电机电控散热提供冷却水循环和风冷，通过 CAN 总线接入能量域。</p>
+<p><img src="image-20211112104532040.png" alt="image-20211112104532040" style="zoom:50%;" /></p>
+<h4 id="CBUS-底盘域"><a href="#CBUS-底盘域" class="headerlink" title="CBUS 底盘域"></a>CBUS 底盘域</h4><p>底盘域为整个底盘系统的协调者，即是将车辆运动控制进行总体把控。接入到 CAN 网络底盘域中的控制器包括 ABS 防抱死制动系统、EPB 电子驻车制动控制器、EPS  电动助力转向系统、P 档控制器、ESK 档位控制器、VBP 真空泵控制器等。</p>
+<h5 id="ABS-防抱死制动系统"><a href="#ABS-防抱死制动系统" class="headerlink" title="ABS 防抱死制动系统"></a>ABS 防抱死制动系统</h5><p>ABS(Antilock Brake System) 防抱死制动系统是在汽车制动时，自动控制制动器制动力的大小，使车轮不被抱死，处于边滚边滑（滑移率在20%左右)的状态，以保证车轮与地面的附着力在最大值。ABS 采集四个轮子上的转速传感器信号，自动控制制动器制动力的大小，防止车辆抱死。</p>
+<p><img src="image-20211112115057877.png" alt="image-20211112115057877"></p>
+<h5 id="EPB-电子驻车制动控制器"><a href="#EPB-电子驻车制动控制器" class="headerlink" title="EPB 电子驻车制动控制器"></a>EPB 电子驻车制动控制器</h5><p>EPB(Electrical Park Brake) 电子驻车制动系统既通常所说的电子手刹，采用电子控制的方式来完成驻车制动。EPB 驻车通过控制四个EPB电机完成驻车制动。</p>
+<p><img src="image-20211112113135506.png" alt="image-20211112113135506"></p>
+<h5 id="EPS-电动助力转向系统"><a href="#EPS-电动助力转向系统" class="headerlink" title="EPS  电动助力转向系统"></a>EPS  电动助力转向系统</h5><p>EPS(Electric Power Steering) 电动助力转向系统是依靠电机提供辅助扭矩的动力转向系统。EPS 根据驾驶员意图和车辆的运行工况而进行助力的转向系统。EPS 的控制过程是动力转向系统综合控制的过程，通过底盘域CAN网络与其他电子控制器进行通信。</p>
+<p><img src="image-20211112113631841.png" alt="image-20211112113631841"></p>
+<h5 id="P-档控制器"><a href="#P-档控制器" class="headerlink" title="P 档控制器"></a>P 档控制器</h5><p>电动汽车上的P挡控制，其作用等同于传统自动变速器的“驻车挡”。</p>
+<p><img src="image-20211112114605397.png" alt="image-20211112114605397"></p>
+<h5 id="ESK-档位控制器"><a href="#ESK-档位控制器" class="headerlink" title="ESK 档位控制器"></a>ESK 档位控制器</h5><p>旋转式电子档位控制器用于切换 D档、R档、N档、S档、L档等。</p>
+<p><img src="image-20211112111732143.png" alt="image-20211112111732143" style="zoom:50%;" /></p>
+<h5 id="VBP-真空泵控制器"><a href="#VBP-真空泵控制器" class="headerlink" title="VBP 真空泵控制器"></a>VBP 真空泵控制器</h5><p>真空泵用于产生真空，利用产生的负压增加制动力。</p>
+<p><img src="image-20211112112301791.png" alt="image-20211112112301791" style="zoom:67%;" /></p>
+<h4 id="IBUS-信息域-智能座舱域"><a href="#IBUS-信息域-智能座舱域" class="headerlink" title="IBUS 信息域/智能座舱域"></a>IBUS 信息域/智能座舱域</h4><p>智能网联汽车之所以叫做智能网联，智能座舱在其中扮演着至关重要的角色。智能座舱中包括中控娱乐系统、组合仪表、空调舒适系统、低速行人警示器等。</p>
+<h5 id="中控娱乐系统"><a href="#中控娱乐系统" class="headerlink" title="中控娱乐系统"></a>中控娱乐系统</h5><p>中控面板可能是传统按钮式的，也可能是更加现代的电子式。通过中控面板上的按钮控制空调，有中控通过IBUS传达给空调控制器。</p>
+<p><img src="image-20211112122759622.png" alt="image-20211112122759622"></p>
+<h5 id="音响主机C"><a href="#音响主机C" class="headerlink" title="音响主机C"></a>音响主机C</h5><p>音响主机也被叫做车机、IVI、中控主机等，连接有控制按钮、扬声器、麦克风、摄像头等。</p>
+<p><img src="image-20211112123726218.png" alt="image-20211112123726218"></p>
+<h5 id="组合仪表"><a href="#组合仪表" class="headerlink" title="组合仪表"></a>组合仪表</h5><p>组合仪表通过IBUS接收汽车行驶和其他的转态数据并展现在仪表上。组合仪表与车机都在智能座舱域下，没有经过网关，是可以直接互通的。</p>
+<p><img src="image-20211112124106173.png" alt="image-20211112124106173"></p>
+<h5 id="ACP-空调控制器"><a href="#ACP-空调控制器" class="headerlink" title="ACP 空调控制器"></a>ACP 空调控制器</h5><p>空调控制器接收 IBUS 上的空调控制信息，驱动空调制热或制冷。同时有各种传感器进行监控。</p>
+<p><img src="image-20211112120425461.png" alt="image-20211112120425461"></p>
+<h5 id="EAS-电动压缩机控制器"><a href="#EAS-电动压缩机控制器" class="headerlink" title="EAS 电动压缩机控制器"></a>EAS 电动压缩机控制器</h5><p>空调控制器通过 CAN 控制 EAS 空调压缩机驱动器制热或制冷。</p>
+<p><img src="image-20211112121243656.png" alt="image-20211112121243656"></p>
+<h5 id="PTC-电加热控制"><a href="#PTC-电加热控制" class="headerlink" title="PTC 电加热控制"></a>PTC 电加热控制</h5><p>通过 CAN 控制 PTC 加热控制器调节温度。</p>
+<p><img src="image-20211112121443053.png" alt="image-20211112121443053"></p>
+<h5 id="低速行人警示器"><a href="#低速行人警示器" class="headerlink" title="低速行人警示器"></a>低速行人警示器</h5><p>由于纯电动汽车在低速行驶时噪音相对较小，周边行人很难察觉。为了提高行车安全性，该系统可以在车速低于30公里时发出警示声音，借此可以使得周边行人更好地察觉。</p>
+<p><img src="image-20211112122140688.png" alt="image-20211112122140688"></p>
+<h4 id="EBUS-车身域"><a href="#EBUS-车身域" class="headerlink" title="EBUS 车身域"></a>EBUS 车身域</h4><p>车身域主要包括车身附件控制(门窗控制、门锁等)、内外饰附件控制（天窗、雨刮、内外灯等)、启动控制、数字钥匙等。车身域中的主要模块有 BCM 车身控制模块、PEPS 一键启动开关、无钥匙进入、TPMS 胎压检测、PAS 泊车辅助雷达、AVM 全景摄像模块、SDM 安全气囊控制器、ESCL转向柱锁、DVR行车记录仪等。</p>
+<p>车身域控制系统特点：</p>
+<ul>
+<li>涉及多领域，个性化设置，如作为座椅位置记忆；语音控制，控制车窗等；</li>
+<li>涉及系统多，与整车绝大多数其他系统存在信息交互：动力系统、娱乐系统等；</li>
+<li>涉及功能安全，近灯光控制(ASILB)、前雨刷控制(ASILB)、整车电源状态管理(ASILB)、车窗防夹(ASILA)。</li>
+<li>涉及高感知功能，重要程度高，影响车辆启动、用户进入；车窗、灯光控制等使用频率高。</li>
+</ul>
+<p>车身域控制系统涉及多个技术领域，接口类型多，资源需求不同车型变化大;同时又涉及功能安全以及高感知的功能，有较高的可靠性设计要求;另外还涉及PEPS、TPMS、蓝牙、NFC 等无线通讯技术。</p>
+<h5 id="BCM-车身控制模块"><a href="#BCM-车身控制模块" class="headerlink" title="BCM 车身控制模块"></a>BCM 车身控制模块</h5><p>BCM(（Body Control Module)车身控制模块的功能包括：电动门窗控制、中控门锁控制、遥控防盗、灯光系统控制、电动后视镜)加热控制、仪表背光调节、电源分配等。</p>
+<p><img src="image-20211112000231431.png" alt="image-20211112000231431"></p>
+<p><img src="image-20211112000835375.png" alt="image-20211112000835375"></p>
+<h5 id="PEPS-无钥匙进入与一键启动"><a href="#PEPS-无钥匙进入与一键启动" class="headerlink" title="PEPS 无钥匙进入与一键启动"></a>PEPS 无钥匙进入与一键启动</h5><p>PEPS(Passive Entry Passive Start)无钥匙进入及启动系统， 由控制器、智能钥匙中的射频(RF)发射器和汽车端的接收器等组成。当钥匙在有效范围内，车主拉动车门或按下一键启动开关， 相应的模块会发送中断信号来唤醒主控制器，开始整个通信过程。整个过程无需使用钥匙，即可打开车门或者启动发动机。主要零部件有遥控钥匙、天线、车身控制模块(BCM)、涉及核心技术有RFID识别技术、加密算法、 EMC技术。</p>
+<p>根据无钥匙进入的插线端子可知有两组天线，用户探测钥匙是否在周边。当钥匙在可识别距离内，将车门设置为可打开模式。</p>
+<p><img src="image-20211111233345398.png" alt="image-20211111233345398"></p>
+<p>SSB(SSB Start Stop Button,一键启动按键) 俗称点火按开关，用于启动发动机。</p>
+<p><img src="image-20211111232400288.png" alt="image-20211111232400288"></p>
+<p>现在也出现了 PEPS 与 BCM 融合的方案。</p>
+<p><img src="image-20211113234220158.png" alt="image-20211113234220158"></p>
+<h5 id="TPMS-胎压检测"><a href="#TPMS-胎压检测" class="headerlink" title="TPMS 胎压检测"></a>TPMS 胎压检测</h5><p>TPMS(Tire Pressure Monitoring System，胎压智能监测系统)是一种采用无线传输技术,工作频率在 433.92 MHz，利用固定于汽车轮胎内的高灵敏度微型无线传感装置在行车或静止的状态下采集汽车轮胎压力、温度等数据，并将数据传送到驾驶室内的显示屏中，以数字化的形式实时显示汽车轮胎压力和温度等相关数据，并在轮胎出现异常时（预防爆胎)以蜂鸣和语音等形式提醒驾驶者进行预警的汽车主动安全系统。确保轮胎的压力和温度维持在标准范围内，起到减少爆胎、毁胎的概率，降低油耗和车辆部件的损坏的作用。中央监视器接收 TPMS 监测模块发射的信号，将各个轮胎的压力和温度数据显示在屏幕上，供驾驶者参考。如果轮胎的压力或温度出现异常，中央监视器根据异常情况，发出报警信号，提醒驾驶者采取必要的措施。 </p>
+<p>TPMS 检测到胎压数据经过 EBUS CAN 传输给其他 ECU 使用。</p>
+<p><img src="image-20211111233735818.png" alt="image-20211111233735818"></p>
+<h5 id="PAS-泊车辅助雷达"><a href="#PAS-泊车辅助雷达" class="headerlink" title="PAS 泊车辅助雷达"></a>PAS 泊车辅助雷达</h5><p>PAS(<em>Parking</em> Assist System,泊车辅助系统)利用倒车雷达和为驾驶员在狭窄空间停放车辆时提供援助，通过发送声音信号以及在中央显示屏上显示相应图形指示与障碍物的距离。</p>
+<p><img src="image-20211111234419237.png" alt="image-20211111234419237"></p>
+<h5 id="AVM-全景摄像模块"><a href="#AVM-全景摄像模块" class="headerlink" title="AVM 全景摄像模块"></a>AVM 全景摄像模块</h5><p>AVM(Around View Monitor,全景影像的系统)通过多个超大广角鱼眼镜头拍摄图像，然后经过数据处理对拍摄图像进行畸变矫正以及拼接，形成周围影像。为驾驶员提供车身四周的俯视图像，消除驾驶员的视野盲区，泊车时可提供有效的视觉辅助功能。最主要的接口是变道灯、摄像头视频和供电接口。</p>
+<p><img src="image-20211111230713168.png" alt="image-20211111230713168"></p>
+<h5 id="SDM-安全气囊控制器"><a href="#SDM-安全气囊控制器" class="headerlink" title="SDM 安全气囊控制器"></a>SDM 安全气囊控制器</h5><p>SDM 安全气囊控制器管控安全气囊和安全带。</p>
+<p><img src="image-20211111234950790.png" alt="image-20211111234950790"></p>
+<h5 id="ESCL-转向柱锁"><a href="#ESCL-转向柱锁" class="headerlink" title="ESCL 转向柱锁"></a>ESCL 转向柱锁</h5><p>ESCL（Electronic Steering Column Lock，电子转向柱锁)是车辆防盗系统的一部分，用于无钥匙进入无钥匙启动系统中锁止和解锁方向盘。ESCL 的上锁和解锁动作通过控制 ESCL 内的电机动作来实现。ESCL产品的安全等级需要根据整车系统构架和ISO26262进行评估与计算。此外还需满足不同国家和地区的法规要求（如GB15740、 ECER116等 )。</p>
+<p><img src="image-20211111232117359.png" alt="image-20211111232117359"></p>
+<h5 id="DVR-行车记录仪"><a href="#DVR-行车记录仪" class="headerlink" title="DVR 行车记录仪"></a>DVR 行车记录仪</h5><p>DVR 行车记录仪也有接入到 EBUS CAN 网络中。</p>
+<p><img src="image-20211111235251029.png" alt="image-20211111235251029"></p>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><h5 id="后排标准USB接口"><a href="#后排标准USB接口" class="headerlink" title="后排标准USB接口"></a>后排标准USB接口</h5><p>后排的标准USB接口只有电源针脚，没有数据针脚。而前排的 USB 接口大多是全功能的 USB 接口，既可以充电也可以传输数据。</p>
+<p><img src="image-20211112131248725.png" alt="image-20211112131248725"></p>
+<h5 id="点烟器"><a href="#点烟器" class="headerlink" title="点烟器"></a>点烟器</h5><p>一直很好奇点烟器是不有其他特殊的功能，看到只有电源针脚，原来是我想多了。</p>
+<p><img src="image-20211112131454826.png" alt="image-20211112131454826"></p>
+<h5 id="PEU-电机控制器"><a href="#PEU-电机控制器" class="headerlink" title="PEU 电机控制器"></a>PEU 电机控制器</h5><p>新能源汽车最核心的技术“三电”，即电机、电控、电池。电机控制器是用来控制电动车电机的启动、运行、进退、速度、停止以及其它电子器件的核心控制器件。PEU 电机控制器同时接入到了 EVBUS 能量域和 CBUS 底盘域中。</p>
+<h3 id="网络拓扑"><a href="#网络拓扑" class="headerlink" title="网络拓扑"></a>网络拓扑</h3><p>根据各 ECU 插线端子上的通信接口将同一个网络域上的 ECU 串联，然后并不同网络进行并联。上文中在解读各 ECU 端子中已进行分类，现只需要将上述的内容绘制成图即可，画完之后的图如下。</p>
+<p><img src="网络拓扑-北汽EU5 网络结构.png" alt="网络拓扑-北汽EU5 网络结构"></p>
+<p>整个网络以网关为核心，一共有8个子网络，分别是远程监控网络、诊断网络、能量域、快速充电网络、底盘域、信息域、车身域以及LIN总线网络。</p>
+<h3 id="整车线束"><a href="#整车线束" class="headerlink" title="整车线束"></a>整车线束</h3><p>从接线端子梳理完这个网络结构后，返回到汽车本身，汽车网络是由线束连接的，各插线端子最终都会连接到线束上，所以我们有必要去了解整车线束。</p>
+<p>汽车线束是汽车电路的网络主体，没有线束也就不存在汽车电路。线束是指由铜材冲制而成的接触件端子（连接器)与电线电缆压接后，外面再塑压绝缘体或外加金属壳体等，以线束捆扎形成连接电路的组件。</p>
+<ul>
+<li><strong>前舱线束：</strong>布置在汽车前舱区域，用于连接车身控制系统。前舱线束与仪表线束、PEU线束、前端线束、前保险杠线束、车身线束相连。ABS系统、BMS、PEU、灯具，前雨刮洗涤系统，电源系统、中央电器盒、油门加速踏板等位于前舱区域。</li>
+<li><strong>仪表线束：</strong>布置在汽车仪表区域，用于连接驾驶系统、娱乐系统、空调系统等电器。仪表线束与前舱线束、车身线束、顶棚线束、空调线束相连。组合仪表、音箱主机、中控面板、中控显示屏、扬声器、OBD 诊断接口、ESP、ESCL 转向柱锁、灯光组合开关、电动后视镜、网关、点烟器、P 档控制器、ESK 旋转式电子换挡、一键启动开关、驾驶员/副驾驶安全气囊、TPMS、BCM、吹脚风道、除霜风道、行李箱与C2L开关等连接在仪表线束上。</li>
+<li><strong>车身线束：</strong> 布置在汽车车身，是汽车线束中的骨干，与前舱线束、仪表线束、前保险线束、后保险线束、座椅线束相连。TBOX、EPB、执行人警示开关、GPS、CMU 交流插座控制单元、后备箱天线、行李箱锁电机、行李箱灯、倒车雷达模块、左右侧安全气囊、左右后组合灯、左右侧气帘、高位制动灯、后排USB接口、后摄像头、AVM 全景摄像模块等连接在车身线束上。</li>
+<li><strong>前端线束：</strong>布置在汽车前端，与前舱线束相连。喇叭、左右侧碰撞传感器、DC-CHM、机舱盖锁、行人警示器连接在前端线束上。</li>
+<li><strong>PEU(动力电子单元)线束：</strong>PEU线束与前舱线束相连，P档电机、电机水泵控制器、正空泵电源、真空泵控制器、蓄电池正极起动机等连接在PEU线束上。</li>
+<li><p><strong>前保险杠线束：</strong>前保险线束与前舱线束相连，快充盖锁、前摄像头、左右日间行车灯等连接在前保险杠线束上。</p>
+</li>
+<li><p><strong>后保险杠线束：</strong>后保险杠线束与车身线束相连，中/后雷达、后雾灯等连接在后保险杠线束上。</p>
+</li>
+<li><p><strong>车门线束:</strong> 每一扇门拥有一根车门线束。车门线束与车身线束相连，扬声器、后视镜、玻璃升降开关、玻璃升级电机、门锁总成、门把手开关等连接在车门线束上。</p>
+</li>
+<li><p><strong>顶棚线束：</strong>顶棚线束与仪表线束相连，行车记录仪、顶灯、ADAS 前摄像头、天窗、雨量传感器等连接在顶棚线束上。</p>
+</li>
+<li><strong>空调线束：</strong>空调使用的线束，通过连接仪表线束接入整车线束中。蒸发温度传感器、内外循环电机、模式电机、混合风机等连接在空调线束上。</li>
+<li><strong>座椅线束：</strong>布置在座椅区域，用于调节座椅高度、加热等。通过连接车身线束接入整车线束中。座椅加热控制器、座椅加热丝、座椅高度调节电机、座椅前后调节电机、座椅靠背调节电机等连接在座椅线束上。</li>
+</ul>
+<p>整车线束的参考位置如下。</p>
+<p><img src="image-20211111150913360.png" alt="image-20211111150913360"></p>
+<h3 id="插线端子在车联网安全上的思考"><a href="#插线端子在车联网安全上的思考" class="headerlink" title="插线端子在车联网安全上的思考"></a>插线端子在车联网安全上的思考</h3><p>在黑盒的情况下，对零部件的物理分析往往是插线端子开始的，这第一步就是找到电源针脚，找到供电针脚上电后才开始了正式的研究工作。梳理出各个 ECU 常见的插线端子，有助于简化分析流程，将精力投入到更为深入的漏洞挖掘工作之中。</p>
+<p>此外，在插线端子上也可以找到一些脆弱的攻击点。例如，DVR 行车记录仪，从插线端子来看 DVR 接入到了车身域 CAN 网络中。那么就可以从行车记录仪入手，拿下 DVR 控制权后，进入到车身域中，而 BCM 也正好处于同一网络之中，BCM 又控制着车门、车灯。这一条控车的逻辑链路，当下没有被大家广泛关注，重点人在云端、TBOX 或 IVI上。从行车记录仪控车的这条路，星舆实验室正在积极探索之中，我们通过无接触的方式利用未知漏洞已经拿到某车行车记录仪的系统权限。 </p>
+<p>在研究插线端子中，我们还有其他的一些想法。欢迎大家和我们一起研究、探讨车联网安全，共同守护出行安全。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://delikely.github.io/2021/08/15/TBOX-Main-Function/">车联网安全基础知识之TBOX主要功能</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/d-GcMiI51ugrnvSfQScL-A">北汽EV200/比亚迪唐/比亚迪e6 车载网络结构剖析</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/149932069">BMS电池管理系统由浅入深全方位解析</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/6bZ2KGoMF307etKGGMnGjA">上汽乘用车：车身域控制系统开发实践</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.doc88.com/p-17347380206512.html">无钥匙系统PEPSBCM一体式技术方案</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/57872365">无钥匙进入及启动系统（Kessy)简介</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.auto-made.com/news/show-10990.html">汽车线束详细分类</a></li>
+<li>北汽新能源 EU5 维修手册电路图(来自互联网)</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E7%BA%BF%E7%AB%AF%E5%AD%90"><span class="toc-number">2.</span> <span class="toc-text">插线端子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E5%85%B3"><span class="toc-number">2.1.</span> <span class="toc-text">网关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TBUS-%E8%BF%9C%E7%A8%8B%E8%AF%8A%E6%96%AD%E7%BD%91%E7%BB%9C"><span class="toc-number">2.2.</span> <span class="toc-text">TBUS 远程诊断网络</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#EVBUS-%E8%83%BD%E9%87%8F%E5%9F%9F-%E5%8A%A8%E5%8A%9B%E5%9F%9F"><span class="toc-number">2.3.</span> <span class="toc-text">EVBUS 能量域&#x2F;动力域</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#BMS-%E7%94%B5%E6%B1%A0%E7%AE%A1%E7%90%86%E3%80%81%E5%BF%AB%E5%85%85%E3%80%81%E6%85%A2%E5%85%85%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.3.1.</span> <span class="toc-text">BMS 电池管理、快充、慢充系统</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#WEP-FD-%E7%94%B5%E6%9C%BA%E6%B0%B4%E6%B3%B5%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">2.3.2.</span> <span class="toc-text">WEP-FD 电机水泵控制器</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CBUS-%E5%BA%95%E7%9B%98%E5%9F%9F"><span class="toc-number">2.4.</span> <span class="toc-text">CBUS 底盘域</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#ABS-%E9%98%B2%E6%8A%B1%E6%AD%BB%E5%88%B6%E5%8A%A8%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.4.1.</span> <span class="toc-text">ABS 防抱死制动系统</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#EPB-%E7%94%B5%E5%AD%90%E9%A9%BB%E8%BD%A6%E5%88%B6%E5%8A%A8%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">2.4.2.</span> <span class="toc-text">EPB 电子驻车制动控制器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#EPS-%E7%94%B5%E5%8A%A8%E5%8A%A9%E5%8A%9B%E8%BD%AC%E5%90%91%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.4.3.</span> <span class="toc-text">EPS  电动助力转向系统</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#P-%E6%A1%A3%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">2.4.4.</span> <span class="toc-text">P 档控制器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ESK-%E6%A1%A3%E4%BD%8D%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">2.4.5.</span> <span class="toc-text">ESK 档位控制器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#VBP-%E7%9C%9F%E7%A9%BA%E6%B3%B5%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">2.4.6.</span> <span class="toc-text">VBP 真空泵控制器</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IBUS-%E4%BF%A1%E6%81%AF%E5%9F%9F-%E6%99%BA%E8%83%BD%E5%BA%A7%E8%88%B1%E5%9F%9F"><span class="toc-number">2.5.</span> <span class="toc-text">IBUS 信息域&#x2F;智能座舱域</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%AD%E6%8E%A7%E5%A8%B1%E4%B9%90%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.5.1.</span> <span class="toc-text">中控娱乐系统</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%9F%B3%E5%93%8D%E4%B8%BB%E6%9C%BAC"><span class="toc-number">2.5.2.</span> <span class="toc-text">音响主机C</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%BB%84%E5%90%88%E4%BB%AA%E8%A1%A8"><span class="toc-number">2.5.3.</span> <span class="toc-text">组合仪表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ACP-%E7%A9%BA%E8%B0%83%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">2.5.4.</span> <span class="toc-text">ACP 空调控制器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#EAS-%E7%94%B5%E5%8A%A8%E5%8E%8B%E7%BC%A9%E6%9C%BA%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">2.5.5.</span> <span class="toc-text">EAS 电动压缩机控制器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#PTC-%E7%94%B5%E5%8A%A0%E7%83%AD%E6%8E%A7%E5%88%B6"><span class="toc-number">2.5.6.</span> <span class="toc-text">PTC 电加热控制</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BD%8E%E9%80%9F%E8%A1%8C%E4%BA%BA%E8%AD%A6%E7%A4%BA%E5%99%A8"><span class="toc-number">2.5.7.</span> <span class="toc-text">低速行人警示器</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#EBUS-%E8%BD%A6%E8%BA%AB%E5%9F%9F"><span class="toc-number">2.6.</span> <span class="toc-text">EBUS 车身域</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#BCM-%E8%BD%A6%E8%BA%AB%E6%8E%A7%E5%88%B6%E6%A8%A1%E5%9D%97"><span class="toc-number">2.6.1.</span> <span class="toc-text">BCM 车身控制模块</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#PEPS-%E6%97%A0%E9%92%A5%E5%8C%99%E8%BF%9B%E5%85%A5%E4%B8%8E%E4%B8%80%E9%94%AE%E5%90%AF%E5%8A%A8"><span class="toc-number">2.6.2.</span> <span class="toc-text">PEPS 无钥匙进入与一键启动</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#TPMS-%E8%83%8E%E5%8E%8B%E6%A3%80%E6%B5%8B"><span class="toc-number">2.6.3.</span> <span class="toc-text">TPMS 胎压检测</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#PAS-%E6%B3%8A%E8%BD%A6%E8%BE%85%E5%8A%A9%E9%9B%B7%E8%BE%BE"><span class="toc-number">2.6.4.</span> <span class="toc-text">PAS 泊车辅助雷达</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#AVM-%E5%85%A8%E6%99%AF%E6%91%84%E5%83%8F%E6%A8%A1%E5%9D%97"><span class="toc-number">2.6.5.</span> <span class="toc-text">AVM 全景摄像模块</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#SDM-%E5%AE%89%E5%85%A8%E6%B0%94%E5%9B%8A%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">2.6.6.</span> <span class="toc-text">SDM 安全气囊控制器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ESCL-%E8%BD%AC%E5%90%91%E6%9F%B1%E9%94%81"><span class="toc-number">2.6.7.</span> <span class="toc-text">ESCL 转向柱锁</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#DVR-%E8%A1%8C%E8%BD%A6%E8%AE%B0%E5%BD%95%E4%BB%AA"><span class="toc-number">2.6.8.</span> <span class="toc-text">DVR 行车记录仪</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">2.7.</span> <span class="toc-text">其他</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%90%8E%E6%8E%92%E6%A0%87%E5%87%86USB%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.7.1.</span> <span class="toc-text">后排标准USB接口</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%82%B9%E7%83%9F%E5%99%A8"><span class="toc-number">2.7.2.</span> <span class="toc-text">点烟器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#PEU-%E7%94%B5%E6%9C%BA%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">2.7.3.</span> <span class="toc-text">PEU 电机控制器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%8B%93%E6%89%91"><span class="toc-number">3.</span> <span class="toc-text">网络拓扑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B4%E8%BD%A6%E7%BA%BF%E6%9D%9F"><span class="toc-number">4.</span> <span class="toc-text">整车线束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E7%BA%BF%E7%AB%AF%E5%AD%90%E5%9C%A8%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E4%B8%8A%E7%9A%84%E6%80%9D%E8%80%83"><span class="toc-number">5.</span> <span class="toc-text">插线端子在车联网安全上的思考</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&text=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&is_video=false&description=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=车联网安全基础知识之从插线端子分析车内通信网络结构&body=Check out this article: http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&name=车联网安全基础知识之从插线端子分析车内通信网络结构&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+

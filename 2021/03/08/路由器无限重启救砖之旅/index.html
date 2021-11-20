@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="路由器无限重启救砖之旅挖掘路由器漏洞时，发现了一个命令执行漏洞，正好有重启设备的需求，于是通过漏洞传递 reboot 命令重启，没想到的是设备变砖了。分析变砖原因，发现传递的参数会保存 NVRAM 中，开机的时候会读取并执行，于是造成了设备的拒绝服务。手头这个设备也是好不容易淘来的，这可怎么是好。开始救砖吧！ 尝试一——恢复记忆由于 reboot 命令存储到了路由器的 NVRAM 配置中，将路由器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="路由器无限重启救砖之旅">
+<meta property="og:url" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="路由器无限重启救砖之旅挖掘路由器漏洞时，发现了一个命令执行漏洞，正好有重启设备的需求，于是通过漏洞传递 reboot 命令重启，没想到的是设备变砖了。分析变砖原因，发现传递的参数会保存 NVRAM 中，开机的时候会读取并执行，于是造成了设备的拒绝服务。手头这个设备也是好不容易淘来的，这可怎么是好。开始救砖吧！ 尝试一——恢复记忆由于 reboot 命令存储到了路由器的 NVRAM 配置中，将路由器">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210217162552577.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210203132138347.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210217162647088.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210217162738728.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210217162440505.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210217162915051.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210201145923744.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210201153709706.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210202112524412.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210203171118562.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210204111142453.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210217171100965.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210204112130922.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210204112818418.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210204114159142.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210204114321805.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210203170300054.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210203171244274.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210203172021000.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210203172703641.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210217165552187.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210202172331541.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210217165714575.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210202173126095.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210217163301489.png">
+<meta property="article:published_time" content="2021-03-08T09:21:00.000Z">
+<meta property="article:modified_time" content="2021-03-08T09:37:40.000Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="IOT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210217162552577.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>路由器无限重启救砖之旅</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/03/10/Tesla%E8%BD%A6%E6%9C%BA%E5%9B%BA%E4%BB%B6%E5%88%86%E6%9E%90%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E4%BB%8E%E7%A3%81%E7%9B%98%E6%98%A0%E5%83%8F%E4%B8%AD%E6%8F%90%E5%8F%96%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/01/30/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6%E5%9C%A8%E6%B1%BD%E8%BD%A6%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
+      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
+      <span id="i-top" class="info" style="display:none;">Arriba</span>
+      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/&text=路由器无限重启救砖之旅"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/&title=路由器无限重启救砖之旅"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/&is_video=false&description=路由器无限重启救砖之旅"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=路由器无限重启救砖之旅&body=Check out this article: http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/&title=路由器无限重启救砖之旅"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/&title=路由器无限重启救砖之旅"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/&title=路由器无限重启救砖之旅"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/&title=路由器无限重启救砖之旅"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/&name=路由器无限重启救砖之旅&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85"><span class="toc-number">1.</span> <span class="toc-text">路由器无限重启救砖之旅</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%9D%E8%AF%95%E4%B8%80%E2%80%94%E2%80%94%E6%81%A2%E5%A4%8D%E8%AE%B0%E5%BF%86"><span class="toc-number">1.1.</span> <span class="toc-text">尝试一——恢复记忆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%9D%E8%AF%95%E4%BA%8C%E2%80%94%E2%80%94%E4%BA%89%E5%88%86%E5%A4%BA%E7%A7%92"><span class="toc-number">1.2.</span> <span class="toc-text">尝试二——争分夺秒</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%9D%E8%AF%95%E4%B8%89%E2%80%94%E2%80%94%E7%B4%A7%E6%80%A5%E6%95%91%E6%8F%B4"><span class="toc-number">1.3.</span> <span class="toc-text">尝试三——紧急救援</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%9D%E8%AF%95%E5%9B%9B%E2%80%94%E2%80%94%E5%86%85%E5%AD%98%E4%BF%AE%E6%94%B9"><span class="toc-number">1.4.</span> <span class="toc-text">尝试四——内存修改</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.4.1.</span> <span class="toc-text">1. 提取固件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%88%86%E6%9E%90%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.4.2.</span> <span class="toc-text">2. 分析固件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E4%BF%AE%E6%94%B9-Flash"><span class="toc-number">1.4.3.</span> <span class="toc-text">3. 修改 Flash</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-1-%E4%BD%BF%E7%94%A8-FTP-%E4%B8%8A%E4%BC%A0%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.4.3.1.</span> <span class="toc-text">1.1) 使用 FTP 上传固件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-%E4%BD%BF%E7%94%A8-loady-%E4%B8%8A%E4%BC%A0%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.4.3.2.</span> <span class="toc-text">1.2) 使用 loady 上传固件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-3-%E4%BD%BF%E7%94%A8-loads-%E4%B8%8A%E4%BC%A0%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.4.3.3.</span> <span class="toc-text">1.3) 使用 loads 上传固件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E5%88%B7%E5%86%99%E9%85%8D%E7%BD%AE%E5%88%86%E5%8C%BA"><span class="toc-number">1.4.3.4.</span> <span class="toc-text">2) 刷写配置分区</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E9%87%8D%E5%90%AF"><span class="toc-number">1.4.4.</span> <span class="toc-text">4. 重启</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%9D%E8%AF%95%E4%BA%94%E2%80%94%E2%80%94%E7%89%A9%E7%90%86%E4%BC%A4%E5%AE%B3"><span class="toc-number">1.5.</span> <span class="toc-text">尝试五——物理伤害</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%96%B9%E6%B3%95"><span class="toc-number">1.6.</span> <span class="toc-text">其他方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.7.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.8.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        路由器无限重启救砖之旅
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2021-03-08T09:21:00.000Z" itemprop="datePublished">2021-03-08</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/IOT/" rel="tag">IOT</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="路由器无限重启救砖之旅"><a href="#路由器无限重启救砖之旅" class="headerlink" title="路由器无限重启救砖之旅"></a>路由器无限重启救砖之旅</h2><p>挖掘路由器漏洞时，发现了一个命令执行漏洞，正好有重启设备的需求，于是通过漏洞传递 reboot 命令重启，没想到的是设备变砖了。分析变砖原因，发现传递的参数会保存 NVRAM 中，开机的时候会读取并执行，于是造成了设备的拒绝服务。手头这个设备也是好不容易淘来的，这可怎么是好。开始救砖吧！</p>
+<h3 id="尝试一——恢复记忆"><a href="#尝试一——恢复记忆" class="headerlink" title="尝试一——恢复记忆"></a>尝试一——恢复记忆</h3><p>由于 reboot 命令存储到了路由器的 NVRAM 配置中，将路由器<strong>恢复出厂设置</strong>还原 NVRAM 中的值理论上可行。正好路由器上有 reset 按键，“摁”住它一段时间，测试了好几次没反应。这种方法就不回来。猜测是负责恢复出厂设置程序在设备自动重启之间没有启动。</p>
+<h3 id="尝试二——争分夺秒"><a href="#尝试二——争分夺秒" class="headerlink" title="尝试二——争分夺秒"></a>尝试二——争分夺秒</h3><p>软的不行来硬的，直接拆。拆了发现预留有串口。通过串口进入系统 shell，与自动重启争分夺秒。希望web服务启动能有点延时，在重启之前，删除 reboot。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvram set name&#x3D;&quot;&quot;</span><br></pre></td></tr></table></figure>
+<p>输入了用户名密码，还没进入shell 就重启了。这个方法也不行，时间来不及。</p>
+<p><img src="image-20210217162552577.png" alt="image-20210217162552577"></p>
+<h3 id="尝试三——紧急救援"><a href="#尝试三——紧急救援" class="headerlink" title="尝试三——紧急救援"></a>尝试三——紧急救援</h3><p>进入<strong>单用户模式</strong>，修改启动参数进入单用户模式,U-Boot 没有 saveenv 命令，使用 setenv 修改启动参数后无法保存。这种方法也受阻了，如果能进入单用户模式，可以恢复参数进行救砖。</p>
+<p><img src="image-20210203132138347.png" alt="image-20210203132138347"></p>
+<h3 id="尝试四——内存修改"><a href="#尝试四——内存修改" class="headerlink" title="尝试四——内存修改"></a>尝试四——内存修改</h3><p>首先提取出固件定位到问题所在，然后修改好固件后，最后在 U-Boot 中直接刷写。</p>
+<h4 id="1-提取固件"><a href="#1-提取固件" class="headerlink" title="1. 提取固件"></a>1. 提取固件</h4><p>读取内存：Flash 在内存的地址使用命令 bdinfo 查看，。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ath&gt; bdinfo</span><br><span class="line">boot_params &#x3D; 0x87F77FB0</span><br><span class="line">memstart    &#x3D; 0x80000000</span><br><span class="line">memsize     &#x3D; 0x08000000</span><br><span class="line">flashstart  &#x3D; 0x9F000000</span><br><span class="line">flashsize   &#x3D; 0x01000000</span><br><span class="line">flashoffset &#x3D; 0x0002BD20</span><br><span class="line">ethaddr     &#x3D; 00:AA:BB:CC:DD:EE</span><br><span class="line">ip_addr     &#x3D; 10.10.10.123</span><br><span class="line">baudrate    &#x3D; 115200 bps</span><br></pre></td></tr></table></figure>
+<p>Flash 的起始地址为 0x9F000000，大小为 0x01000000（16M）。16M = 16777216 Bit，16777216/32 = 524288=0x80000。启动xshell 的日志记录功能。等待两个小时左右，完成读取。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ath&gt; md 0x9F000000 80000</span><br><span class="line">9f000000: 100000ff 00000000 100000fd 00000000    ................</span><br><span class="line">9f000010: 10000175 00000000 10000173 00000000    ...u.......s....</span><br><span class="line">9f000020: 10000171 00000000 1000016f 00000000    ...q.......o....</span><br><span class="line">9f000030: 1000016d 00000000 1000016b 00000000    ...m.......k....</span><br><span class="line">9f000040: 10000169 00000000 10000167 00000000    ...i.......g....</span><br></pre></td></tr></table></figure>
+<p>然后把日志中的内容转化为二进制。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">pre_index = <span class="number">0</span></span><br><span class="line">index = <span class="number">0</span></span><br><span class="line"><span class="comment">#检查日志中的内容是否完整</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">r&quot;md_flash.log&quot;</span>.encode(),encoding=<span class="string">&quot;utf-8&quot;</span>) <span class="keyword">as</span> log:</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> log.readlines():</span><br><span class="line">        index = <span class="built_in">int</span>(line.split(<span class="string">&quot;:&quot;</span>)[<span class="number">0</span>],<span class="number">16</span>)</span><br><span class="line">        <span class="keyword">if</span> pre_index == <span class="number">0</span>:</span><br><span class="line">            pre_index = index</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">if</span> index - pre_index != <span class="number">0x10</span>:</span><br><span class="line">            print(<span class="built_in">hex</span>(pre_index),<span class="string">&quot; to &quot;</span>,<span class="built_in">hex</span>(index),<span class="string">&quot;data absence&quot;</span>)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            pre_index = index</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">r&quot;md_flash.log&quot;</span>.encode(),encoding=<span class="string">&quot;utf-8&quot;</span>) <span class="keyword">as</span> log:</span><br><span class="line">    data = log.read()</span><br><span class="line"></span><br><span class="line"><span class="comment">#末尾加一个换行符，方便正常统一处理</span></span><br><span class="line">data = data+<span class="string">&quot;\n&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 去掉字符</span></span><br><span class="line">data = re.sub(<span class="string">r&quot;\s\s\s\s.*\n&quot;</span>,<span class="string">&quot;&quot;</span>,data)</span><br><span class="line"><span class="comment"># 去掉地址</span></span><br><span class="line">data = re.sub(<span class="string">r&quot;[0-9a-zA-Z]&#123;8,8&#125;:\s&quot;</span>,<span class="string">&quot;&quot;</span>,data)</span><br><span class="line"><span class="comment"># 去掉空格</span></span><br><span class="line">data = re.sub(<span class="string">r&quot;\s&quot;</span>,<span class="string">&quot;&quot;</span>,data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;flash.bin&quot;</span>,<span class="string">&quot;bw&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(<span class="built_in">bytes</span>.fromhex(data))</span><br></pre></td></tr></table></figure>
+<h4 id="2-分析固件"><a href="#2-分析固件" class="headerlink" title="2. 分析固件"></a>2. 分析固件</h4><p>binwalk 分析对固件的分析结果。</p>
+<p><img src="image-20210217162647088.png" alt="image-20210217162647088"></p>
+<p>现在手里有串口，当然得参考串口日志信息。根据串口打印的 Flash 中配置分区的信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[    9.465000] Creating 9 MTD partitions on &quot;spi0.0&quot;:</span><br><span class="line">[    9.519000] 0x000000fe0000-0x000000ff0000 : &quot;Config&quot;</span><br></pre></td></tr></table></figure>
+<p>使用 dd 拆分出各模块，下面是可能与 NVRAM 有关的模块。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali<span class="comment">#dd if=flash.bin of=config.bin bs=1 count=65535 skip=16646144</span></span><br><span class="line">65535+0 records <span class="keyword">in</span></span><br><span class="line">65535+0 records out</span><br><span class="line">65535 bytes (66 kB, 64 KiB) copied, 1.46555 s, 44.7 kB/s</span><br></pre></td></tr></table></figure>
+<p>binwalk 分析出 config 中的内容是经过 gzip压缩的。</p>
+<p><img src="image-20210217162738728.png" alt="image-20210217162738728"></p>
+<p>binwalk 提取出配置文件，里面是明文存储着的配置数据。</p>
+<p><img src="image-20210217162440505.png" alt="image-20210217162440505"></p>
+<p>找到了罪魁祸首。</p>
+<p><img src="image-20210217162915051.png" alt="image-20210217162915051"></p>
+<p>修改好之后，进行压缩。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># gzip C  -9 -c &gt; config_m.bin </span></span><br></pre></td></tr></table></figure>
+<p>最后加上加上分区头，就重构了配置分区，接下来就要想办法写入到 Flash 中。</p>
+<h4 id="3-修改-Flash"><a href="#3-修改-Flash" class="headerlink" title="3. 修改 Flash"></a>3. 修改 Flash</h4><p>搞 IOT 安全的并不是都熟悉嵌入式开发，搞嵌入式开发的不一定理解我们的需求，问了搞嵌入式的朋友他会不会。我是第一次通过 U-Boot 刷写固件，由于缺乏基础知识走了不少弯路，写这篇文章的目的也是帮助有同样需求的人少走弯路。U-Boot 固件刷写不能直接写入到 Flash 中，需要按照下图的流程操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">graph LR;</span><br><span class="line">上传固件到内存中 --&gt; 擦除Flash;</span><br><span class="line">擦除Flash --&gt; 关闭Flash保护;</span><br><span class="line">关闭Flash保护 --&gt; 从内存中拷贝固件到Flash中;</span><br></pre></td></tr></table></figure>
+<p>首先尝试用 FTP、loady、loads 上传文件，实际使用时选择一种即可。最后重新刷写配置分区，救活路由器。</p>
+<h5 id="1-1-使用-FTP-上传固件"><a href="#1-1-使用-FTP-上传固件" class="headerlink" title="1.1) 使用 FTP 上传固件"></a>1.1) 使用 FTP 上传固件</h5><p>printenv 命令查看环境变量可知预设服务器的地址为10.10.10.3。</p>
+<p><img src="image-20210201145923744.png" alt="image-20210201145923744"></p>
+<p>找一根网线连接路由器和电脑，然后给电脑设置静态 IP 地址 10.10.10.3，掩码 255.255.255.0。然后，测试一下连通性。在路由器串口中 ping 电脑。</p>
+<p><img src="image-20210201153709706.png" alt="image-20210201153709706"></p>
+<p>host 10.10.10.3 存活说明连接成功。另外，还准备一个 TFTP 服务器，刚开始用的 <a target="_blank" rel="noopener" href="https://filezilla-project.org/">FileZilla</a>，不行发现还需要 DHCP 服务器，有找个<a target="_blank" rel="noopener" href="https://www.dhcpserver.de/cms/">dhcpsrv</a> ，最后发现还是 <a target="_blank" rel="noopener" href="http://tftpd32.jounin.net/tftpd32_download.html">TFTPD</a>比较好用。打开就能用，配置也很简单，FTP 设置一下路径，DHCP 需要设置IP等，如下图。</p>
+<p><img src="image-20210202112524412.png" alt="image-20210202112524412"></p>
+<p>参考环境变量中的la，如果环境变量中没有可以参考的，那就需要在内存中寻找一块足够大的空白区域。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">la&#x3D;tftp 0x80060000 data.bin&amp;&amp;erase 0x9fff0000 +$filesize&amp;&amp;protect off all&amp;&amp;cp.b $fileaddr 0x9fff0000 $filesize</span><br></pre></td></tr></table></figure>
+<p>将固件加载到地址 0x80060000。</p>
+<p><img src="image-20210203171118562.png" alt="image-20210203171118562"></p>
+<h5 id="1-2-使用-loady-上传固件"><a href="#1-2-使用-loady-上传固件" class="headerlink" title="1.2) 使用 loady 上传固件"></a>1.2) 使用 loady 上传固件</h5><p>命令格式为 <code>loady address</code>,然后使用 YMODEM 发送修改后的文件。</p>
+<p><img src="image-20210204111142453.png" alt="image-20210204111142453"></p>
+<p><img src="image-20210217171100965.png" alt="image-20210217171100965"></p>
+<h5 id="1-3-使用-loads-上传固件"><a href="#1-3-使用-loads-上传固件" class="headerlink" title="1.3) 使用 loads 上传固件"></a>1.3) 使用 loads 上传固件</h5><p>首先将二进制文件转为S-Record文件。</p>
+<p><img src="image-20210204112130922.png" alt="image-20210204112130922"></p>
+<p>​                    使用默认配置，导出即可。</p>
+<p><img src="image-20210204112818418.png" alt="image-20210204112818418"></p>
+<p>S-Record文件中的数据都是以ASCII码的格式存储，正好使用 Xshell ASCII 字符传输修改后的文件。命令格式为 <code>loads address</code>。</p>
+<p><img src="image-20210204114159142.png" alt="image-20210204114159142"></p>
+<p>选择文件，等待片刻写入完成。</p>
+<p><img src="image-20210204114321805.png" alt="image-20210204114321805"></p>
+<h5 id="2-刷写配置分区"><a href="#2-刷写配置分区" class="headerlink" title="2) 刷写配置分区"></a>2) 刷写配置分区</h5><p>刷血配置分区，加载到内存的数据拷贝到 Flash 中。</p>
+<ol>
+<li><p>擦除 Config 分区 </p>
+<p><img src="image-20210203170300054.png" alt="image-20210203170300054"></p>
+</li>
+<li><p>关闭 flash 保护</p>
+<p><img src="image-20210203171244274.png" alt="image-20210203171244274"></p>
+</li>
+<li><p>从Momory 中复制到 Flash 中。</p>
+<p><img src="image-20210203172021000.png" alt="image-20210203172021000"></p>
+</li>
+<li><p>查看写入的数据</p>
+<p><img src="image-20210203172703641.png" alt="image-20210203172703641"></p>
+</li>
+</ol>
+<h4 id="4-重启"><a href="#4-重启" class="headerlink" title="4. 重启"></a>4. 重启</h4><p>输入 reset 重启，路由器正常运行，救砖成功。</p>
+<h3 id="尝试五——物理伤害"><a href="#尝试五——物理伤害" class="headerlink" title="尝试五——物理伤害"></a>尝试五——物理伤害</h3><p>除了U-Boot 刷写还可以直接<strong>物理操作</strong>，使用 FT232H 连接 SOP8 封装的 SPI Flash，用 Flashrom 刷入固件。</p>
+<p>压缩修改后的配置文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># gzip C  -9 -c &gt; config_m.bin </span></span><br></pre></td></tr></table></figure>
+<p>截取分区头。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># dd if=../config.bin of=header.bin bs=1 count=12</span></span><br><span class="line">12+0 records <span class="keyword">in</span></span><br><span class="line">12+0 records out</span><br><span class="line">12 bytes copied, 0.000132176 s, 90.8 kB/s</span><br></pre></td></tr></table></figure>
+<p>计算需要填充的<code>0xFF</code>的大小，然后使用 dd 创建填充块。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># ls -l config_m.bin </span></span><br><span class="line">-rw-r--r-- 1 root root 34289 Jan 31 23:08 config_m.bin</span><br><span class="line">root@kali:~<span class="comment"># ls -l config.bin </span></span><br><span class="line">-rwxrw-rw- 1 root root 65535 Jan 27 03:15 config.bin</span><br><span class="line">root@kali:~<span class="comment"># python3 -c &quot;print(65535-12-34289)&quot;</span></span><br><span class="line">31246</span><br><span class="line">root@kali:~<span class="comment"># dd if=/dev/zero bs=1 count=31234 | tr &quot;\000&quot; &quot;\377&quot; &gt;ff.bin</span></span><br><span class="line">31234+0 records <span class="keyword">in</span></span><br><span class="line">31234+0 records out</span><br><span class="line">31234 bytes (31 kB, 31 KiB) copied, 0.0801646 s, 390 kB/s</span><br></pre></td></tr></table></figure>
+<p>最后，将所有的分区拼接起来形成完整的固件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># cat header.bin config_m.bin ff.bin  &gt; config_new.bin</span></span><br><span class="line">root@kali:~<span class="comment"># ls -l config_new.bin </span></span><br><span class="line">-rw-r--r-- 1 root root 65535 Jan 31 23:24 config_new.bin</span><br></pre></td></tr></table></figure>
+<p>以上操作完成了固件的重打包，然后就可以使用 Flashrom 写入新固件。</p>
+<p>SOP 夹子夹不稳，只能手扶着。</p>
+<p><img src="image-20210217165552187.png" alt="image-20210217165552187"></p>
+<p>写入时间还是比较长，手有点受不了，可能导致接触不良，写入失败。</p>
+<p><img src="image-20210202172331541.png" alt="image-20210202172331541"></p>
+<p>然后，就使用芯片测试夹连接，这样稳一下。</p>
+<p><img src="image-20210217165714575.png" alt="image-20210217165714575"></p>
+<p>此时写入成功，但是验证失败。</p>
+<p><img src="image-20210202173126095.png" alt="image-20210202173126095"></p>
+<p>上电，并双手合十，登录界面维持住了，Web 管理端也能访问了，救砖成功。</p>
+<p><img src="image-20210217163301489.png" alt="image-20210217163301489"></p>
+<h3 id="其他方法"><a href="#其他方法" class="headerlink" title="其他方法"></a>其他方法</h3><p>除以上 5 种方法，还有更简单粗暴的方法，但需要一个正常的设备，或之前备份过的正常完整 Flash。操作比较简单直接读取正常设备的 Flash 并写入变砖的设备中即可。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>救砖，首先需要分析搬砖的原因，然后对症下药。我这次是配置参数引起的，所以我首先想到的是恢复出厂设置，但恢复出厂模式需要长按数秒，此时设备已经重启，这种方法就不行了；然后想到进入 shell 快速还原配置参数修复，结果是还没进入shell，设备就重启了；设备重启是 Web 服务启动时触发，只要不启动 Web 服务设备就不会重启，于是就尝试了一下进入单用户模式，然而 U-Boot中修改后的启动参数却无法保存； 从系统层的修复已经无计可施只能从底层出发，于是对固件进行提取分析，找到问题点修复后重新刷写，刷写尝试了不同的方法，一是通过U-Boot刷写，另外就是直接操作 Flash。</p>
+<p>此次救砖还是花了不少时间的，通过实践了解了 NVRAM 的物理存储方式，还尝试了 U-Boot 中多种固件刷写方法。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://www.nxp.com/docs/en/user-guide/MEDIA5200UBPG.pdf">U-Boot Quick Reference</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/229320">抢救变砖的某款智能音箱</a></li>
+</ul>
+<p>本文首发于<a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/231493">安全客</a></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85"><span class="toc-number">1.</span> <span class="toc-text">路由器无限重启救砖之旅</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%9D%E8%AF%95%E4%B8%80%E2%80%94%E2%80%94%E6%81%A2%E5%A4%8D%E8%AE%B0%E5%BF%86"><span class="toc-number">1.1.</span> <span class="toc-text">尝试一——恢复记忆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%9D%E8%AF%95%E4%BA%8C%E2%80%94%E2%80%94%E4%BA%89%E5%88%86%E5%A4%BA%E7%A7%92"><span class="toc-number">1.2.</span> <span class="toc-text">尝试二——争分夺秒</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%9D%E8%AF%95%E4%B8%89%E2%80%94%E2%80%94%E7%B4%A7%E6%80%A5%E6%95%91%E6%8F%B4"><span class="toc-number">1.3.</span> <span class="toc-text">尝试三——紧急救援</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%9D%E8%AF%95%E5%9B%9B%E2%80%94%E2%80%94%E5%86%85%E5%AD%98%E4%BF%AE%E6%94%B9"><span class="toc-number">1.4.</span> <span class="toc-text">尝试四——内存修改</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.4.1.</span> <span class="toc-text">1. 提取固件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%88%86%E6%9E%90%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.4.2.</span> <span class="toc-text">2. 分析固件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E4%BF%AE%E6%94%B9-Flash"><span class="toc-number">1.4.3.</span> <span class="toc-text">3. 修改 Flash</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-1-%E4%BD%BF%E7%94%A8-FTP-%E4%B8%8A%E4%BC%A0%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.4.3.1.</span> <span class="toc-text">1.1) 使用 FTP 上传固件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-%E4%BD%BF%E7%94%A8-loady-%E4%B8%8A%E4%BC%A0%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.4.3.2.</span> <span class="toc-text">1.2) 使用 loady 上传固件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-3-%E4%BD%BF%E7%94%A8-loads-%E4%B8%8A%E4%BC%A0%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.4.3.3.</span> <span class="toc-text">1.3) 使用 loads 上传固件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E5%88%B7%E5%86%99%E9%85%8D%E7%BD%AE%E5%88%86%E5%8C%BA"><span class="toc-number">1.4.3.4.</span> <span class="toc-text">2) 刷写配置分区</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E9%87%8D%E5%90%AF"><span class="toc-number">1.4.4.</span> <span class="toc-text">4. 重启</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%9D%E8%AF%95%E4%BA%94%E2%80%94%E2%80%94%E7%89%A9%E7%90%86%E4%BC%A4%E5%AE%B3"><span class="toc-number">1.5.</span> <span class="toc-text">尝试五——物理伤害</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%96%B9%E6%B3%95"><span class="toc-number">1.6.</span> <span class="toc-text">其他方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.7.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.8.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/&text=路由器无限重启救砖之旅"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/&title=路由器无限重启救砖之旅"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/&is_video=false&description=路由器无限重启救砖之旅"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=路由器无限重启救砖之旅&body=Check out this article: http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/&title=路由器无限重启救砖之旅"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/&title=路由器无限重启救砖之旅"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/&title=路由器无限重启救砖之旅"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/&title=路由器无限重启救砖之旅"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/&name=路由器无限重启救砖之旅&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+

@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="众所周时，蓝牙是当下无线网络技术中最受欢迎和常用一种。伴随着蓝牙技术在物联网中的发展，蓝牙技术联盟以信标、医疗保健、娱乐、健身为核心不断努力提升传输速度。 低功耗功耗蓝牙（BLE）是蓝牙4.0规范的一部份，它还包含传统蓝牙和蓝牙高速传输协议。与传统蓝牙相比，BLE 在保持相同的通信范围的同时，功耗更低。BLE 是一种“总是关闭”的技术，期间只需传输少量的数据。这大大降低了功耗，使其非常适合在需要具">
+<meta property="og:type" content="article">
+<meta property="og:title" content="低功耗蓝牙攻击实用指南">
+<meta property="og:url" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="众所周时，蓝牙是当下无线网络技术中最受欢迎和常用一种。伴随着蓝牙技术在物联网中的发展，蓝牙技术联盟以信标、医疗保健、娱乐、健身为核心不断努力提升传输速度。 低功耗功耗蓝牙（BLE）是蓝牙4.0规范的一部份，它还包含传统蓝牙和蓝牙高速传输协议。与传统蓝牙相比，BLE 在保持相同的通信范围的同时，功耗更低。BLE 是一种“总是关闭”的技术，期间只需传输少量的数据。这大大降低了功耗，使其非常适合在需要具">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Advertising%20process.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/TX%20Power%20UUID.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/TX%20power%20id%20scanned%20by%20nrf%20connect%20app.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/List%20of%20BLE%20adapters.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Enabling%20a%20BLE%20adapter.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Disabling%20a%20BLE%20adaptor.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Scanning%20for%20BLE%20devices.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/gatttool%20running%20in%20interactive%20mode.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Connecting%20with%20a%20BLE%20device.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Connect%20using%20a%20random%20address.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Services.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Characteristics.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Available%20handles.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Filter%20displayed%20handles.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Reading%20a%20handle%20value.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Error%20reading%20handle%200x000b%20which%20is%20a%20write%20handle.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/UUID%20of%20handle%200x000b.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Write%20handle%20in%20nrf%20connect%20app.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Value%20%20data%20written%20successfully%20to%20the%20device.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Value%20%20data%20written.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Enabling%20Bluetooth%20HCI%20snoop%20log.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Phone%20connected%20to%20laptop%20using%20a%20USB%20cable.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Viewing%20the%20captured%20file%20in%20nano.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Using%20nRF%20Connect.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Writing%20a%20value%20in%20nRF%20Connect.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/The%20RGB%20value%20of%20the%20color.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Checking%20if%20Blueby%20is%20functioning%20correctly.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Scanning%20in%20Bleah.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Running%20Bleah%20in%20continuous%20scan%20mode.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Continuous%20scanning%20results.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Connect%20to%20a%20device%20and%20perform%20enumeration.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Bleah%20enumerates%20all%20the%20services%20and%20characteristics.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Using%20Bleah%20to%20write%20data%20to%20a%20characteristic.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Writing%20in%20Bleah%20was%20successful.png">
+<meta property="og:image" content="https://p1.ssl.qhimg.com/t01e30783b30dca10bf.png">
+<meta property="og:image" content="https://p4.ssl.qhimg.com/t0119e02af13bd165cd.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/t011b3ab758a2c4290a.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/t01e22c36923ac0521a.png">
+<meta property="og:image" content="https://p1.ssl.qhimg.com/t01bf52c462d24c94ba.png">
+<meta property="og:image" content="https://p5.ssl.qhimg.com/t013b132efe9b92ecfe.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/t01d27f6d84f2e09cfd.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/t01cbac4e54563f7a99.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/t01670422d6d0e414aa.png">
+<meta property="og:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/t0195fe10e80e89350e.png">
+<meta property="og:image" content="https://p0.ssl.qhimg.com/t01074fa0488c6b08c2.png">
+<meta property="og:image" content="https://p1.ssl.qhimg.com/t01dfa59c715b52254a.png">
+<meta property="og:image" content="https://p3.ssl.qhimg.com/t017582bd697279abcb.png">
+<meta property="og:image" content="https://p4.ssl.qhimg.com/t01f04bc8d44e2ecd8f.png">
+<meta property="og:image" content="https://p0.ssl.qhimg.com/t01923c7a7cfa460fe9.png">
+<meta property="og:image" content="https://p1.ssl.qhimg.com/t01f469bb13464f071a.png">
+<meta property="og:image" content="https://p5.ssl.qhimg.com/t018babc815bc0f72e1.png">
+<meta property="og:image" content="https://p3.ssl.qhimg.com/t018fd22c0b412f03cb.png">
+<meta property="og:image" content="https://p2.ssl.qhimg.com/t011e78c1f59dcc5e30.png">
+<meta property="og:image" content="https://p4.ssl.qhimg.com/t0188a2c37bc2263e8a.png">
+<meta property="og:image" content="https://p3.ssl.qhimg.com/t01cdd09f4c9b393e39.png">
+<meta property="og:image" content="https://p2.ssl.qhimg.com/t01dbe5a71ac32d31ef.png">
+<meta property="og:image" content="https://p4.ssl.qhimg.com/t01379cb172148adf44.png">
+<meta property="og:image" content="https://p3.ssl.qhimg.com/t018419a882fca828d2.png">
+<meta property="og:image" content="https://p4.ssl.qhimg.com/t01e5a2f4a06a15e39e.png">
+<meta property="og:image" content="https://p0.ssl.qhimg.com/t01d076c3f477d3c055.png">
+<meta property="og:image" content="https://p4.ssl.qhimg.com/t01d1a92ccbe34bd6af.png">
+<meta property="og:image" content="https://p5.ssl.qhimg.com/t018d1d3c8795bb37c6.png">
+<meta property="og:image" content="https://p1.ssl.qhimg.com/t018730b027c37182bc.png">
+<meta property="og:image" content="https://p0.ssl.qhimg.com/t01651b7da79f73deef.png">
+<meta property="og:image" content="https://p5.ssl.qhimg.com/t0191d1b5be95f4b375.png">
+<meta property="og:image" content="https://p3.ssl.qhimg.com/t01ceab62c0243ad79b.png">
+<meta property="og:image" content="https://p4.ssl.qhimg.com/t01775a2d6c1f707dc2.png">
+<meta property="og:image" content="https://p3.ssl.qhimg.com/t01c42a0d69feb54876.png">
+<meta property="article:published_time" content="2018-12-27T06:30:17.000Z">
+<meta property="article:modified_time" content="2021-11-20T03:41:56.805Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="Blutooth">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/Advertising%20process.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>低功耗蓝牙攻击实用指南</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/12/12/%E7%B1%B3%E5%AE%B6%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E5%A5%97%E8%A3%85-Zigbee/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/08/18/VDOO-%E6%8A%AB%E9%9C%B2-Axis-%E6%91%84%E5%83%8F%E5%A4%B4%E5%A4%9A%E4%B8%AA%E6%BC%8F%E6%B4%9E/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
+      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
+      <span id="i-top" class="info" style="display:none;">Arriba</span>
+      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/&text=低功耗蓝牙攻击实用指南"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/&title=低功耗蓝牙攻击实用指南"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/&is_video=false&description=低功耗蓝牙攻击实用指南"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=低功耗蓝牙攻击实用指南&body=Check out this article: http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/&title=低功耗蓝牙攻击实用指南"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/&title=低功耗蓝牙攻击实用指南"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/&title=低功耗蓝牙攻击实用指南"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/&title=低功耗蓝牙攻击实用指南"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/&name=低功耗蓝牙攻击实用指南&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E8%AE%A9BLE%E5%A6%82%E6%AD%A4%E7%AA%81%E5%87%BA"><span class="toc-number">1.</span> <span class="toc-text">什么让BLE如此突出?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BLE-%E5%90%AC%E8%B5%B7%E6%9D%A5%E4%B8%8D%E9%94%99%EF%BC%8C%E5%AE%83%E7%9C%9F%E7%9A%84%E9%82%A3%E4%B9%88%E5%A5%BD%E5%90%97%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">BLE 听起来不错，它真的那么好吗？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BLE%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-number">3.</span> <span class="toc-text">BLE核心概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E8%AE%BF%E9%97%AE%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-GAP"><span class="toc-number">3.1.</span> <span class="toc-text">通用访问配置文件(GAP)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B9%BF%E6%92%AD%E6%B5%81%E7%A8%8B%EF%BC%88Advertising-process%EF%BC%89"><span class="toc-number">3.1.1.</span> <span class="toc-text">广播流程（Advertising process）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E5%B1%9E%E6%80%A7%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-GATT"><span class="toc-number">3.2.</span> <span class="toc-text">通用属性配置文件(GATT)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1"><span class="toc-number">3.2.1.</span> <span class="toc-text">服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7"><span class="toc-number">3.2.2.</span> <span class="toc-text">属性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BLE-%E5%88%A9%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-number">3.3.</span> <span class="toc-text">BLE 利用工具</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#hcitool"><span class="toc-number">3.3.1.</span> <span class="toc-text">hcitool</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#gattool"><span class="toc-number">3.3.2.</span> <span class="toc-text">gattool</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%89%8B%E5%86%8C"><span class="toc-number">3.4.</span> <span class="toc-text">命令手册</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4"><span class="toc-number">3.4.1.</span> <span class="toc-text">常用指令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Hcitool-%E5%91%BD%E4%BB%A4"><span class="toc-number">3.4.2.</span> <span class="toc-text">Hcitool 命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Gattool-%E5%91%BD%E4%BB%A4"><span class="toc-number">3.4.3.</span> <span class="toc-text">Gattool 命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-number">3.5.</span> <span class="toc-text">使用示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%93%9D%E7%89%99%E6%95%B0%E6%8D%AE%E5%8C%85%E6%97%A5%E5%BF%97%EF%BC%88Bluetooth-HCI-snoop-log%EF%BC%89"><span class="toc-number">3.6.</span> <span class="toc-text">蓝牙数据包日志（Bluetooth HCI snoop log）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-nRF-Connect"><span class="toc-number">3.7.</span> <span class="toc-text">使用 nRF Connect</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Blash-%E8%BF%9B%E8%A1%8C-BLE-%E6%94%BB%E5%87%BB"><span class="toc-number">3.8.</span> <span class="toc-text">使用 Blash 进行 BLE 攻击</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E8%AE%A9BLE%E5%A6%82%E6%AD%A4%E7%AA%81%E5%87%BA-1"><span class="toc-number">4.</span> <span class="toc-text">什么让BLE如此突出?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BLE-%E5%90%AC%E8%B5%B7%E6%9D%A5%E4%B8%8D%E9%94%99%EF%BC%8C%E5%AE%83%E7%9C%9F%E7%9A%84%E9%82%A3%E4%B9%88%E5%A5%BD%E5%90%97%EF%BC%9F-1"><span class="toc-number">5.</span> <span class="toc-text">BLE 听起来不错，它真的那么好吗？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BLE%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5-1"><span class="toc-number">6.</span> <span class="toc-text">BLE核心概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E8%AE%BF%E9%97%AE%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-GAP-1"><span class="toc-number">6.1.</span> <span class="toc-text">通用访问配置文件(GAP)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B9%BF%E6%92%AD%E6%B5%81%E7%A8%8B%EF%BC%88Advertising-process%EF%BC%89-1"><span class="toc-number">6.1.1.</span> <span class="toc-text">广播流程（Advertising process）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E5%B1%9E%E6%80%A7%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-GATT-1"><span class="toc-number">6.2.</span> <span class="toc-text">通用属性配置文件(GATT)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1-1"><span class="toc-number">6.2.1.</span> <span class="toc-text">服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7-1"><span class="toc-number">6.2.2.</span> <span class="toc-text">属性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BLE-%E5%88%A9%E7%94%A8%E5%B7%A5%E5%85%B7-1"><span class="toc-number">6.3.</span> <span class="toc-text">BLE 利用工具</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#hcitool-1"><span class="toc-number">6.3.1.</span> <span class="toc-text">hcitool</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#gattool-1"><span class="toc-number">6.3.2.</span> <span class="toc-text">gattool</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%89%8B%E5%86%8C-1"><span class="toc-number">6.4.</span> <span class="toc-text">命令手册</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4-1"><span class="toc-number">6.4.1.</span> <span class="toc-text">常用指令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Hcitool-%E5%91%BD%E4%BB%A4-1"><span class="toc-number">6.4.2.</span> <span class="toc-text">Hcitool 命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Gattool-%E5%91%BD%E4%BB%A4-1"><span class="toc-number">6.4.3.</span> <span class="toc-text">Gattool 命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B-1"><span class="toc-number">6.5.</span> <span class="toc-text">使用示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%93%9D%E7%89%99%E6%95%B0%E6%8D%AE%E5%8C%85%E6%97%A5%E5%BF%97%EF%BC%88Bluetooth-HCI-snoop-log%EF%BC%89-1"><span class="toc-number">6.6.</span> <span class="toc-text">蓝牙数据包日志（Bluetooth HCI snoop log）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-nRF-Connect-1"><span class="toc-number">6.7.</span> <span class="toc-text">使用 nRF Connect</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Blash-%E8%BF%9B%E8%A1%8C-BLE-%E6%94%BB%E5%87%BB-1"><span class="toc-number">6.8.</span> <span class="toc-text">使用 Blash 进行 BLE 攻击</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        低功耗蓝牙攻击实用指南
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-12-27T06:30:17.000Z" itemprop="datePublished">2018-12-27</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Blutooth/" rel="tag">Blutooth</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>众所周时，蓝牙是当下无线网络技术中最受欢迎和常用一种。伴随着蓝牙技术在物联网中的发展，蓝牙技术联盟以信标、医疗保健、娱乐、健身为核心不断努力提升传输速度。</p>
+<p>低功耗功耗蓝牙（BLE）是蓝牙4.0规范的一部份，它还包含传统蓝牙和蓝牙高速传输协议。与传统蓝牙相比，BLE 在保持相同的通信范围的同时，功耗更低。BLE 是一种“总是关闭”的技术，期间只需传输少量的数据。这大大降低了功耗，使其非常适合在需要具有低数据速率的持久长连接的情况下使用。蓝牙非常适合做电视遥控，但是不适合需要传输大量数据的无线流媒体设备。</p>
+<p>我们现在使用的很多设备内置有低功耗蓝牙。从智能手机、智能电视、医疗设备等先进技术到咖啡机等基本设备都是用了蓝牙。</p>
+<p>BLE 源自于诺基亚一个名为“WIBREE“的内部项目，后期被蓝牙技术联盟(SIG)接管。BLE的设计着重于更好的配对速度和能源效率。</p>
+<h2 id="什么让BLE如此突出"><a href="#什么让BLE如此突出" class="headerlink" title="什么让BLE如此突出?"></a>什么让BLE如此突出?</h2><ul>
+<li>支持多平台通信：能够轻松的在 Android、IOS、Linux、Windows Phone、 Windows 8 以及 OS X 等平台的大量设备上通信。</li>
+<li>更快的匹配速度</li>
+<li>有助于维持较长时间的连接</li>
+<li>显著降低实施成本</li>
+<li>节能</li>
+</ul>
+<h2 id="BLE-听起来不错，它真的那么好吗？"><a href="#BLE-听起来不错，它真的那么好吗？" class="headerlink" title="BLE 听起来不错，它真的那么好吗？"></a>BLE 听起来不错，它真的那么好吗？</h2><p>从安全的角度来看，这是个很好的问题。事实是——BLE只是一个协议。这取决与制作商在他们设备上安全的实现 BLE。由于随机数生成器不够“随机”，即使是最强的加密协议也会失败。BLE 也同样适用。可以这么说，BLE 的安全掌握在他的实现者手上。</p>
+<p>虽然所有的蓝牙低功耗设备都是以增强用户体验为主要目的开发的，在开发过程中，安全是否退居次要地位?</p>
+<p>让我们看看 BLE 可能会让用户暴露的三个主要漏洞:</p>
+<ol>
+<li><strong>窃听：</strong>顾名思义，窃听是指第三方设备监听两个已配对设备之间的数据交换。两个已经匹配的设备之间的连接建立了信任链。当其中一个设备被移除，信任链就会断开。攻击者可以使用这个设备的单元号取得与另一个蓝牙设备的访问权限。即使此设备的加/解密密钥一倍删除，攻击者仍然可以使用蓝牙嗅探器暴力破解 PIN 码。一旦得到 PIN码，设备极易被劫持。</li>
+</ol>
+<p>2.<strong>中间人攻击：</strong>中间人攻击中第三方设备伪装成合法设备，欺骗两个合法的设备，让它们相信它们之间是相互连接的。事实上，合法的设备被连接到攻击设备上。此中攻击攻击者更够访问正常设备之间的所有交互的数据，以及在数据在到达接收端之前通过删除或者修改方式来伪造数据。</p>
+<p>3.<strong>拒绝服务&amp;模糊攻击（Fuzzing）：</strong>由于目前大多数无线设备都使用内置的电池组，这些设备面临着遭受拒绝服务攻击(DoS)的风险。DoS攻击时系统频繁崩溃，从而导致电池完全耗尽。模糊攻击也会导致系统崩溃，因为攻击者发送畸形的数据到设备的蓝牙广播并检查其响应，最终导致系统崩溃。</p>
+<h2 id="BLE核心概念"><a href="#BLE核心概念" class="headerlink" title="BLE核心概念"></a>BLE核心概念</h2><p>BLE 的两个基本概念。</p>
+<ul>
+<li><strong>GAP</strong> 通用访问配置文件(Generic Access Profile)</li>
+<li><strong>GATT</strong> 通用属性配置文件(Generic Attribute Protocol)</li>
+</ul>
+<h3 id="通用访问配置文件-GAP"><a href="#通用访问配置文件-GAP" class="headerlink" title="通用访问配置文件(GAP)"></a>通用访问配置文件(GAP)</h3><p>GAP 用于设备连接和广播通信（advertising）。GAP 负责蓝牙设备对外可见性，并在决定设备如何与其他设备交互时起到重要作用。</p>
+<p>以下是 GAP 内部较为重要要两个概念：</p>
+<p><strong>外围设备：</strong>这些小型低功耗设备可以连接到更为复杂、强大的中心设备。心率检测器就是一个典型的外围设备。</p>
+<p><strong>中心设备：</strong>此类设备大多是手机或者拥有更大内存、更强处理能力的设备。</p>
+<h4 id="广播流程（Advertising-process）"><a href="#广播流程（Advertising-process）" class="headerlink" title="广播流程（Advertising process）"></a>广播流程（Advertising process）</h4><p>下图形象的展示了广播和扫描响应是如何工作的。</p>
+<p><img src="Advertising process.png" alt="Advertising process"></p>
+<p>外围设备每隔2秒发送一次广播数据。如果中心设备监听到了来自外围设备的广播数据，他将回复扫描<strong>响应请求</strong>。</p>
+<p>作为对该请求的响应，外围设备会发送扫描响应数据。至此，外围中心设备与外围设备均取得了广播，并相互建立了连接。</p>
+<h3 id="通用属性配置文件-GATT"><a href="#通用属性配置文件-GATT" class="headerlink" title="通用属性配置文件(GATT)"></a>通用属性配置文件(GATT)</h3><p>GATT 使用一种称为属性协议的通用数据协议，它定义了两个 BLE 设备如何使用服务和属性两个概念进行数据交换。该协议使用蓝牙技术联盟指定的16 位 ID 将所有服务和属性存储在查找表中。需要注意的是，GATT 只有在 GAP 广播流程结束之后才能初始化。</p>
+<p>GATT 的两个主要概念：</p>
+<ul>
+<li>服务（Services）</li>
+<li>属性（Characteristics）</li>
+</ul>
+<h4 id="服务"><a href="#服务" class="headerlink" title="服务"></a>服务</h4><p>服务被简单地定义为一个可以容纳许多抽屉的柜子，这些抽屉又被称为属性。一个服务可以有多个属性。每个服务可以使用官方16位的通用唯一识别码（UUID）或128位自定义的通用唯一识别码（UUID）。</p>
+<h4 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h4><p>属性是 GATT 事务中最基本的概念。属性包含单个数据点，与服务类似，每个属性都有一个用于与其他属性相区别的 ID 或 UUID。例如，健康手环的心率传感器。</p>
+<p>这里是BLE设备<a target="_blank" rel="noopener" href="https://www.bluetooth.com/specifications/gatt/characteristics"><strong>属性</strong></a>和<a target="_blank" rel="noopener" href="https://www.bluetooth.com/specifications/gatt/services"><strong>服务</strong></a>的 SIG 规范。SIG 正式采用的 UUID 在任何一个 BLE 设备中都必须在应用程序中使用他们指定的 ID。</p>
+<p>例如，SIG 规定的官方的TX Power 的 UUID 是<code>0x1804</code>。</p>
+<p><img src="TX Power UUID.png" alt="TX Power UUID"></p>
+<p>nRF Connect应用扫描的信标(稍后将详细介绍)必须与 SIG 规范中的TX power 的 UUID 保持一致。</p>
+<p><img src="TX power id scanned by nrf connect app.png" alt="TX power id scanned by nrf connect app"></p>
+<h3 id="BLE-利用工具"><a href="#BLE-利用工具" class="headerlink" title="BLE 利用工具"></a>BLE 利用工具</h3><p>Linux 对 BLE 提供了很好支持。为了使用 BLE,我们需要安装蓝牙栈（blueZ）。使用以下命令安装BlueZ。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install bluez</span><br></pre></td></tr></table></figure>
+<p>我们将使用已安装有 bluez 的台式/笔记本电脑。它将作为中心网关与其他外围设备之间通信。BlueZ 的目标是编写和实现蓝牙无线标准规范。在安装好 BlueZ 之后，我么需要两个工具去扫描、连接以及读写数据。</p>
+<ol>
+<li><strong>hcitool</strong></li>
+<li><strong>gattool</strong></li>
+</ol>
+<p>在开始之前，我们需要周围的 BLE 设备。如果我们需要搞清楚怎么连接 BLE 设备、如何读取数据以及发现设备的漏洞，那么hcitool 必不可少。</p>
+<h4 id="hcitool"><a href="#hcitool" class="headerlink" title="hcitool"></a>hcitool</h4><p>它利用笔记本电脑的主机控制器接口与BLE设备进行通信和读写更改。因此，hcitool在发现可用的广播受害者BLE设备，并在连接后更改值时非常有用。</p>
+<h4 id="gattool"><a href="#gattool" class="headerlink" title="gattool"></a>gattool</h4><p>如上一段所述，gatttool主要用来帮助发现可用 BLE 设备的服务和属性，以便根据攻击者读取/写入受害者的数据。</p>
+<h3 id="命令手册"><a href="#命令手册" class="headerlink" title="命令手册"></a>命令手册</h3><h4 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h4><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hciconfig</td>
+<td>用于配置蓝牙设备。我们可以运行这个命令来列出连接到我们计算机的 BLE 适配器以及它们的基本信息。</td>
+</tr>
+<tr>
+<td>hciconfig hciX up</td>
+<td>启用名为 hciX 的蓝牙设备</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Hcitool-命令"><a href="#Hcitool-命令" class="headerlink" title="Hcitool 命令"></a>Hcitool 命令</h4><p>hcitool 用于配置蓝牙连接，并向蓝牙设备发送一些特殊命令。</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hcitool -i hciX</td>
+<td>使用 hciX 接口，如果不指定，默认使用第一个可用接口。</td>
+</tr>
+<tr>
+<td>hcitool -i hciX</td>
+<td>扫描处于发现模式的传统蓝牙设备。</td>
+</tr>
+<tr>
+<td>hcitool lescan</td>
+<td>扫描 BLE 设备。</td>
+</tr>
+</tbody>
+</table>
+<p>更多命令：<a target="_blank" rel="noopener" href="https://helpmanual.io/man1/hcitool/">https://helpmanual.io/man1/hcitool/</a></p>
+<h4 id="Gattool-命令"><a href="#Gattool-命令" class="headerlink" title="Gattool 命令"></a>Gattool 命令</h4><p>GATT 代表通用属性，定义了用于组织特征和属性的数据结构。</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gatttool -I</td>
+<td>以交互模式启动 gatttool。</td>
+</tr>
+<tr>
+<td>gatttool -t random -b [adr] -I</td>
+<td>使用随机 LE 地址在交互模式下启动 gattool。连接到地址为 adr 的远程蓝牙设备。</td>
+</tr>
+<tr>
+<td>primary</td>
+<td>检查已连接 BLE 设备的可用服务。</td>
+</tr>
+<tr>
+<td>characteristic</td>
+<td>检查已连接 BLE 设备的可用属性，以便从中读取数据。</td>
+</tr>
+<tr>
+<td>char-desc</td>
+<td>特征描述符的发现。检查 n 个 handle。</td>
+</tr>
+<tr>
+<td>char-read-hnd</td>
+<td>使用 handle 读取属性 。</td>
+</tr>
+<tr>
+<td>char-write-req</td>
+<td>向 handle 写入值。</td>
+</tr>
+</tbody>
+</table>
+<p>更多命令：<a target="_blank" rel="noopener" href="https://helpmanual.io/man1/gatttool/">https://helpmanual.io/man1/gatttool/</a></p>
+<h3 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h3><p><code>hciconfig</code>: 用于列出所有连接的 BLE 适配器。</p>
+<p><img src="List of BLE adapters.png" alt="List of BLE adapters"></p>
+<p><code>hciconfig hicX up</code>: 启用名为 hciX 的 BLE 适配器。</p>
+<p><img src="Enabling a BLE adapter.png" alt="Enabling a BLE adapter"></p>
+<p><code>hciconfig hciX down</code>: 禁用名为 hciX 的 BLE 适配器</p>
+<p><img src="Disabling a BLE adaptor.png" alt="Disabling a BLE adaptor"></p>
+<p><code>hcitool lescan</code>: 扫描附近的 BLE 设备。</p>
+<p> <img src="Scanning for BLE devices.png" alt="Scanning for BLE devices"></p>
+<p>在获得 BLE 设备的地址后，我们需要连接它。这就是我们使用 gattool 的时候。</p>
+<p><code>gatttool -I</code>: 以类似 REPL 的交互模式启动 gatttool，用户可以按照下列的方式执行各种命令。</p>
+<p><img src="gatttool running in interactive mode.png" alt="gatttool running in interactive mode"></p>
+<p><code>connect &lt;addr&gt;</code>：使用给定的地址连接 BLE 设备。</p>
+<p><img src="Connecting with a BLE device.png" alt="Connecting with a BLE device"></p>
+<p>如果设备只与手机相连而不能与电脑相连，上述步骤可能无效。为了连接这样的设备，我们需要使用随机的地址。</p>
+<p><code>gatttool -t random -b &lt;addr&gt; -I</code>: 使用随机地址连接设备。</p>
+<p><img src="Connect using a random address.png" alt="Connect using a random address"></p>
+<p>在成功连接后，我们可用使用以下命令查看设备的服务和属性。</p>
+<p><strong>Primary</strong></p>
+<p><img src="Services.png" alt="Services"></p>
+<p><strong>Characteristics</strong></p>
+<p><img src="Characteristics.png" alt="Characteristics"></p>
+<p>在找到服务和属性后，我们需要知道读/写数据的 handle。这可以使用<code>char-desc</code>命令得到。</p>
+<p><img src="Available handles.png" alt="Available handles"></p>
+<p>我们可以使用形如<code>char-desc 01 05</code>（该显示从1 到 5 的5 个 handle）的命令过滤特定范围的 handle 并显示。</p>
+<p><img src="Filter displayed handles.png" alt="Filter displayed handles"></p>
+<p>在找到 handle 后，我们使用命令<code>char-read-hnd &lt;handle&gt;</code>从 handle 中读取数据。</p>
+<p><img src="Reading a handle value.png" alt="Reading a handle value"></p>
+<p>为了能够写入特定的 handle，我们需要知道哪个是可写 handle。为此，我们可以选择一个 hit 和 try 方法，然后逐个读取所有 handle，直到遇到读取错误为止。读取错误意味着这是一个写 handle（写 handle 不能被读取）。或者，类似 nRF Connect 的应用可以自动计算出写 handle。</p>
+<p><img src="Error reading handle 0x000b which is a write handle.png" alt="Error reading handle 0x000b which is a write handle"></p>
+<p>handle <strong>0x000b</strong> 的UUID 下图所示。</p>
+<p><img src="UUID of handle 0x000b.png" alt="UUID of handle 0x000b"></p>
+<p>使用 nRF Connect，我们得到了以下的输出，确认 0x000b 确实是写 handle。上图中 0x000b的 UUID 和下图中 nRF Connect 的相匹配。</p>
+<p><img src="Write handle in nrf connect app.png" alt="Write handle in nrf connect app"></p>
+<p>在连接到灯泡后，我们可以向不用同的属性写入随机值。在大多数情况下，写入随机值不会像预期的那样工作。在 handle 中写入正确的值，我们需要解密数据协议，我们可用使用嗅探工具来解密，如 wireshark 和 ubertooth。</p>
+<p>在解密数据协议后，我们可以命令<code>char-write-req &lt;handle&gt; &lt;value&gt;</code> 向 handle 中写入值。</p>
+<p><img src="Value  data written successfully to the device.png" alt="Value  data written successfully to the device"></p>
+<p>如果<code>char-write-req</code>报错，可以使用<code>char-write-cmd</code>替换。</p>
+<p><img src="Value  data written.png" alt="Value  data written"></p>
+<h3 id="蓝牙数据包日志（Bluetooth-HCI-snoop-log）"><a href="#蓝牙数据包日志（Bluetooth-HCI-snoop-log）" class="headerlink" title="蓝牙数据包日志（Bluetooth HCI snoop log）"></a>蓝牙数据包日志（Bluetooth HCI snoop log）</h3><p>Android 4.4 及以上有一个选项，可以记录设备所有进出的蓝牙数据包。要捕获蓝牙通信，请遵循以下步骤。确保安装了Android 应用程序。</p>
+<p><strong>第一步</strong>： 进入设置中的开发者选项。</p>
+<p><strong>第二步</strong>: 在开发者选项中启用“打开蓝牙数据包日志”。</p>
+<p><img src="Enabling Bluetooth HCI snoop log.png" alt="Enabling Bluetooth HCI snoop log"></p>
+<p><strong>第三步</strong>： 运行 Android 程序（magic blue），并发送一些改变灯泡颜色的命令。重复发送几次。</p>
+<p><strong>第四步</strong>：对应于我们的命令，我们可以在<code>sdcard/btsnoop_hci.log</code> 或者<code>/internal Storage/btsnoop_hci.log</code>中找到捕获的蓝牙流量文件。</p>
+<p>注意 - 在部分设备上, btsnoop_hci.log 被创建在不同的位置，例如<code>/sdcard/Android/data/btsnoop_hci.log</code>。</p>
+<p> 使用Emal 、 Google Drive 或者 USB  数据线将捕获的日志文件传输到台式/笔记本电脑上。</p>
+<p><img src="Phone connected to laptop using a USB cable.png" alt="Phone connected to laptop using a USB cable"></p>
+<p><strong>第四步</strong>： 在 Wireshark 中分析流量，Wireshark 是一个免费开源的数据包分析工具，使用以下命令安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install wireshark-qt</span><br></pre></td></tr></table></figure>
+<p>更多关于如何使用 Wireshark 说明见我们的博客：<a target="_blank" rel="noopener" href="https://blog.attify.com/exploiting-iot-enabled-ble-smart-bulb-security/">https://blog.attify.com/exploiting-iot-enabled-ble-smart-bulb-security/</a>。</p>
+<p>或者，使用文本编辑器打开捕获的文件，如nano。</p>
+<p><img src="Viewing the captured file in nano.png" alt="Viewing the captured file in nano"></p>
+<h3 id="使用-nRF-Connect"><a href="#使用-nRF-Connect" class="headerlink" title="使用 nRF Connect"></a>使用 nRF Connect</h3><p>Nordic 半导体的<a target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=no.nordicsemi.android.mcp&amp;hl=en_IN">nRF Connect</a> 可以用与 BLE hacking。它可以嗅探和写入数据，就像gatttool 一样。</p>
+<p><strong>第五步</strong>： 打开 nRF Connect 应用并连接 BLE 灯泡。</p>
+<p><img src="Using nRF Connect.png" alt="Using nRF Connect"></p>
+<p><strong>第六步</strong>： 一旦连接，写入 payload 值<code>56b0306000f0aa</code>,点击发送。灯泡的颜色会变成紫红色。</p>
+<p><img src="Writing a value in nRF Connect.png" alt="Writing a value in nRF Connect"></p>
+<p>这是因为颜色使用了RGB 值 176, 48, 96 或者十六进制值 B03060。此条命令发送非灯泡的值是 <code>56 b0 30 60 00 f0 aa</code>。注意，第二字节、第三字节、第四字节分别对应十六进制中的 RGB 值。</p>
+<p>我们可以通过人工分析流量并试图从中找到协议中的模式。</p>
+<p><img src="The RGB value of the color.png" alt="The RGB value of the color"></p>
+<h3 id="使用-Blash-进行-BLE-攻击"><a href="#使用-Blash-进行-BLE-攻击" class="headerlink" title="使用 Blash 进行 BLE 攻击"></a>使用 Blash 进行 BLE 攻击</h3><p><a target="_blank" rel="noopener" href="https://github.com/evilsocket/bleah">Blash</a> 是一个 BLE 扫描工具，它基于 python库 <a target="_blank" rel="noopener" href="https://github.com/IanHarvey/bluepy">bluepy</a>。在此节中，我们将了解如何使用Bleah 黑掉 BLE设备。</p>
+<p>在开始之前，我们需要</p>
+<p><strong>硬件</strong></p>
+<ul>
+<li>做好是运行 Ubuntu 的笔记本</li>
+<li>一个智能 BLE 灯泡或者其他蓝牙智能设备</li>
+<li>一个蓝牙适配器</li>
+</ul>
+<p><strong>软件</strong></p>
+<ul>
+<li>Python 2.7 （Ubuntu中默认已安装）</li>
+<li>Bluepy 库</li>
+<li>Bleah</li>
+</ul>
+<p>首先确保，Bluepy 如预期一样工作。</p>
+<p>前往 bluepy 目录，打开终端，然后输入<code></code>sudo ./bluepy-helper 0`然后输入le on，如下所示。</p>
+<p>（注意：可用使用命令<code>which bluepy-helper</code>找到 Bluepy 的安装路径）</p>
+<p><img src="Checking if Blueby is functioning correctly.png" alt="Checking if Blueby is functioning correctly"></p>
+<p>success 消息表明 Bluepy 运行正常。现在，让我们看看如何使用 Bleah 进行 BLE 攻击。</p>
+<p><strong>第一步</strong>： 在同一终端中输入 <code>scan</code>扫描附近的 BLE 设备。</p>
+<p><img src="Scanning in Bleah.png" alt="Scanning in Bleah"></p>
+<p>我们的 BLE 设备的地址是 <code>F81D78607184</code> 。</p>
+<p><strong>第二步</strong>： 开一个新终端并运行<code>sudo bleah -t0</code>，<code>t0</code>表示连续扫描。</p>
+<p><img src="Running Bleah in continuous scan mode.png" alt="Running Bleah in continuous scan mode"></p>
+<p><img src="Continuous scanning results.png" alt="Continuous scanning results"></p>
+<p><strong>第三步</strong>： 我们可以连接指定的设备并枚举所有的服务和属性，使用以下命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo bleah -b <span class="string">&quot;aa:bb:cc:dd:ee:ff&quot;</span> -e</span><br></pre></td></tr></table></figure>
+<p><code>aa:bb:cc:dd:ee:ff</code> 代表设备地址</p>
+<p><code>-b</code> 表示按照设备地址过滤</p>
+<p><code>-e</code> 代表连接设备并执行枚举操作</p>
+<p><img src="Connect to a device and perform enumeration.png" alt="Connect to a device and perform enumeration"></p>
+<p><img src="Bleah enumerates all the services and characteristics.png" alt="Bleah enumerates all the services and characteristics"></p>
+<p><strong>第四步</strong>：向特定的属性中写入数据运行。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo bleah -b <span class="string">&quot;aa:bb:cc:dd:ee:ff&quot;</span> -u <span class="string">&quot;0000ffe9-0000-1000-8000-00805f9b34fb&quot;</span> -d <span class="string">&quot;data&quot;</span></span><br></pre></td></tr></table></figure>
+<p><img src="Using Bleah to write data to a characteristic.png" alt="Using Bleah to write data to a characteristic"></p>
+<p><img src="Writing in Bleah was successful.png" alt="Writing in Bleah was successful"></p>
+<p>正如我们看到的，Blash 是一个实施 BLE 设备攻击的强大工具。它自动化实现了许多步骤，否则我们需要手工完成。</p>
+<p>在这篇博文中，我们学习了对蓝牙低功耗设备进行攻击的各种工具和技术。希望你从此文中受益。</p>
+<p>原文： <a target="_blank" rel="noopener" href="https://blog.attify.com/the-practical-guide-to-hacking-bluetooth-low-energy/">https://blog.attify.com/the-practical-guide-to-hacking-bluetooth-low-energy/</a></p>
+<p>众所周时，蓝牙是当下无线网络技术中最受欢迎和常用一种。伴随着蓝牙技术在物联网中的发展，蓝牙技术联盟以信标、医疗保健、娱乐、健身为核心不断努力提升传输速度。</p>
+<p>低功耗功耗蓝牙（BLE）是蓝牙4.0规范的一部份，它还包含传统蓝牙和蓝牙高速传输协议。与传统蓝牙相比，BLE 在保持相同的通信范围的同时，功耗更低。BLE 是一种“总是关闭”的技术，期间只需传输少量的数据。这大大降低了功耗，使其非常适合在需要具有低数据速率的持久长连接的情况下使用。蓝牙非常适合做电视遥控，但是不适合需要传输大量数据的无线流媒体设备。</p>
+<p>我们现在使用的很多设备内置有低功耗蓝牙。从智能手机、智能电视、医疗设备等先进技术到咖啡机等基本设备都是用了蓝牙。</p>
+<p>BLE 源自于诺基亚一个名为“WIBREE“的内部项目，后期被蓝牙技术联盟(SIG)接管。BLE的设计着重于更好的配对速度和能源效率。</p>
+<h2 id="什么让BLE如此突出-1"><a href="#什么让BLE如此突出-1" class="headerlink" title="什么让BLE如此突出?"></a>什么让BLE如此突出?</h2><ul>
+<li>支持多平台通信：能够轻松的在 Android、IOS、Linux、Windows Phone、 Windows 8 以及 OS X 等平台的大量设备上通信。</li>
+<li>更快的匹配速度</li>
+<li>有助于维持较长时间的连接</li>
+<li>显著降低实施成本</li>
+<li>节能</li>
+</ul>
+<h2 id="BLE-听起来不错，它真的那么好吗？-1"><a href="#BLE-听起来不错，它真的那么好吗？-1" class="headerlink" title="BLE 听起来不错，它真的那么好吗？"></a>BLE 听起来不错，它真的那么好吗？</h2><p>从安全的角度来看，这是个很好的问题。事实是——BLE只是一个协议。这取决与制作商在他们设备上安全的实现 BLE。由于随机数生成器不够“随机”，即使是最强的加密协议也会失败。BLE 也同样适用。可以这么说，BLE 的安全掌握在他的实现者手上。</p>
+<p>虽然所有的蓝牙低功耗设备都是以增强用户体验为主要目的开发的，在开发过程中，安全是否退居次要地位?</p>
+<p>让我们看看 BLE 可能会让用户暴露的三个主要漏洞:</p>
+<ol>
+<li><strong>窃听：</strong>顾名思义，窃听是指第三方设备监听两个已配对设备之间的数据交换。两个已经匹配的设备之间的连接建立了信任链。当其中一个设备被移除，信任链就会断开。攻击者可以使用这个设备的单元号取得与另一个蓝牙设备的访问权限。即使此设备的加/解密密钥一倍删除，攻击者仍然可以使用蓝牙嗅探器暴力破解 PIN 码。一旦得到 PIN码，设备极易被劫持。</li>
+</ol>
+<p>2.<strong>中间人攻击：</strong>中间人攻击中第三方设备伪装成合法设备，欺骗两个合法的设备，让它们相信它们之间是相互连接的。事实上，合法的设备被连接到攻击设备上。此中攻击攻击者更够访问正常设备之间的所有交互的数据，以及在数据在到达接收端之前通过删除或者修改方式来伪造数据。</p>
+<p>3.<strong>拒绝服务&amp;模糊攻击（Fuzzing）：</strong>由于目前大多数无线设备都使用内置的电池组，这些设备面临着遭受拒绝服务攻击(DoS)的风险。DoS攻击时系统频繁崩溃，从而导致电池完全耗尽。模糊攻击也会导致系统崩溃，因为攻击者发送畸形的数据到设备的蓝牙广播并检查其响应，最终导致系统崩溃。</p>
+<h2 id="BLE核心概念-1"><a href="#BLE核心概念-1" class="headerlink" title="BLE核心概念"></a>BLE核心概念</h2><p>BLE 的两个基本概念。</p>
+<ul>
+<li><strong>GAP</strong> 通用访问配置文件(Generic Access Profile)</li>
+<li><strong>GATT</strong> 通用属性配置文件(Generic Attribute Protocol)</li>
+</ul>
+<h3 id="通用访问配置文件-GAP-1"><a href="#通用访问配置文件-GAP-1" class="headerlink" title="通用访问配置文件(GAP)"></a>通用访问配置文件(GAP)</h3><p>GAP 用于设备连接和广播通信（advertising）。GAP 负责蓝牙设备对外可见性，并在决定设备如何与其他设备交互时起到重要作用。</p>
+<p>以下是 GAP 内部较为重要要两个概念：</p>
+<p><strong>外围设备：</strong>这些小型低功耗设备可以连接到更为复杂、强大的中心设备。心率检测器就是一个典型的外围设备。</p>
+<p><strong>中心设备：</strong>此类设备大多是手机或者拥有更大内存、更强处理能力的设备。</p>
+<h4 id="广播流程（Advertising-process）-1"><a href="#广播流程（Advertising-process）-1" class="headerlink" title="广播流程（Advertising process）"></a>广播流程（Advertising process）</h4><p>下图形象的展示了广播和扫描响应是如何工作的。<br><img src="https://p1.ssl.qhimg.com/t01e30783b30dca10bf.png" alt=""></p>
+<p>外围设备每隔2秒发送一次广播数据。如果中心设备监听到了来自外围设备的广播数据，他将回复扫描<strong>响应请求</strong>。</p>
+<p>作为对该请求的响应，外围设备会发送扫描响应数据。至此，外围中心设备与外围设备均取得了广播，并相互建立了连接。</p>
+<h3 id="通用属性配置文件-GATT-1"><a href="#通用属性配置文件-GATT-1" class="headerlink" title="通用属性配置文件(GATT)"></a>通用属性配置文件(GATT)</h3><p>GATT 使用一种称为属性协议的通用数据协议，它定义了两个 BLE 设备如何使用服务和属性两个概念进行数据交换。该协议使用蓝牙技术联盟指定的16 位 ID 将所有服务和属性存储在查找表中。需要注意的是，GATT 只有在 GAP 广播流程结束之后才能初始化。</p>
+<p>GATT 的两个主要概念：</p>
+<ul>
+<li>服务（Services）</li>
+<li>属性（Characteristics）</li>
+</ul>
+<h4 id="服务-1"><a href="#服务-1" class="headerlink" title="服务"></a>服务</h4><p>服务被简单地定义为一个可以容纳许多抽屉的柜子，这些抽屉又被称为属性。一个服务可以有多个属性。每个服务可以使用官方16位的通用唯一识别码（UUID）或128位自定义的通用唯一识别码（UUID）。</p>
+<h4 id="属性-1"><a href="#属性-1" class="headerlink" title="属性"></a>属性</h4><p>属性是 GATT 事务中最基本的概念。属性包含单个数据点，与服务类似，每个属性都有一个用于与其他属性相区别的 ID 或 UUID。例如，健康手环的心率传感器。</p>
+<p>这里是BLE设备<a target="_blank" rel="noopener" href="https://www.bluetooth.com/specifications/gatt/characteristics"><strong>属性</strong></a>和<a target="_blank" rel="noopener" href="https://www.bluetooth.com/specifications/gatt/services"><strong>服务</strong></a>的 SIG 规范。SIG 正式采用的 UUID 在任何一个 BLE 设备中都必须在应用程序中使用他们指定的 ID。</p>
+<p>例如，SIG 规定的官方的TX Power 的 UUID 是<code>0x1804</code>。<br><img src="https://p4.ssl.qhimg.com/t0119e02af13bd165cd.png" alt=""></p>
+<p>nRF Connect应用扫描的信标(稍后将详细介绍)必须与 SIG 规范中的TX power 的 UUID 保持一致。<br><img src="t011b3ab758a2c4290a.png" alt=""></p>
+<h3 id="BLE-利用工具-1"><a href="#BLE-利用工具-1" class="headerlink" title="BLE 利用工具"></a>BLE 利用工具</h3><p>Linux 对 BLE 提供了很好支持。为了使用 BLE,我们需要安装蓝牙栈（blueZ）。使用以下命令安装BlueZ。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install bluez</span><br></pre></td></tr></table></figure>
+<p>我们将使用已安装有 bluez 的台式/笔记本电脑。它将作为中心网关与其他外围设备之间通信。BlueZ 的目标是编写和实现蓝牙无线标准规范。在安装好 BlueZ 之后，我么需要两个工具去扫描、连接以及读写数据。</p>
+<ol>
+<li><strong>hcitool</strong></li>
+<li><strong>gattool</strong></li>
+</ol>
+<p>在开始之前，我们需要周围的 BLE 设备。如果我们需要搞清楚怎么连接 BLE 设备、如何读取数据以及发现设备的漏洞，那么hcitool 必不可少。</p>
+<h4 id="hcitool-1"><a href="#hcitool-1" class="headerlink" title="hcitool"></a>hcitool</h4><p>它利用笔记本电脑的主机控制器接口与BLE设备进行通信和读写更改。因此，hcitool在发现可用的广播受害者BLE设备，并在连接后更改值时非常有用。</p>
+<h4 id="gattool-1"><a href="#gattool-1" class="headerlink" title="gattool"></a>gattool</h4><p>如上一段所述，gatttool主要用来帮助发现可用 BLE 设备的服务和属性，以便根据攻击者读取/写入受害者的数据。</p>
+<h3 id="命令手册-1"><a href="#命令手册-1" class="headerlink" title="命令手册"></a>命令手册</h3><h4 id="常用指令-1"><a href="#常用指令-1" class="headerlink" title="常用指令"></a>常用指令</h4><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hciconfig</td>
+<td>用于配置蓝牙设备。我们可以运行这个命令来列出连接到我们计算机的 BLE 适配器以及它们的基本信息。</td>
+</tr>
+<tr>
+<td>hciconfig hciX up</td>
+<td>启用名为 hciX 的蓝牙设备</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Hcitool-命令-1"><a href="#Hcitool-命令-1" class="headerlink" title="Hcitool 命令"></a>Hcitool 命令</h4><p>hcitool 用于配置蓝牙连接，并向蓝牙设备发送一些特殊命令。</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hcitool -i hciX</td>
+<td>使用 hciX 接口，如果不指定，默认使用第一个可用接口。</td>
+</tr>
+<tr>
+<td>hcitool -i hciX</td>
+<td>扫描处于发现模式的传统蓝牙设备。</td>
+</tr>
+<tr>
+<td>hcitool lescan</td>
+<td>扫描 BLE 设备。</td>
+</tr>
+</tbody>
+</table>
+<p>更多命令：<a target="_blank" rel="noopener" href="https://helpmanual.io/man1/hcitool/">https://helpmanual.io/man1/hcitool/</a></p>
+<h4 id="Gattool-命令-1"><a href="#Gattool-命令-1" class="headerlink" title="Gattool 命令"></a>Gattool 命令</h4><p>GATT 代表通用属性，定义了用于组织特征和属性的数据结构。</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gatttool -I</td>
+<td>以交互模式启动 gatttool。</td>
+</tr>
+<tr>
+<td>gatttool -t random -b [adr] -I</td>
+<td>使用随机 LE 地址在交互模式下启动 gattool。连接到地址为 adr 的远程蓝牙设备。</td>
+</tr>
+<tr>
+<td>primary</td>
+<td>检查已连接 BLE 设备的可用服务。</td>
+</tr>
+<tr>
+<td>characteristic</td>
+<td>检查已连接 BLE 设备的可用属性，以便从中读取数据。</td>
+</tr>
+<tr>
+<td>char-desc</td>
+<td>特征描述符的发现。检查 n 个 handle。</td>
+</tr>
+<tr>
+<td>char-read-hnd</td>
+<td>使用 handle 读取属性 。</td>
+</tr>
+<tr>
+<td>char-write-req</td>
+<td>向 handle 写入值。</td>
+</tr>
+</tbody>
+</table>
+<p>更多命令：<a target="_blank" rel="noopener" href="https://helpmanual.io/man1/gatttool/">https://helpmanual.io/man1/gatttool/</a></p>
+<h3 id="使用示例-1"><a href="#使用示例-1" class="headerlink" title="使用示例"></a>使用示例</h3><p><code>hciconfig</code>: 用于列出所有连接的 BLE 适配器。<br><img src="t01e22c36923ac0521a.png" alt=""></p>
+<p><code>hciconfig hicX up</code>: 启用名为 hciX 的 BLE 适配器。<br><img src="https://p1.ssl.qhimg.com/t01bf52c462d24c94ba.png" alt=""></p>
+<p><code>hciconfig hciX down</code>: 禁用名为 hciX 的 BLE 适配器<br><img src="https://p5.ssl.qhimg.com/t013b132efe9b92ecfe.png" alt=""></p>
+<p><code>hcitool lescan</code>: 扫描附近的 BLE 设备。<br><img src="t01d27f6d84f2e09cfd.png" alt=""></p>
+<p>在获得 BLE 设备的地址后，我们需要连接它。这就是我们使用 gattool 的时候。</p>
+<p><code>gatttool -I</code>: 以类似 REPL 的交互模式启动 gatttool，用户可以按照下列的方式执行各种命令。<br><img src="t01cbac4e54563f7a99.png" alt=""></p>
+<p><code>connect &lt;addr&gt;</code>：使用给定的地址连接 BLE 设备。</p>
+<p><img src="t01670422d6d0e414aa.png" alt=""></p>
+<p>如果设备只与手机相连而不能与电脑相连，上述步骤可能无效。为了连接这样的设备，我们需要使用随机的地址。</p>
+<p><code>gatttool -t random -b &lt;addr&gt; -I</code>: 使用随机地址连接设备。</p>
+<p><img src="t0195fe10e80e89350e.png" alt=""></p>
+<p>在成功连接后，我们可用使用以下命令查看设备的服务和属性。</p>
+<p><strong>Primary</strong><br><img src="https://p0.ssl.qhimg.com/t01074fa0488c6b08c2.png" alt=""></p>
+<p><strong>Characteristics</strong><br><img src="https://p1.ssl.qhimg.com/t01dfa59c715b52254a.png" alt=""></p>
+<p>在找到服务和属性后，我们需要知道读/写数据的 handle。这可以使用<code>char-desc</code>命令得到。<br><img src="https://p3.ssl.qhimg.com/t017582bd697279abcb.png" alt=""></p>
+<p>我们可以使用形如<code>char-desc 01 05</code>（该显示从1 到 5 的5 个 handle）的命令过滤特定范围的 handle 并显示。<br><img src="https://p4.ssl.qhimg.com/t01f04bc8d44e2ecd8f.png" alt=""></p>
+<p>在找到 handle 后，我们使用命令<code>char-read-hnd &lt;handle&gt;</code>从 handle 中读取数据。<br><img src="https://p0.ssl.qhimg.com/t01923c7a7cfa460fe9.png" alt=""></p>
+<p>为了能够写入特定的 handle，我们需要知道哪个是可写 handle。为此，我们可以选择一个 hit 和 try 方法，然后逐个读取所有 handle，直到遇到读取错误为止。读取错误意味着这是一个写 handle（写 handle 不能被读取）。或者，类似 nRF Connect 的应用可以自动计算出写 handle。<br><img src="https://p1.ssl.qhimg.com/t01f469bb13464f071a.png" alt=""></p>
+<p>handle <strong>0x000b</strong> 的UUID 下图所示。</p>
+<p><img src="https://p5.ssl.qhimg.com/t018babc815bc0f72e1.png" alt=""></p>
+<p>使用 nRF Connect，我们得到了以下的输出，确认 0x000b 确实是写 handle。上图中 0x000b的 UUID 和下图中 nRF Connect 的相匹配。<br><img src="https://p3.ssl.qhimg.com/t018fd22c0b412f03cb.png" alt=""></p>
+<p>在连接到灯泡后，我们可以向不用同的属性写入随机值。在大多数情况下，写入随机值不会像预期的那样工作。在 handle 中写入正确的值，我们需要解密数据协议，我们可用使用嗅探工具来解密，如 wireshark 和 ubertooth。</p>
+<p>在解密数据协议后，我们可以命令<code>char-write-req &lt;handle&gt; &lt;value&gt;</code> 向 handle 中写入值。<br><img src="https://p2.ssl.qhimg.com/t011e78c1f59dcc5e30.png" alt=""></p>
+<p>如果<code>char-write-req</code>报错，可以使用<code>char-write-cmd</code>替换。<br><img src="https://p4.ssl.qhimg.com/t0188a2c37bc2263e8a.png" alt=""></p>
+<h3 id="蓝牙数据包日志（Bluetooth-HCI-snoop-log）-1"><a href="#蓝牙数据包日志（Bluetooth-HCI-snoop-log）-1" class="headerlink" title="蓝牙数据包日志（Bluetooth HCI snoop log）"></a>蓝牙数据包日志（Bluetooth HCI snoop log）</h3><p>Android 4.4 及以上有一个选项，可以记录设备所有进出的蓝牙数据包。要捕获蓝牙通信，请遵循以下步骤。确保安装了Android 应用程序。</p>
+<p><strong>第一步</strong>： 进入设置中的开发者选项。</p>
+<p><strong>第二步</strong>: 在开发者选项中启用“打开蓝牙数据包日志”。</p>
+<p><img src="https://p3.ssl.qhimg.com/t01cdd09f4c9b393e39.png" alt=""></p>
+<p><strong>第三步</strong>： 运行 Android 程序（magic blue），并发送一些改变灯泡颜色的命令。重复发送几次。</p>
+<p><strong>第四步</strong>：对应于我们的命令，我们可以在<code>sdcard/btsnoop_hci.log</code> 或者<code>/internal Storage/btsnoop_hci.log</code>中找到捕获的蓝牙流量文件。</p>
+<p>注意 - 在部分设备上, btsnoop_hci.log 被创建在不同的位置，例如<code>/sdcard/Android/data/btsnoop_hci.log</code>。</p>
+<p> 使用Emal 、 Google Drive 或者 USB  数据线将捕获的日志文件传输到台式/笔记本电脑上。<br><img src="https://p2.ssl.qhimg.com/t01dbe5a71ac32d31ef.png" alt=""></p>
+<p><strong>第四步</strong>： 在 Wireshark 中分析流量，Wireshark 是一个免费开源的数据包分析工具，使用以下命令安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install wireshark-qt</span><br></pre></td></tr></table></figure>
+<p>更多关于如何使用 Wireshark 说明见我们的博客：<a target="_blank" rel="noopener" href="https://blog.attify.com/exploiting-iot-enabled-ble-smart-bulb-security/">https://blog.attify.com/exploiting-iot-enabled-ble-smart-bulb-security/</a>。</p>
+<p>或者，使用文本编辑器打开捕获的文件，如nano。<br><img src="https://p4.ssl.qhimg.com/t01379cb172148adf44.png" alt=""></p>
+<h3 id="使用-nRF-Connect-1"><a href="#使用-nRF-Connect-1" class="headerlink" title="使用 nRF Connect"></a>使用 nRF Connect</h3><p>Nordic 半导体的<a target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=no.nordicsemi.android.mcp&amp;hl=en_IN">nRF Connect</a> 可以用与 BLE hacking。它可以嗅探和写入数据，就像gatttool 一样。</p>
+<p><strong>第五步</strong>： 打开 nRF Connect 应用并连接 BLE 灯泡。<br><img src="https://p3.ssl.qhimg.com/t018419a882fca828d2.png" alt=""></p>
+<p><strong>第六步</strong>： 一旦连接，写入 payload 值<code>56b0306000f0aa</code>,点击发送。灯泡的颜色会变成紫红色。<br><img src="https://p4.ssl.qhimg.com/t01e5a2f4a06a15e39e.png" alt=""></p>
+<p>这是因为颜色使用了RGB 值 176, 48, 96 或者十六进制值 B03060。此条命令发送非灯泡的值是 <code>56 b0 30 60 00 f0 aa</code>。注意，第二字节、第三字节、第四字节分别对应十六进制中的 RGB 值。</p>
+<p>我们可以通过人工分析流量并试图从中找到协议中的模式。<br><img src="https://p0.ssl.qhimg.com/t01d076c3f477d3c055.png" alt=""></p>
+<h3 id="使用-Blash-进行-BLE-攻击-1"><a href="#使用-Blash-进行-BLE-攻击-1" class="headerlink" title="使用 Blash 进行 BLE 攻击"></a>使用 Blash 进行 BLE 攻击</h3><p><a target="_blank" rel="noopener" href="https://github.com/evilsocket/bleah">Blash</a> 是一个 BLE 扫描工具，它基于 python库 <a target="_blank" rel="noopener" href="https://github.com/IanHarvey/bluepy">bluepy</a>。在此节中，我们将了解如何使用Bleah 黑掉 BLE设备。</p>
+<p>在开始之前，我们需要</p>
+<p><strong>硬件</strong></p>
+<ul>
+<li>做好是运行 Ubuntu 的笔记本</li>
+<li>一个智能 BLE 灯泡或者其他蓝牙智能设备</li>
+<li>一个蓝牙适配器</li>
+</ul>
+<p><strong>软件</strong></p>
+<ul>
+<li>Python 2.7 （Ubuntu中默认已安装）</li>
+<li>Bluepy 库</li>
+<li>Bleah</li>
+</ul>
+<p>首先确保，Bluepy 如预期一样工作。</p>
+<p>前往 bluepy 目录，打开终端，然后输入<code></code>sudo ./bluepy-helper 0`然后输入le on，如下所示。</p>
+<p>（注意：可用使用命令<code>which bluepy-helper</code>找到 Bluepy 的安装路径）</p>
+<p><img src="https://p4.ssl.qhimg.com/t01d1a92ccbe34bd6af.png" alt=""></p>
+<p>success 消息表明 Bluepy 运行正常。现在，让我们看看如何使用 Bleah 进行 BLE 攻击。</p>
+<p><strong>第一步</strong>： 在同一终端中输入 <code>scan</code>扫描附近的 BLE 设备。<br><img src="https://p5.ssl.qhimg.com/t018d1d3c8795bb37c6.png" alt=""></p>
+<p>我们的 BLE 设备的地址是 <code>F81D78607184</code> 。</p>
+<p><strong>第二步</strong>： 开一个新终端并运行<code>sudo bleah -t0</code>，<code>t0</code>表示连续扫描。<br><img src="https://p1.ssl.qhimg.com/t018730b027c37182bc.png" alt=""></p>
+<p><img src="https://p0.ssl.qhimg.com/t01651b7da79f73deef.png" alt=""></p>
+<p><strong>第三步</strong>： 我们可以连接指定的设备并枚举所有的服务和属性，使用以下命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo bleah -b <span class="string">&quot;aa:bb:cc:dd:ee:ff&quot;</span> -e</span><br></pre></td></tr></table></figure>
+<p><code>aa:bb:cc:dd:ee:ff</code> 代表设备地址</p>
+<p><code>-b</code> 表示按照设备地址过滤</p>
+<p><code>-e</code> 代表连接设备并执行枚举操作</p>
+<p><img src="https://p5.ssl.qhimg.com/t0191d1b5be95f4b375.png" alt=""></p>
+<p><img src="https://p3.ssl.qhimg.com/t01ceab62c0243ad79b.png" alt=""></p>
+<p><strong>第四步</strong>：向特定的属性中写入数据运行。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo bleah -b <span class="string">&quot;aa:bb:cc:dd:ee:ff&quot;</span> -u <span class="string">&quot;0000ffe9-0000-1000-8000-00805f9b34fb&quot;</span> -d <span class="string">&quot;data&quot;</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://p4.ssl.qhimg.com/t01775a2d6c1f707dc2.png" alt=""><br><img src="https://p3.ssl.qhimg.com/t01c42a0d69feb54876.png" alt=""></p>
+<p>正如我们看到的，Blash 是一个实施 BLE 设备攻击的强大工具。它自动化实现了许多步骤，否则我们需要手工完成。</p>
+<p>在这篇博文中，我们学习了对蓝牙低功耗设备进行攻击的各种工具和技术。希望你从此文中受益。</p>
+<p>原文： <a target="_blank" rel="noopener" href="https://blog.attify.com/the-practical-guide-to-hacking-bluetooth-low-energy/">https://blog.attify.com/the-practical-guide-to-hacking-bluetooth-low-energy/</a></p>
+<p>来自：<a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/168116">安全客</a></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E8%AE%A9BLE%E5%A6%82%E6%AD%A4%E7%AA%81%E5%87%BA"><span class="toc-number">1.</span> <span class="toc-text">什么让BLE如此突出?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BLE-%E5%90%AC%E8%B5%B7%E6%9D%A5%E4%B8%8D%E9%94%99%EF%BC%8C%E5%AE%83%E7%9C%9F%E7%9A%84%E9%82%A3%E4%B9%88%E5%A5%BD%E5%90%97%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">BLE 听起来不错，它真的那么好吗？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BLE%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-number">3.</span> <span class="toc-text">BLE核心概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E8%AE%BF%E9%97%AE%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-GAP"><span class="toc-number">3.1.</span> <span class="toc-text">通用访问配置文件(GAP)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B9%BF%E6%92%AD%E6%B5%81%E7%A8%8B%EF%BC%88Advertising-process%EF%BC%89"><span class="toc-number">3.1.1.</span> <span class="toc-text">广播流程（Advertising process）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E5%B1%9E%E6%80%A7%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-GATT"><span class="toc-number">3.2.</span> <span class="toc-text">通用属性配置文件(GATT)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1"><span class="toc-number">3.2.1.</span> <span class="toc-text">服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7"><span class="toc-number">3.2.2.</span> <span class="toc-text">属性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BLE-%E5%88%A9%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-number">3.3.</span> <span class="toc-text">BLE 利用工具</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#hcitool"><span class="toc-number">3.3.1.</span> <span class="toc-text">hcitool</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#gattool"><span class="toc-number">3.3.2.</span> <span class="toc-text">gattool</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%89%8B%E5%86%8C"><span class="toc-number">3.4.</span> <span class="toc-text">命令手册</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4"><span class="toc-number">3.4.1.</span> <span class="toc-text">常用指令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Hcitool-%E5%91%BD%E4%BB%A4"><span class="toc-number">3.4.2.</span> <span class="toc-text">Hcitool 命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Gattool-%E5%91%BD%E4%BB%A4"><span class="toc-number">3.4.3.</span> <span class="toc-text">Gattool 命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-number">3.5.</span> <span class="toc-text">使用示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%93%9D%E7%89%99%E6%95%B0%E6%8D%AE%E5%8C%85%E6%97%A5%E5%BF%97%EF%BC%88Bluetooth-HCI-snoop-log%EF%BC%89"><span class="toc-number">3.6.</span> <span class="toc-text">蓝牙数据包日志（Bluetooth HCI snoop log）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-nRF-Connect"><span class="toc-number">3.7.</span> <span class="toc-text">使用 nRF Connect</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Blash-%E8%BF%9B%E8%A1%8C-BLE-%E6%94%BB%E5%87%BB"><span class="toc-number">3.8.</span> <span class="toc-text">使用 Blash 进行 BLE 攻击</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E8%AE%A9BLE%E5%A6%82%E6%AD%A4%E7%AA%81%E5%87%BA-1"><span class="toc-number">4.</span> <span class="toc-text">什么让BLE如此突出?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BLE-%E5%90%AC%E8%B5%B7%E6%9D%A5%E4%B8%8D%E9%94%99%EF%BC%8C%E5%AE%83%E7%9C%9F%E7%9A%84%E9%82%A3%E4%B9%88%E5%A5%BD%E5%90%97%EF%BC%9F-1"><span class="toc-number">5.</span> <span class="toc-text">BLE 听起来不错，它真的那么好吗？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BLE%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5-1"><span class="toc-number">6.</span> <span class="toc-text">BLE核心概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E8%AE%BF%E9%97%AE%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-GAP-1"><span class="toc-number">6.1.</span> <span class="toc-text">通用访问配置文件(GAP)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B9%BF%E6%92%AD%E6%B5%81%E7%A8%8B%EF%BC%88Advertising-process%EF%BC%89-1"><span class="toc-number">6.1.1.</span> <span class="toc-text">广播流程（Advertising process）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E5%B1%9E%E6%80%A7%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-GATT-1"><span class="toc-number">6.2.</span> <span class="toc-text">通用属性配置文件(GATT)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1-1"><span class="toc-number">6.2.1.</span> <span class="toc-text">服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7-1"><span class="toc-number">6.2.2.</span> <span class="toc-text">属性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BLE-%E5%88%A9%E7%94%A8%E5%B7%A5%E5%85%B7-1"><span class="toc-number">6.3.</span> <span class="toc-text">BLE 利用工具</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#hcitool-1"><span class="toc-number">6.3.1.</span> <span class="toc-text">hcitool</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#gattool-1"><span class="toc-number">6.3.2.</span> <span class="toc-text">gattool</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%89%8B%E5%86%8C-1"><span class="toc-number">6.4.</span> <span class="toc-text">命令手册</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4-1"><span class="toc-number">6.4.1.</span> <span class="toc-text">常用指令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Hcitool-%E5%91%BD%E4%BB%A4-1"><span class="toc-number">6.4.2.</span> <span class="toc-text">Hcitool 命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Gattool-%E5%91%BD%E4%BB%A4-1"><span class="toc-number">6.4.3.</span> <span class="toc-text">Gattool 命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B-1"><span class="toc-number">6.5.</span> <span class="toc-text">使用示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%93%9D%E7%89%99%E6%95%B0%E6%8D%AE%E5%8C%85%E6%97%A5%E5%BF%97%EF%BC%88Bluetooth-HCI-snoop-log%EF%BC%89-1"><span class="toc-number">6.6.</span> <span class="toc-text">蓝牙数据包日志（Bluetooth HCI snoop log）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-nRF-Connect-1"><span class="toc-number">6.7.</span> <span class="toc-text">使用 nRF Connect</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Blash-%E8%BF%9B%E8%A1%8C-BLE-%E6%94%BB%E5%87%BB-1"><span class="toc-number">6.8.</span> <span class="toc-text">使用 Blash 进行 BLE 攻击</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/&text=低功耗蓝牙攻击实用指南"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/&title=低功耗蓝牙攻击实用指南"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/&is_video=false&description=低功耗蓝牙攻击实用指南"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=低功耗蓝牙攻击实用指南&body=Check out this article: http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/&title=低功耗蓝牙攻击实用指南"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/&title=低功耗蓝牙攻击实用指南"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/&title=低功耗蓝牙攻击实用指南"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/&title=低功耗蓝牙攻击实用指南"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2018/12/27/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%94%BB%E5%87%BB%E5%AE%9E%E7%94%A8%E6%8C%87%E5%8D%97/&name=低功耗蓝牙攻击实用指南&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+

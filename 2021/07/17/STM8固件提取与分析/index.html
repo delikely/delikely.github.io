@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="STM8 固件提取与分析最近看了一篇关于智能手环的逆向的文章 Reverse Engineering the M6 Smart Fitness Bracelet，文章中讲到 Single Wire (aka. SWire or SWS) 。恰巧之前也碰到单线调试的 STM8，网上讲 STM32（ARM M系列） 的不少，讲 STM8 寥寥无几，这里和大家分享一下通过 SWIM 调试接口提取固件，并">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STM8 固件提取与分析">
+<meta property="og:url" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="STM8 固件提取与分析最近看了一篇关于智能手环的逆向的文章 Reverse Engineering the M6 Smart Fitness Bracelet，文章中讲到 Single Wire (aka. SWire or SWS) 。恰巧之前也碰到单线调试的 STM8，网上讲 STM32（ARM M系列） 的不少，讲 STM8 寥寥无几，这里和大家分享一下通过 SWIM 调试接口提取固件，并">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/en.STM8_SC1244.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210223225013360.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210223225421159.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210301122808616.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210708193246617.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210301132705315.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210301142832018.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210301152622850.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210303161955707.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305144745463.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305150602863.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305150911667.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305152150267.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305153410524.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305154036445.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305233137833.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305160242781.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305190205927.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305190320633.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210708195502037.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305190858841.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305203015348.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210311143123666.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210311151917027.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210311152340582.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210311155504013.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210311151812138.png">
+<meta property="article:published_time" content="2021-07-17T11:10:52.000Z">
+<meta property="article:modified_time" content="2021-07-25T11:54:28.000Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="IOT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/en.STM8_SC1244.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>STM8 固件提取与分析</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/07/25/Automotive-Modular-Platform/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/07/05/iot-security-lab-hardware/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
+      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
+      <span id="i-top" class="info" style="display:none;">Arriba</span>
+      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&text=STM8 固件提取与分析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&is_video=false&description=STM8 固件提取与分析"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=STM8 固件提取与分析&body=Check out this article: http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&name=STM8 固件提取与分析&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#STM8-%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">STM8 固件提取与分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E8%AF%95%E6%8E%A5%E5%8F%A3-SWIM"><span class="toc-number">1.1.</span> <span class="toc-text">调试接口 SWIM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6%E5%88%86%E6%9E%90"><span class="toc-number">1.2.</span> <span class="toc-text">固件分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#IDA-STM8-%E8%AF%86%E5%88%AB"><span class="toc-number">1.2.1.</span> <span class="toc-text">IDA STM8 识别</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#IDA-STM8-%E5%A4%84%E7%90%86%E5%99%A8%E6%8F%92%E4%BB%B6%E7%BC%96%E8%AF%91"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">IDA STM8 处理器插件编译</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6"><span class="toc-number">1.2.1.2.</span> <span class="toc-text">使用插件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%8F%92%E4%BB%B6%E5%88%86%E6%9E%90%E6%95%88%E6%9E%9C%E5%AF%B9%E6%AF%94"><span class="toc-number">1.2.1.3.</span> <span class="toc-text">插件分析效果对比</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8D-INT-VECTS-%E6%AE%B5%E6%9C%AB%E4%B8%BA%E4%B8%8D%E8%AF%86%E5%88%AB"><span class="toc-number">1.2.2.</span> <span class="toc-text">修复 INT_VECTS 段末为不识别</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.3.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        STM8 固件提取与分析
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2021-07-17T11:10:52.000Z" itemprop="datePublished">2021-07-17</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/IOT/" rel="tag">IOT</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="STM8-固件提取与分析"><a href="#STM8-固件提取与分析" class="headerlink" title="STM8 固件提取与分析"></a>STM8 固件提取与分析</h2><p>最近看了一篇关于智能手环的逆向的文章 <a target="_blank" rel="noopener" href="https://rbaron.net/blog/2021/07/06/Reverse-engineering-the-M6-smart-fitness-band.html">Reverse Engineering the M6 Smart Fitness Bracelet</a>，文章中讲到 Single Wire (aka. SWire or SWS) 。恰巧之前也碰到单线调试的 STM8，网上讲 STM32（ARM M系列） 的不少，讲 STM8 寥寥无几，这里和大家分享一下通过 SWIM 调试接口提取固件，并编译 STM8-IDA 插件识别 STM8 的固件，其中包含插件的纠错部分。</p>
+<p>STM8系列是意法半导体公司生产的8位的单片机，一共有三个系列分别为 STM8S(标准系列)、STM8L(超低功耗MCU)、TM8A(汽车级应用)。</p>
+<p><img src="en.STM8_SC1244.jpg" alt="img"></p>
+<h3 id="调试接口-SWIM"><a href="#调试接口-SWIM" class="headerlink" title="调试接口 SWIM"></a>调试接口 SWIM</h3><p>STM8 采用 SWIM( single wire data interface ) 接口调试。SWIM接口只需要一根传输线，即可完成双向的传输。传输过程，都是由主控制端发起，设备端做出反应。</p>
+<p><img src="image-20210223225013360.png" alt="(image-20210223225013360"></p>
+<p>手册中讲到存在代码读保护（CRP）机制。我们想要从中提取固件，CRP 必须是关闭状态。或使用故障注入 Bypass CRP。</p>
+<p><img src="image-20210223225421159.png" alt="(image-20210223225421159"></p>
+<p>根据芯片手册可知 3 号引脚是 SWIM 调试接口。使用万用表分析出预留的 SWIM 调试接口，结果如下。</p>
+<p><img src="image-20210301122808616.png" alt="(image-20210301122808616"></p>
+<p>SWIM 调试接口连接表如下。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">仿真器端口</th>
+<th style="text-align:left">目标板</th>
+<th style="text-align:left">连线方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">VDD</td>
+<td style="text-align:left">VCC</td>
+<td style="text-align:left">连接STM8目标板的电源VCC</td>
+</tr>
+<tr>
+<td style="text-align:left">DATA</td>
+<td style="text-align:left">SWIM</td>
+<td style="text-align:left">连接STM8目标板的SWIM PIN</td>
+</tr>
+<tr>
+<td style="text-align:left">GND</td>
+<td style="text-align:left">VSS</td>
+<td style="text-align:left">连接STM8目标板的电源GND</td>
+</tr>
+<tr>
+<td style="text-align:left">RESET</td>
+<td style="text-align:left">RESET</td>
+<td style="text-align:left">连接STM8目标板的RESET PIN</td>
+</tr>
+</tbody>
+</table>
+<p>使用 ST-LINK V2 按照上表连接。</p>
+<p><img src="image-20210708193246617.png" alt="(image-20210708193246617"></p>
+<p>然后使用 Openocd 读取固件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openocd -f interface/stlink-dap.cfg -f target/stm8l152.cfg</span><br></pre></td></tr></table></figure>
+<p><img src="image-20210301132705315.png" alt="(image-20210301132705315"></p>
+<p>根据手册中的 Meomery Map 提取固件。</p>
+<p><img src="image-20210301142832018.png" alt="(image-20210301142832018"></p>
+<p>使用命令 stm8l.cpu mdd 提取固件，Flash 的起始位置为 0x8100，mdd 读取的长度为（0xa000-0x8100）/ 8 = 992，然后转换为二进制就得到了固件。</p>
+<p><img src="image-20210301152622850.png" alt="(image-20210301152622850"></p>
+<p>另外还可以使用 <a target="_blank" rel="noopener" href="https://www.st.com/zh/development-tools/stvp-stm8.html">STVP</a> 读取 Flash，推荐使用 STVP 图形化操作很简单。</p>
+<p><img src="image-20210303161955707.png" alt="(image-20210303161955707"></p>
+<h3 id="固件分析"><a href="#固件分析" class="headerlink" title="固件分析"></a>固件分析</h3><h4 id="IDA-STM8-识别"><a href="#IDA-STM8-识别" class="headerlink" title="IDA STM8 识别"></a>IDA STM8 识别</h4><p>IDA 原生不支持 STM8 芯片，但可以通过插件(STM8-IDA)来完成。</p>
+<h5 id="IDA-STM8-处理器插件编译"><a href="#IDA-STM8-处理器插件编译" class="headerlink" title="IDA STM8 处理器插件编译"></a>IDA STM8 处理器插件编译</h5><p>找到了一个名为 <a target="_blank" rel="noopener" href="https://github.com/Prehistoricman/STM8-IDA">STM8-IDA</a> 的 IDA 插件，支持 STM8  部分芯片识别。直接下载 release 报错，猜测是版本不兼容引7起的。当前我使用的数据 IDA 7.5，release 版本插件是基于 IDA SDK 7.2 开发的。不能使用于是开始自行编译。</p>
+<p>使用 <a target="_blank" rel="noopener" href="https://visualstudio.microsoft.com/zh-hans/downloads/">Visual Studio 2019</a> 编译 STM8 处理器插件，需要 IDA SDK 库。网上下载的 IDA 7.5 大多都有，但可能没有解压，需要手动解压。</p>
+<p><img src="image-20210305144745463.png" alt="(image-20210305144745463"></p>
+<p>准备好 Visual Studio 和 IDASDK 之后，就可以使用 Visual Studio 编译了。首先需要配置编译选项。点击菜单栏 “项目”，选择 “属性” 进入项目属性配置页面。</p>
+<ol>
+<li><p>设置 IDASDK 路径</p>
+<p>依此选择 <strong>C/C++</strong>  <strong>常规</strong>  <strong>附加包含目录</strong>，将 IDASDK 的 module 和 include 路径添加到附件包含目录中。</p>
+<p><img src="image-20210305150602863.png" alt="(image-20210305150602863"></p>
+</li>
+<li><p>配置预处理器定义</p>
+<p>依此选择 <strong>C/C++</strong>  <strong>预处理器</strong>  <strong>预处理器</strong> 删除多余的，仅保留如下的内容。</p>
+<p><img src="image-20210305150911667.png" alt="(image-20210305150911667"></p>
+</li>
+<li><p>配置附件库目录</p>
+<p>依此选择 <strong>链接器</strong> <strong>常规</strong>  <strong>附件库目录</strong>，按照平台选择 lib 库路径，Windows 64位选择 x64_win_vc_32。</p>
+<p><img src="image-20210305152150267.png" alt="(image-20210305152150267"></p>
+</li>
+<li><p>配置附件依赖项</p>
+<p>在<strong>链接器</strong>  <strong>输入</strong>  <strong>附加依赖项</strong> 添加 ida.lib 。</p>
+<p><img src="image-20210305153410524.png" alt="(image-20210305153410524"></p>
+</li>
+<li><p>如果需要动态调试的话，还需要配置调试命令。</p>
+<p>在 <strong>调试</strong>  <strong>命令</strong> 中设置 IDA.exe 路径。</p>
+<p><img src="image-20210305154036445.png" alt="(image-20210305154036445"></p>
+<p>另外，还需要配置 “输出目录” 为 IDA 安装目录下的 procs。</p>
+<p><img src="image-20210305233137833.png" alt="(image-20210305233137833"></p>
+</li>
+</ol>
+<h5 id="使用插件"><a href="#使用插件" class="headerlink" title="使用插件"></a>使用插件</h5><ol>
+<li><p>将项目下的 stm8.cfg 复制到 IDA 安装目录下的 cfg 目录中。</p>
+</li>
+<li><p>将插件项目 STM8-IDA/x64/Debug/ 目录下的 stm8.dll 复制到 IDA 安装目录下的 procs 目录中。</p>
+</li>
+<li><p>最后，打开文件就能选择处理器为 STM8 了。</p>
+<p><img src="image-20210305160242781.png" alt="(image-20210305160242781"></p>
+</li>
+</ol>
+<p>加载的固件是使用 <code>ST Visual Programmer</code>读取的 0x8000-0x9FFF 的内容，大小为 8K。从手册可以看到，RAM 区间为 0x0000 到 0x03FF，Flash 的起始地址为 0x8000。配置好 RAM 和 ROM 参数后，点击确认。</p>
+<p><img src="image-20210305190205927.png" alt="(image-20210305190205927"></p>
+<p>然后，选择芯片型号，这里我用的是 STM8L051F3。</p>
+<p><img src="image-20210305190320633.png" alt="(image-20210305190320633"></p>
+<p>点击确认后，弹出提醒 ，需要用在入口点按 C 后开始自动分析。这个型号芯片是我自己添加的配置，根据芯片手册在 stm8.cfg 添加配置。需要添加的内容包括MEMORY MAP、Interrupt and reset vector assignments、INPUT/OUTPUT PORTS，这些都可以参照现有的配置并根据芯片手册中的相应部分手动添加。</p>
+<p><img src="image-20210708195502037.png" alt="(image-20210708195502037"></p>
+<p>添加了芯片支持以后，选择所属芯片后，再次点击确认，大部分代码已经自动分析了，剩余的按需手动识别。</p>
+<p><img src="image-20210305190858841.png" alt="(image-20210305190858841"></p>
+<h5 id="插件分析效果对比"><a href="#插件分析效果对比" class="headerlink" title="插件分析效果对比"></a>插件分析效果对比</h5><p>写了一个 DEMO 对比分析一下，以前没有碰到过 STM8，正好对比学习一下。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">delay</span><span class="params">(<span class="keyword">uint32_t</span> t)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">true<span class="keyword">while</span> (t--);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;	</span><br><span class="line">true<span class="keyword">unsigned</span> <span class="keyword">char</span> value = <span class="number">0b00000000</span>;</span><br><span class="line">trueGPIOD-&gt;DDR = <span class="number">0b00001000</span>;</span><br><span class="line">trueGPIOD-&gt;CR1 = <span class="number">0b00001000</span>;</span><br><span class="line">trueGPIOD-&gt;CR2 = <span class="number">0b00001000</span>;</span><br><span class="line">true<span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">true&#123;</span><br><span class="line">truetruevalue = value ^ <span class="number">0b11111111</span>;</span><br><span class="line">truetrueGPIOD-&gt;ODR = value;</span><br><span class="line">truetruedelay(<span class="number">20000</span>);</span><br><span class="line">true&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>把固件写入 STM8 开发板，并开始动态调试。动态调试反汇编的页面给个好评，一句 C 代码后面跟对应的汇编代码很清晰。</p>
+<p><img src="image-20210305203015348.png" alt="(image-20210305203015348"></p>
+<h4 id="修复-INT-VECTS-段末为不识别"><a href="#修复-INT-VECTS-段末为不识别" class="headerlink" title="修复 INT_VECTS 段末为不识别"></a>修复 INT_VECTS 段末为不识别</h4><p>在使用插件时发现了一个问题，IDA 调用刚编译的 STM8-IDA插件分析后，多出了一个 ROM 段，导致分析的内容不完整。</p>
+<p><img src="image-20210311143123666.png" alt="(image-20210311143123666"></p>
+<p>查看 segment 发现，IDA 本身创建的 segment 与 插件之间存在冲突，导致 0x80FF 被独立拿出来作为一个segment。</p>
+<p><img src="image-20210311151917027.png" alt="(image-20210311151917027"></p>
+<p>因为 Flash有两个段，Reset and interrupt vectors 和 Flash。</p>
+<p><img src="image-20210311152340582.png" alt="(image-20210311152340582"></p>
+<p>而在 IDA 配置内存结构是给定 ROM 的起始位置和大小。</p>
+<p><img src="image-20210311155504013.png" alt="(image-20210311155504013"></p>
+<p>从 segment1 到 segment 11 正常，创建的 segment12(Reset and interrupt vectors ) 属于 ROM，IDA 以为把 ROM 中剩下的部分删掉了，但后面还有 Flash 段，于是又创建了一个段，然后将 Flash 放到 ROM 中，经过这一操作原本属于 Reset and interrupt vectors 的 0x80FF 被独立出来了。</p>
+<p><img src="image-20210311151812138.png" alt="(image-20210311151812138"></p>
+<p><strong>修复</strong>：可以在配置文件中，对 ROM 中的每个段末地址加一。</p>
+<p>例如，原始段配置，INT_VECTS 的地址段为 0x08000 到 0x080FF，CODE1 的地址段为 0x08100 到 0x9FFF。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">area CODE INT_VECTS      0x08000:0x080FF</span><br><span class="line">area CODE CODE1          0x08100:0x09FFF</span><br></pre></td></tr></table></figure>
+<p>更改后的段定义，INT_VECTS 的地址段为 0x08000 到 0x08100，CODE1 的地址段为 0x08100 到 0x10000。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">area CODE INT_VECTS      0x08000:0x08100</span><br><span class="line">area CODE CODE1          0x08100:0x10000</span><br></pre></td></tr></table></figure>
+<p>修改之后 IDA 就能就能正常识别处理了。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/u010093140/article/details/50021897">STM8汇编代码分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/chenshikun/p/13373671.html">基于IDA7.2的STM8处理器插件编写</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Prehistoricman/STM8-IDA"> STM8-IDA</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/TG9541/stm8ef/blob/master/STM8L051F3/README.md">stm8ef</a></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#STM8-%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">STM8 固件提取与分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E8%AF%95%E6%8E%A5%E5%8F%A3-SWIM"><span class="toc-number">1.1.</span> <span class="toc-text">调试接口 SWIM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6%E5%88%86%E6%9E%90"><span class="toc-number">1.2.</span> <span class="toc-text">固件分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#IDA-STM8-%E8%AF%86%E5%88%AB"><span class="toc-number">1.2.1.</span> <span class="toc-text">IDA STM8 识别</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#IDA-STM8-%E5%A4%84%E7%90%86%E5%99%A8%E6%8F%92%E4%BB%B6%E7%BC%96%E8%AF%91"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">IDA STM8 处理器插件编译</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6"><span class="toc-number">1.2.1.2.</span> <span class="toc-text">使用插件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%8F%92%E4%BB%B6%E5%88%86%E6%9E%90%E6%95%88%E6%9E%9C%E5%AF%B9%E6%AF%94"><span class="toc-number">1.2.1.3.</span> <span class="toc-text">插件分析效果对比</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8D-INT-VECTS-%E6%AE%B5%E6%9C%AB%E4%B8%BA%E4%B8%8D%E8%AF%86%E5%88%AB"><span class="toc-number">1.2.2.</span> <span class="toc-text">修复 INT_VECTS 段末为不识别</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.3.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&text=STM8 固件提取与分析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&is_video=false&description=STM8 固件提取与分析"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=STM8 固件提取与分析&body=Check out this article: http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&name=STM8 固件提取与分析&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="免拆芯片提取固件近期做项目，使用芯片夹对 MCU 固件进行了免拆提取。客户很感兴趣，会后负责人特意找到我，想我给他发点相关的资料学习一下。本以为网上很多，搜索了一下都不是很满意，大多讲的固件提取的方式，即没有基础知识介绍，也没有详细的操作步骤。既然没有就自己动手吧，于是便有今天的这篇文章。 为什么要免拆提取呢，直接用热风枪吹下来，用 Flash 编程器读取，它不香吗。免拆，一是懒，吹下来之后还要焊">
+<meta property="og:type" content="article">
+<meta property="og:title" content="免拆芯片提取固件">
+<meta property="og:url" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="免拆芯片提取固件近期做项目，使用芯片夹对 MCU 固件进行了免拆提取。客户很感兴趣，会后负责人特意找到我，想我给他发点相关的资料学习一下。本以为网上很多，搜索了一下都不是很满意，大多讲的固件提取的方式，即没有基础知识介绍，也没有详细的操作步骤。既然没有就自己动手吧，于是便有今天的这篇文章。 为什么要免拆提取呢，直接用热风枪吹下来，用 Flash 编程器读取，它不香吗。免拆，一是懒，吹下来之后还要焊">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/免拆芯片提取固件.assets/image-20201227143032456.png">
+<meta property="og:image" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/免拆芯片提取固件.assets/image-20201226235326781.png">
+<meta property="og:image" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/免拆芯片提取固件.assets/image-20201227104618453.png">
+<meta property="og:image" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/免拆芯片提取固件.assets/image-20201227002246357.png">
+<meta property="og:image" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/免拆芯片提取固件.assets/image-20201227102837769.png">
+<meta property="og:image" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/免拆芯片提取固件.assets/image-20201226220506123.png">
+<meta property="og:image" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/免拆芯片提取固件.assets/image-20201226224403544.png">
+<meta property="og:image" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/免拆芯片提取固件.assets/image-20201226225944825.png">
+<meta property="og:image" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/免拆芯片提取固件.assets/image-20201227102446592.png">
+<meta property="og:image" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/免拆芯片提取固件.assets/image-20200114105714909.png">
+<meta property="og:image" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/免拆芯片提取固件.assets/image-20200114125443247.png">
+<meta property="og:image" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/免拆芯片提取固件.assets/image-20201227121147566.png">
+<meta property="og:image" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/免拆芯片提取固件.assets/image-20201227194728892.png">
+<meta property="og:image" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/免拆芯片提取固件.assets/image-20201227200455612.png">
+<meta property="og:image" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/免拆芯片提取固件.assets/swd-ft2332h.png">
+<meta property="og:image" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/免拆芯片提取固件.assets/image-20201227183750326.png">
+<meta property="og:image" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/免拆芯片提取固件.assets/image-20200312102429744.png">
+<meta property="og:image" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/免拆芯片提取固件.assets/image-20200506170508280.png">
+<meta property="article:published_time" content="2021-01-11T07:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-05T11:17:23.000Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="IOT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/免拆芯片提取固件.assets/image-20201227143032456.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>免拆芯片提取固件</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/01/30/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6%E5%9C%A8%E6%B1%BD%E8%BD%A6%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/06/11/LoraWAN1-0-3-security/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
+      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
+      <span id="i-top" class="info" style="display:none;">Arriba</span>
+      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/&text=免拆芯片提取固件"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/&title=免拆芯片提取固件"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/&is_video=false&description=免拆芯片提取固件"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=免拆芯片提取固件&body=Check out this article: http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/&title=免拆芯片提取固件"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/&title=免拆芯片提取固件"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/&title=免拆芯片提取固件"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/&title=免拆芯片提取固件"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/&name=免拆芯片提取固件&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.</span> <span class="toc-text">免拆芯片提取固件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">1.1.</span> <span class="toc-text">基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8A%AF%E7%89%87%E5%B0%81%E8%A3%85%E4%B8%8E%E9%92%88%E8%84%9A%E5%AE%9A%E4%B9%89"><span class="toc-number">1.1.1.</span> <span class="toc-text">芯片封装与针脚定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8A%AF%E7%89%87%E5%A4%B9"><span class="toc-number">1.1.2.</span> <span class="toc-text">芯片夹</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8E-Flash-%E4%B8%AD%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.2.</span> <span class="toc-text">从 Flash 中提取固件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8E-MCU-%E4%B8%AD%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">从 MCU 中提取固件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.4.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        免拆芯片提取固件
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2021-01-11T07:00:00.000Z" itemprop="datePublished">2021-01-11</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/IOT/" rel="tag">IOT</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="免拆芯片提取固件"><a href="#免拆芯片提取固件" class="headerlink" title="免拆芯片提取固件"></a>免拆芯片提取固件</h2><p>近期做项目，使用芯片夹对 MCU 固件进行了免拆提取。客户很感兴趣，会后负责人特意找到我，想我给他发点相关的资料学习一下。本以为网上很多，搜索了一下都不是很满意，大多讲的固件提取的方式，即没有基础知识介绍，也没有详细的操作步骤。既然没有就自己动手吧，于是便有今天的这篇文章。</p>
+<p>为什么要免拆提取呢，直接用热风枪吹下来，用 Flash 编程器读取，它不香吗。免拆，一是懒，吹下来之后还要焊上去，对动手能力要求要高一些；二是，像我们在外面做项目，也不一定有热风枪、电烙铁什么的，出差不可能随声带上吧（下面放一张我出差携带的部分装备）。还有一点，有些情况客户是不允许拆芯片的。</p>
+<p><img src="免拆芯片提取固件.assets/image-20201227143032456.png" alt="出行必备"></p>
+<p>另外还有一点，多数资料都是将如何从 Flash 中提取固件，很少讲怎么从 MCU 中提取固件。下面会介绍一些知识，然后分别演示如何从 Flash 和 MCU 免拆提取固件。</p>
+<h3 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h3><h4 id="芯片封装与针脚定义"><a href="#芯片封装与针脚定义" class="headerlink" title="芯片封装与针脚定义"></a>芯片封装与针脚定义</h4><p>使用芯片夹可以实现 SOP、QFP 封装等<strong>针脚外露</strong>的芯片免拆固件提取，而对 QFN、BGA 等封装方式则无能无力。</p>
+<ul>
+<li><p>SOP8/16</p>
+<p>SOP(Small Out-Line Package,小外形封装) 针脚从封装两侧引出呈海鸥翼状(L 字形)，一般用于针脚不太多的芯片上 。SOP8/16 封装的 Flash 在路由器、摄像头等 IOT 设备厂较为常见。针脚有8根或16根，且一个角上有小圆点（每个芯片都有一个小圆点，小圆点所在的位置是第一针脚,然后逆时针排布第二针脚,第三针脚等）,型号代码一般是24或25开头。SOP8/16 SPI Flash 一般的针脚定义如下。</p>
+<p><img src="免拆芯片提取固件.assets/image-20201226235326781.png" alt="SOP8/SOP16"></p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>引脚</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/CS</td>
+<td>片选</td>
+</tr>
+<tr>
+<td>DO</td>
+<td>数据输出</td>
+</tr>
+<tr>
+<td>/WP</td>
+<td>写保护</td>
+</tr>
+<tr>
+<td>GND</td>
+<td>电源地</td>
+</tr>
+<tr>
+<td>VCC</td>
+<td>电源正极</td>
+</tr>
+<tr>
+<td>/HOLD</td>
+<td>输入保持</td>
+</tr>
+<tr>
+<td>/RESET</td>
+<td>复位</td>
+</tr>
+<tr>
+<td>CLK</td>
+<td>时钟</td>
+</tr>
+<tr>
+<td>DI</td>
+<td>数据输入</td>
+</tr>
+</tbody>
+</table>
+<p>  <img src="免拆芯片提取固件.assets/image-20201227104618453.png" alt="SPI FALSH"></p>
+<ul>
+<li><p>QFP</p>
+<p>QFP(Plastic Quad Flat Package，方型扁平式封装技术）针脚从四个侧面引出呈海鸥翼(L)型。实现的芯片针脚之间距离很小，管脚很细，一般大规模或超大规模集成电路采用这种封装形式，其针脚数一般都在64以上。在小型IOT设备中可作为主控或协处理器。下图中的芯片就是采用 QFP 封装。</p>
+<p><img src="免拆芯片提取固件.assets/image-20201227002246357.png" alt="QFP MCU" style="zoom: 50%;" /></p>
+<p>此类封装由于针脚数不固定，没有统一标准，一般由厂商自行定义，引脚定义详见芯片手册。</p>
+</li>
+<li><p>GBA</p>
+<p>BGA(Ball Grid Array Package,球栅阵列封装) 封装的 I/O 端子以圆形或柱状焊点按阵列形式分布在封装下面，具有更小的体积，更好的散热性能和电性能。由于 I/O 端子在<strong>封装下方</strong>，提取固件则需要使用<code>BGA返修台</code>拆卸下来读取，<strong>不能实现免拆提取</strong>。BGA 封装一般用于 CPU 和大容量存储。</p>
+<p><img src="免拆芯片提取固件.assets/image-20201227102837769.png" alt="BGA NAND FLASH" style="zoom:50%;" /></p>
+<p>此类封装同 QFP 封装的芯片一样，引脚定义需看看相应的芯片手册。</p>
+</li>
+</ul>
+<h4 id="芯片夹"><a href="#芯片夹" class="headerlink" title="芯片夹"></a>芯片夹</h4><p>一般使用的夹子有三种。第一种是<code>SOP8/16脚测夹</code>，常用于 SPI 闪存的固件提取；第二种是<code>芯片通用测试夹测试钩子</code>,常用于SOP QFP 封装芯片的固件提取或协议分析；第三种是<code>ECU 探针</code>，多用于汽车 ECU 固件提取。</p>
+<ol>
+<li><p>SOP8/16脚测夹</p>
+<p><img src="免拆芯片提取固件.assets/image-20201226220506123.png" alt="image-20201226220506123" style="zoom:33%;" /></p>
+<p><code>SOP8/16脚测夹</code>适用于 SOP8 以及 SOP16 封装的芯片。</p>
+</li>
+<li><p>芯片通用测试夹测试钩子</p>
+<p><code>芯片通用测试夹测试钩子</code>此类钩子淘宝上有好几种在售。下图的这种，只适用于芯片针脚较少的芯片，如采用 SOP8 封装的芯片。勾式是单钩钩取，扁式是双钩夹取。这种的价格相对便宜一些。</p>
+<p><img src="免拆芯片提取固件.assets/image-20201226224403544.png" alt="勾式/扁式测试钩子" style="zoom: 67%;" /></p>
+</li>
+</ol>
+<p>   下面这种夹子更细，能够用在有更多更细的针脚芯片上，如 QFP 封装的 MCU。这类夹子较上面的这种要贵一些。</p>
+<p>   <img src="免拆芯片提取固件.assets/image-20201226225944825.png" alt="IC脚夹" style="zoom:40%;" /></p>
+<p>   这类夹子都比较小，当需要夹连续的针脚时有一定的困难，需要反复尝试。另外由于没有支撑，可能刚夹上就被弹开了，这种情况就可以用<code>ECU 探针</code>来连接。</p>
+<ol start="3">
+<li><p>ECU 探针</p>
+<p><code>ECU 探针</code>常用于汽车行业，是动力调教等玩车搞车一族的必备单品。当然其他的芯片也可以用它来进行固件提取。这类由于带有支架，使用时只需要把探针搭在对应的芯片针脚上。</p>
+<p><img src="免拆芯片提取固件.assets/image-20201227102446592.png" alt="image-20201227102446592" style="zoom:20%;" /></p>
+</li>
+</ol>
+<h3 id="从-Flash-中提取固件"><a href="#从-Flash-中提取固件" class="headerlink" title="从 Flash 中提取固件"></a>从 Flash 中提取固件</h3><p>免拆读取 Flash，一般读取 SOP8 封装的 SPI Flash较多，使用<code>SOP8/16脚测夹</code>较为方便。提取所需的软硬件如下。</p>
+<ul>
+<li><p>软件</p>
+<ul>
+<li>flashrom: <a target="_blank" rel="noopener" href="https://flashrom.org/">flashrom</a> 是一个开源的跨平台的烧录工具, 提供了不少的芯片支持和编程器支持. 用于识别、 读取、写入、 验证和擦除各种 Flash 芯片。</li>
+</ul>
+</li>
+<li><p>硬件</p>
+<ul>
+<li>测试夹：SOP8/16脚测夹，上文有详细介绍。</li>
+<li>编程器：CH341A 编程器/树莓派/CJMCU FT232H等(任选一)</li>
+</ul>
+</li>
+</ul>
+<p>这里我用树莓派做演示，之前用过 CH341A 编程器 提取的速度比较慢，建议使用树莓派或 FT232H 等调试器。</p>
+<ol>
+<li><p>安装flashrom</p>
+<p>使用 apt 直接安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get intall flashrom</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启用树莓派的 SPI</p>
+<p>使用树莓派的配置命令<code>rasp_config</code>，依次选择 “Interfacing Options” -&gt; SPI -&gt; YES 启动树莓派的 SPI 接口。</p>
+</li>
+<li><p>加载 SPI 模块</p>
+<p>要使用树莓派的 SPI 接口还需要加载 spi_bcm2835 与 spidev 模块。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pi@raspberrypi:~ $ sudo modprobe spi_bcm2835</span><br><span class="line">pi@raspberrypi:~ $ sudo modprobe spidev</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接线</p>
+<p>首先找到板子上的 Flash，然后找到 Flash 的 datasheet 中对引脚的定义与树莓派的引脚定义，根据 flashrom 上给出的使用说明进行连接，如下图。</p>
+</li>
+</ol>
+<p><img src="免拆芯片提取固件.assets/image-20200114105714909.png" alt="SPI FLASH 与 树莓派SPI 连接说明"></p>
+<table>
+<thead>
+<tr>
+<th>树莓派引脚</th>
+<th>SPI Flash 引脚</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>25</td>
+<td>GND</td>
+</tr>
+<tr>
+<td>24</td>
+<td>/CS</td>
+</tr>
+<tr>
+<td>23</td>
+<td>SCK</td>
+</tr>
+<tr>
+<td>21</td>
+<td>DO</td>
+</tr>
+<tr>
+<td>19</td>
+<td>DI</td>
+</tr>
+<tr>
+<td>17</td>
+<td>VCC 3.3V (+ /HOLD, /WP)</td>
+</tr>
+</tbody>
+</table>
+<p>   一般情况下 SPI Flash 的 VCC、/HOLD、/WP 都需要连接树莓派的 3.3V 的 VCC 上。</p>
+<p>   按照上表进行接线，连接好的效果图如下。使用编程器、调试器等设备时接线也类似。</p>
+<p>   <img src="免拆芯片提取固件.assets/image-20200114125443247.png" alt="树莓派连接SPI FLASH"></p>
+<ol start="4">
+<li><p>提取</p>
+<p>接好线后，使用 flashrom 提取固件。<code>-p</code> 选项指定使用的设备类型，这里使用了树莓派的 spi 接口，并设定读写速度；<code>-r</code> 选项指定读取后保存的路径；从文件中写回 flash 所用到的选项为 <code>-w</code>。如下成功提取固件并保存到了当前目录的 w25q_rasp.bin 文件中了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">pi@raspberrypi:~ $ flashrom -p linux_spi:dev=/dev/spidev0.0,spispeed=1000 -r w25q_rasp.bin</span><br><span class="line">flashrom  on Linux 4.19.57-v7+ (armv7l)</span><br><span class="line">flashrom is free software, get the <span class="built_in">source</span> code at https://flashrom.org</span><br><span class="line"></span><br><span class="line">Using clock_gettime <span class="keyword">for</span> delay loops (clk_id: 1, resolution: 1ns).</span><br><span class="line">Found Winbond flash chip <span class="string">&quot;W25Q128.V&quot;</span> (16384 kB, SPI) on linux_spi.</span><br><span class="line">Reading flash... <span class="keyword">done</span>.</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="从-MCU-中提取固件"><a href="#从-MCU-中提取固件" class="headerlink" title="从 MCU 中提取固件"></a>从 MCU 中提取固件</h3><p>从 Flash 中提取固件较为常见，但有些情况下固件被没有存储在外置的 Flash 上，而是在 MCU 的内置 Flash 中。这时需要通过调试接口（SWD/JTAG等）对固件进行提取，也可以进行动态调试。</p>
+<p>对 MCU 上固件进行提取，首先需要根据芯片手册，找到调试接口。有些情况下，调试接口可能会引出。下图是我曾经研究过的一款智能设备，板子上引出 SWD 调试接口。</p>
+<p><img src="免拆芯片提取固件.assets/image-20201227121147566.png" alt="板子上预留SWD调试接口"></p>
+<p>但随着硬件厂商对安全的重视，MCU 调试接口被引出的情况越来越少。但遇到这种情况时，可以尝试直接操作芯片针脚。下面演示使用芯片测试夹从 MCU 中提取内置固件。提取所需的软硬件如下。</p>
+<ul>
+<li>硬件<ul>
+<li>测试夹：芯片通用测试夹测试钩子。</li>
+<li>FT232H：多功能 USB to JTAG SWD/UART/FIFO SPI/I2C 模块。也可以使用 JLink、STLink 等调试器。</li>
+</ul>
+</li>
+<li>软件<ul>
+<li>OpenOCD: <a target="_blank" rel="noopener" href="https://github.com/ntfreak/openocd">OpenOCD</a>（Open On-Chip Debugger)是一个开源的片上调试器，旨在提供针对嵌入式设备的调试、系统编程和边界扫描功能，可以与 GDB 配合进行动态调试。</li>
+</ul>
+</li>
+</ul>
+<p>以下以某 IOT 设备 MCU (STM32f030 RCT6) 为例使用测试夹通过 OpenOCD 提取固件。<code>STM32f030 RCT6</code>采用 QFP 64 封装。</p>
+<ol>
+<li><p>OpenOCD 安装与简单使用</p>
+<p>使用 apt 直接安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install openocd</span><br></pre></td></tr></table></figure>
+<p>有特殊需求时，也可以进行源码安装。部分芯片厂商对 OpenOCD 进行了适配，如新唐的 <a target="_blank" rel="noopener" href="https://github.com/OpenNuvoton/OpenOCD-Nuvoton">OpenOCD-Nuvoton</a>。</p>
+<p>OpenOCD 运行需要两个配置文件，第一个是调试器的配置文件，第二个是目标芯片的配置文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openocd -f interface/ft232h-module-swd.cfg  -f target/stm32f0x.cfg </span><br></pre></td></tr></table></figure>
+<p>OpenOCD 运行之后，使用 telnet 连接本地的 4444 端口与芯片进行交互。连接后，输入 help 查看支持的命令，不同的芯片支持的命令有所不同。一般而言提取固件使用 <code>dump_image</code>命令。</p>
+<p>GDB 动态调试监听见本地的 3333 端口，进入GDB 后通过 <code>target remote localhost:3333</code>连接。</p>
+</li>
+<li><p>连线</p>
+<p>根据芯片丝印 <code>STM32f030 RCT6</code>下载相应的<a target="_blank" rel="noopener" href="https://www.st.com/resource/en/datasheet/stm32f030f4.pdf">芯片手册</a>。在手册中找到调试接口，此芯片采用 SWD 进行调试。<code>STM32f030 RCT6</code>有 64 个针脚，对应下图 46 号针脚 SWDIO，49 号针脚 SWCLK，63 号针脚 VSS，7 号针脚 RESET。</p>
+<p><img src="免拆芯片提取固件.assets/image-20201227194728892.png" alt="image-20201227194728892"></p>
+<p>然后，使用已连接杜邦线的测试夹连接SWD 接口，依次为 7 号针脚（RESET）、 46 号针脚（SWDIO）、 49 号针脚（SWCLK）、 63 号针脚（VSS） ，连接之后如下图。</p>
+<p><img src="免拆芯片提取固件.assets/image-20201227200455612.png" alt="芯片测试夹连接SWD接口"></p>
+</li>
+</ol>
+<p>   然后，按下图连接 FT232H。注意 AD2(DO) 需要串联一个电阻，然后与 AD1(DI) 合并组成 SWDIO。</p>
+<p>   <img src="免拆芯片提取固件.assets/swd-ft2332h.png" alt="swd-ft2332h SWD连接说明"></p>
+<p>   最后将 FT232 H 通过 USB 接口连接电脑。上面的忘记拍全景图了，放张读取其他的芯片的作为参考。连接好的效果图类似下图。</p>
+<p>   <img src="免拆芯片提取固件.assets/image-20201227183750326.png" alt="使用FT232H连接SWD接线图"></p>
+<ol start="3">
+<li><p>查看芯片手册找到固件所在位置</p>
+<p><img src="免拆芯片提取固件.assets/image-20200312102429744.png" alt="STM32F030 内存映射"></p>
+<p>根据芯片手册的内存映射（如上图） dump固件。固件地址在 0x0000 0000 - 0x2000 0000 中，0x0000 0000 - 0x0004 0000 为 Flash Memory/System Memory/SRAW depending on BOOT configuration、0x0804 0000 - 0x0800 0000 为 Flash memory、0x1FFF xx00 - 0x1FFF FFFF 为 System memory等。</p>
+<ul>
+<li>System Memory:  从系统存储器启动，这种模式启动的程序功能是由厂家设置的。一般来说，这种启动方式用的比较少。系统存储器是芯片内部一块特定的区域，STM32 在出厂时，由 ST 在这个区域内部预置了一段 BootLoader， 也就是我们常说的 ISP 程序， 这是一块 ROM，出厂后无法修改。一般来说，我们选用这种启动模式时，是为了从串口下载程序，因为在厂家提供的 BootLoader 中，提供了串口下载程序的固件，可以通过这个 BootLoader 将程序下载到系统的 Flash 中。</li>
+<li>Flash Memory：是 STM32 内置的 Flash，一般我们使用 JTAG 或者 SWD 模式下载程序时，就是下载到这个里面，重启后也直接从这启动程序。</li>
+<li>SRAW：内置 SRAM，既然是 SRAM，自然也就没有程序存储的能力了，这个模式一般用于程序调试。假如我只修改了代码中一个小小的地方，然后就需要重新擦除整个 Flash，比较的费时，可以考虑从这个模式启动代码（也就是 STM32 的内存中），用于快速的程序调试。</li>
+</ul>
+<p>由上可知，固件在 Flash Memory 中，起始地址为  0x8000000 ，大小为 x40000。</p>
+</li>
+<li><p>提取固件</p>
+<p>首先运行 OpenOCD，连接成功的输出如下。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">root@kali:/usr/share/openocd/scripts<span class="comment"># openocd -f interface/ft232h-module-swd.cfg  -f target/stm32f0x.cfg </span></span><br><span class="line">Open On-Chip Debugger 0.10.0</span><br><span class="line">Licensed under GNU GPL v2</span><br><span class="line">For bug reports, <span class="built_in">read</span></span><br><span class="line">truehttp://openocd.org/doc/doxygen/bugs.html</span><br><span class="line">adapter speed: 1000 kHz</span><br><span class="line">Info : FTDI SWD mode enabled</span><br><span class="line">swd</span><br><span class="line">adapter speed: 1000 kHz</span><br><span class="line">adapter_nsrst_delay: 100</span><br><span class="line">none separate</span><br><span class="line">cortex_m reset_config sysresetreq</span><br><span class="line">Info : clock speed 1000 kHz</span><br><span class="line">Info : SWD DPIDR 0x0bb11477</span><br><span class="line">Info : stm32f0x.cpu: hardware has 4 breakpoints, 2 watchpoints</span><br><span class="line">Polling target stm32f0x.cpu failed, trying to reexamine</span><br><span class="line"><span class="keyword">in</span> procedure <span class="string">&#x27;stm32f0x_default_examine_end&#x27;</span> </span><br><span class="line"><span class="keyword">in</span> procedure <span class="string">&#x27;mmw&#x27;</span> called at file <span class="string">&quot;target/stm32f0x.cfg&quot;</span>, line 65</span><br><span class="line"><span class="keyword">in</span> procedure <span class="string">&#x27;mrw&#x27;</span> called at file <span class="string">&quot;mem_helper.tcl&quot;</span>, line 25</span><br><span class="line">at file <span class="string">&quot;mem_helper.tcl&quot;</span>, line 6</span><br></pre></td></tr></table></figure>
+<p>然后使用 telnet 连接 locahsot:4444 端口 dump 固件。首先输入命令 <code>halt</code> 中断代码执行，然后使用<code>dump_image 导出固件的文件名 起始地址 导出的数据长度</code> 导出固件。固件的起始地址和大小，我们在上一步已经获取到了。使用命令<code>dump_image flash.bin 0x8000000 0x40000</code>提取固件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># telnet 127.0.0.1 4444</span></span><br><span class="line">&gt; halt</span><br><span class="line">target halted due to debug-request, current mode: Thread </span><br><span class="line">xPSR: 0x21000000 pc: 0x0801a8de msp: 0x20007990</span><br><span class="line">&gt; flash list </span><br><span class="line">&#123;name stm32f1x base 134217728 size 0 bus_width 0 chip_width 0&#125;</span><br><span class="line">&gt; dump_image flash.bin 0x8000000 0x40000</span><br><span class="line">dumped 262144 bytes <span class="keyword">in</span> 3.812859s (67.141 KiB/s)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>然而，并不是每一个 QFP 封装的 MCU 都能够免拆提取出固件 ，现在不少芯片开启了<code>代码读取保护（CRP/RDP）</code>。CRP 这一机制就是为了防止固件被提取而设计的。下图是 STM32L151 手册中关于代码读保护的介绍。</p>
+<p><img src="免拆芯片提取固件.assets/image-20200506170508280.png" alt="STM32L151 代码读保护介绍"></p>
+<p>另一方面，此方法可以应用在 IOT 安全测试中，用于验证 CRP 是否开启。</p>
+<p>另外，使用 <code>ECU 探针</code>读取固件方式与使用<code>芯片通用测试夹测试钩子</code>类似。唯一的差异是探针是搭在针脚上，而不是夹在针脚上。</p>
+<p>以上我是近两年对 IOT 设备硬件的一些粗浅认识，有什么不当之处，还请大佬们不吝赐教。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://www.sohu.com/a/162899707_609521">40种芯片封装类型介绍（含实图） </a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ntfreak/openocd">openocd</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/32509747/stm32-read-out-protection-via-openocd">STM32 Read-out protection via OpenOCD</a></li>
+</ul>
+<p>本文首发于<a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/227285">安全客</a></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.</span> <span class="toc-text">免拆芯片提取固件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">1.1.</span> <span class="toc-text">基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8A%AF%E7%89%87%E5%B0%81%E8%A3%85%E4%B8%8E%E9%92%88%E8%84%9A%E5%AE%9A%E4%B9%89"><span class="toc-number">1.1.1.</span> <span class="toc-text">芯片封装与针脚定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8A%AF%E7%89%87%E5%A4%B9"><span class="toc-number">1.1.2.</span> <span class="toc-text">芯片夹</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8E-Flash-%E4%B8%AD%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.2.</span> <span class="toc-text">从 Flash 中提取固件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8E-MCU-%E4%B8%AD%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">从 MCU 中提取固件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.4.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/&text=免拆芯片提取固件"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/&title=免拆芯片提取固件"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/&is_video=false&description=免拆芯片提取固件"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=免拆芯片提取固件&body=Check out this article: http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/&title=免拆芯片提取固件"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/&title=免拆芯片提取固件"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/&title=免拆芯片提取固件"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/&title=免拆芯片提取固件"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/&name=免拆芯片提取固件&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+

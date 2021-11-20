@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="大众集团汽车电子电气架构大众汽车模块化平台大众旗下有 MQB、MLB、MSB、MMB、MHB、MEB、NSF、PPE、SSP，其中 MHB 平台已被并 入 MQB 平台。各平台均可覆盖不同级别车型，其中 MQB 平台所覆盖车型最广，截止 2020 年该平台产量将达到集团总产量 80%以上。     平台简称 技术特点 代表车型     MQB 横置发动机平台 主要生产经济型家用车，高尔夫、斯柯达明">
+<meta property="og:type" content="article">
+<meta property="og:title" content="车联网安全基础知识之大众集团汽车电子电气架构">
+<meta property="og:url" content="http://delikey.github.io/2021/07/30/VW-Electronic/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="大众集团汽车电子电气架构大众汽车模块化平台大众旗下有 MQB、MLB、MSB、MMB、MHB、MEB、NSF、PPE、SSP，其中 MHB 平台已被并 入 MQB 平台。各平台均可覆盖不同级别车型，其中 MQB 平台所覆盖车型最广，截止 2020 年该平台产量将达到集团总产量 80%以上。     平台简称 技术特点 代表车型     MQB 横置发动机平台 主要生产经济型家用车，高尔夫、斯柯达明">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikey.github.io/2021/07/30/VW-Electronic/DB2012AL00080_overfull.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/07/30/VW-Electronic/image-20210718225027331.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/30/VW-Electronic/image-20210718225511611.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/30/VW-Electronic/image-20210718231923777.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/30/VW-Electronic/image-20210718225930156.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/30/VW-Electronic/image-20210718221258360.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/30/VW-Electronic/image-20210622141827674.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/30/VW-Electronic/%E7%BD%91%E7%BB%9C%E6%8B%93%E6%89%91.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/30/VW-Electronic/image-20210722002350039.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/30/VW-Electronic/image-20210621230700116.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/30/VW-Electronic/image-20210621231959485.png">
+<meta property="article:published_time" content="2021-07-30T14:46:29.000Z">
+<meta property="article:modified_time" content="2021-08-04T16:26:49.000Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="Automotive">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikey.github.io/2021/07/30/VW-Electronic/DB2012AL00080_overfull.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>车联网安全基础知识之大众集团汽车电子电气架构</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/07/31/PCB%E6%89%93%E6%9D%BF%E4%B9%8B%E6%97%85/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/07/25/Automotive-Modular-Platform/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
+      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
+      <span id="i-top" class="info" style="display:none;">Arriba</span>
+      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/07/30/VW-Electronic/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/07/30/VW-Electronic/&text=车联网安全基础知识之大众集团汽车电子电气架构"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/07/30/VW-Electronic/&title=车联网安全基础知识之大众集团汽车电子电气架构"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/07/30/VW-Electronic/&is_video=false&description=车联网安全基础知识之大众集团汽车电子电气架构"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=车联网安全基础知识之大众集团汽车电子电气架构&body=Check out this article: http://delikey.github.io/2021/07/30/VW-Electronic/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/07/30/VW-Electronic/&title=车联网安全基础知识之大众集团汽车电子电气架构"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/07/30/VW-Electronic/&title=车联网安全基础知识之大众集团汽车电子电气架构"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/07/30/VW-Electronic/&title=车联网安全基础知识之大众集团汽车电子电气架构"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/07/30/VW-Electronic/&title=车联网安全基础知识之大众集团汽车电子电气架构"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/07/30/VW-Electronic/&name=车联网安全基础知识之大众集团汽车电子电气架构&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E4%BC%97%E9%9B%86%E5%9B%A2%E6%B1%BD%E8%BD%A6%E7%94%B5%E5%AD%90%E7%94%B5%E6%B0%94%E6%9E%B6%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">大众集团汽车电子电气架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%A7%E4%BC%97%E6%B1%BD%E8%BD%A6%E6%A8%A1%E5%9D%97%E5%8C%96%E5%B9%B3%E5%8F%B0"><span class="toc-number">1.1.</span> <span class="toc-text">大众汽车模块化平台</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MQB"><span class="toc-number">1.2.</span> <span class="toc-text">MQB</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BD%A6%E5%86%85%E7%BD%91%E8%B7%AF%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.1.</span> <span class="toc-text">车内网路结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BB%93%E6%9E%84-%E9%83%A8%E5%88%86"><span class="toc-number">1.2.2.</span> <span class="toc-text">重要系统的结构(部分)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.2.3.</span> <span class="toc-text">启动控制系统</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BD%A6%E8%81%94%E7%BD%91%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">车联网系统</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9D%97%E5%8C%96%E9%9B%B6%E9%83%A8%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">模块化零部件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.5.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        车联网安全基础知识之大众集团汽车电子电气架构
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2021-07-30T14:46:29.000Z" itemprop="datePublished">2021-07-30</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Automotive/" rel="tag">Automotive</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="大众集团汽车电子电气架构"><a href="#大众集团汽车电子电气架构" class="headerlink" title="大众集团汽车电子电气架构"></a>大众集团汽车电子电气架构</h2><h3 id="大众汽车模块化平台"><a href="#大众汽车模块化平台" class="headerlink" title="大众汽车模块化平台"></a>大众汽车模块化平台</h3><p>大众旗下有 MQB、MLB、MSB、MMB、MHB、MEB、NSF、PPE、SSP，其中 MHB 平台已被并 入 MQB 平台。各平台均可覆盖不同级别车型，其中 MQB 平台所覆盖车型最广，截止 2020 年该平台产量将达到集团总产量 80%以上。 </p>
+<table>
+<thead>
+<tr>
+<th>平台简称</th>
+<th>技术特点</th>
+<th>代表车型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MQB</td>
+<td>横置发动机平台</td>
+<td>主要生产经济型家用车，高尔夫、斯柯达明锐、全新帕萨特、POLO、途观等</td>
+</tr>
+<tr>
+<td>MLB(MLBevo)</td>
+<td>纵置发动机平台</td>
+<td>奥迪 A4、A5、A6、A7、A8、Q5、Q8</td>
+</tr>
+<tr>
+<td>MSB</td>
+<td>前置发动机后驱平台</td>
+<td>保时捷 Panamera、宾利欧陆</td>
+</tr>
+<tr>
+<td>MEB</td>
+<td>电动汽车平台</td>
+<td>MEB 平台覆盖车型从 A 级到 D 级，涵盖轿车、SUV、MPV 等，如 ID6</td>
+</tr>
+<tr>
+<td>MMB</td>
+<td>中置发动机平台</td>
+<td>保时捷 911、保时捷 922、保时捷 550 等超跑车型</td>
+</tr>
+<tr>
+<td>MHB</td>
+<td>后置发动机小型车平台</td>
+<td>该平台目前已被并入 MQB 平台，曾生产奥迪 R4、奥迪 R8</td>
+</tr>
+<tr>
+<td>NSF</td>
+<td>小型车平台</td>
+<td>大众 UP、奥迪 A2、Microvan、 斯柯达 Citigo、西雅特 Mii 等车型</td>
+</tr>
+<tr>
+<td>PPE</td>
+<td>高端电动车平台</td>
+<td>奥迪、保时捷、宾利等豪华品牌使用，奥迪A6 e-tron概念车</td>
+</tr>
+<tr>
+<td>SSP</td>
+<td>可扩展纯电平台</td>
+<td>是 MQB、MSB、MLB、MEB 和 PPE 平台的延续</td>
+</tr>
+</tbody>
+</table>
+<h3 id="MQB"><a href="#MQB" class="headerlink" title="MQB"></a>MQB</h3><p>谈论汽车模块化平台绕不开的就是大众的 MQB 平台。MQB 是汽车模块化的开创者。</p>
+<p>MQB 是大众集团最新的横置发动机模块化平台(Modular Querbaukasten)，简称 MQB。它于 2012 年开始取代大众上一代 PQ25、PQ35 和 PQ46 平台，该模块化平台目前已在大众、奥迪、斯柯达和西雅特这 4 个品牌中得到极为广泛的应用，并生产从 A00、A0、A 到B 四个级别的车型。</p>
+<p>MQB 平台的组成部分是一个灵活的车辆架构。这个架构将车辆分为五个主要部分，核心部分在踏板和前轴车轮中心之间，这个核心部分的尺寸在所有车辆上都是相同的。其他尺寸根据设计理念不同进行设计，如轴距、轮距、车轮大小和座椅位置等都可以灵活变化。</p>
+<p><img src="DB2012AL00080_overfull.jpg" alt="img"></p>
+<h4 id="车内网路结构"><a href="#车内网路结构" class="headerlink" title="车内网路结构"></a>车内网路结构</h4><p>现在的汽车对于汽车总线带宽的要求越来越高，一条总线很多时候没办法满足整辆汽车的需求。于是汽车中采用了多种总线，包括 CAN、LIN、车载以太网等技术。相同的总线之下按照用途又做出了进一步划分。在 CAN 总线中对不同网络进行划分/隔离能够弥补 CAN 总线由于广播特性引发的安全问题，有效提升车内网络的安全性。不同网络的上的数据交互最终汇聚在网关(J533)上，网关对数据进行分析处理，转发到对应的网络中。网关是保障汽车内部网络通信的重要组件。</p>
+<p>大众燃油车中总线分为以太网、LIN、驱动 CAN、底盘 CAN、辅助驾驶 CAN FD、舒适 CAN、信息娱乐 CAN、诊断 CAN、以太网等。在新车型中驱动 CAN、底盘 CAN 采用速率为 2000kBit/s 的 CAN-FD，老车型中常使用 500kBit/s 的 CAN。</p>
+<p><img src="image-20210718225027331.png" alt="image-20210718225027331"></p>
+<p>不同的总线网络承担着不同的功能，各网络中连接的主要部件如下。</p>
+<ul>
+<li><p><strong>驱动（动力） CAN-FD：</strong>通信速率为 2000 kBit/s，动力 CAN 主要的部件是发动机和安全气囊。动力 CAN 汽车中最重要的网络之一。</p>
+</li>
+<li><p><strong>底盘 CAN-FD：</strong>通信速率为 2000 kBit/s，底盘 CAN 连接助力转向、减震器、制动器（ABS、ESC、集成 EPB）、泊车辅助系统（PLA/PDC）、电子助力器(EBKV)等。</p>
+</li>
+<li><p><strong>辅助驾驶 CAN-FD：</strong>通信速率为 2000 kBit/s，辅助驾驶 CAN 连接防撞预警系统(FCM)、 自适应前大灯系统(AFS)、雷达、摄像头、辅助换倒控制单元、后视等。</p>
+</li>
+<li><p><strong>舒适 CAN：</strong>通信速率为500 kBit/s，舒适 CAN 连接空调、车身控制器(BCM)、无钥匙进入(kessy)、抬头显示（HUD）、组合仪表、座椅记忆、行李箱盖、滑动天窗、车门控制单元、报废车辆指令(ELV)。</p>
+</li>
+<li><p><strong>信息娱乐 CAN：</strong>通信速率为500 kBit/s，信息娱乐 CAN 连接 OCU、显示屏、CNS3.0 信息娱乐系统、音箱系统等。</p>
+</li>
+<li><p><strong>诊断 CAN：</strong>通信速率为500 kBit/s，OBD II 上CAN总线接口连接到网关的部分属于诊断 CAN。</p>
+</li>
+<li><p><strong>以太网等：</strong>通信速率为100 MBit/s 或 1 GBit/s，以太网连接 OCU、HUD、CNS3.0 信息娱乐系统、音箱系统、组合仪表、后视等。</p>
+<p><img src="image-20210718225511611.png" alt="image-20210718225511611"></p>
+</li>
+</ul>
+<p>在电动汽车中除了上述燃油车中的网络结构外，还有电池 CAN 等。例如，MIB 平台下 ID.4(电动汽车)的车载网络使用情况如下。</p>
+<p><img src="image-20210718231923777.png" alt="image-20210718231923777"></p>
+<h4 id="重要系统的结构-部分"><a href="#重要系统的结构-部分" class="headerlink" title="重要系统的结构(部分)"></a>重要系统的结构(部分)</h4><p>上面是车内网络的概览，现在来看看具体的一些重要系统的结构。本文只会讲解各系统的组成结构，不会对控制单元进行详细讲解，后续会对重要的部件进行专题讲解。</p>
+<h4 id="启动控制系统"><a href="#启动控制系统" class="headerlink" title="启动控制系统"></a>启动控制系统</h4><p>驱动控制系统是车辆最为核心的部分。启动控制系统其中包括发动机控制单元(J623)、进入和可控制单元(J965)、启动装置按钮(E378)、中央电气单元(J519)、启动继电器(J906/J907)。</p>
+<p><img src="image-20210718225930156.png" alt="image-20210718225930156"></p>
+<h5 id="车联网系统"><a href="#车联网系统" class="headerlink" title="车联网系统"></a>车联网系统</h5><p>做车联网安全最关注当然还是车联网系统，车联网系统中主要包括的部件有显示及操作单元(J685)、信息娱乐控制单元(J794)又称车机/IVI等、OCU/TBOX(J949)以及麦克风、扬声器、天线等模块。</p>
+<p><img src="image-20210718221258360.png" alt="车联网系统设计概要图"></p>
+<h3 id="模块化零部件"><a href="#模块化零部件" class="headerlink" title="模块化零部件"></a>模块化零部件</h3><p>没有拆解过汽车，对车辆中各个部件的所处位置没有直观的感受。以下奥迪 Q8  控制器位置分布图。</p>
+<p><img src="image-20210622141827674.png" alt="Audi Q8 2019"></p>
+<p>上图包含了主要的控制器，如车机(J794)位于副驾驶员前侧；网关(J533)位于驾驶员座位下方；ABS(J104)位于车头右前方等 。对应的 MEB 网络拓扑结构（不含以太网）如下。</p>
+<p><img src="%E7%BD%91%E7%BB%9C%E6%8B%93%E6%89%91.png" alt="网络拓扑"></p>
+<p>上图与MQB架构中的网络结构大体相似，可以看出零部件在不同平台上实现了共享，既模块化零部件。下面展示车联网中几个重要的零部件。</p>
+<ul>
+<li>OCU/TBOX(J949 )</li>
+</ul>
+<p><img src="image-20210722002350039.png" alt="image-20210722002350039" style="zoom: 33%;" /></p>
+<ul>
+<li>车机(J794)</li>
+</ul>
+<p><img src="image-20210621230700116.png" alt="image-20210621230700116" style="zoom: 45%;" /></p>
+<ul>
+<li>网关(J533)</li>
+</ul>
+<p><img src="image-20210621231959485.png" alt="image-20210621231959485" style="zoom: 50%;" /></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>本文介绍了大众旗下的汽车模块化平台，对 MQB 平台的网络结构进行了梳理，此外初步介绍了模块化零部件。后续文章会较为详细的介绍车联网安全中重要模块的组成结构以及安全威胁等。</p>
+<p>文中的 <code>奥迪 Q8  控制器位置分布图</code>标注花了比较长的时间，通过控制器的位置可以对车辆有更直观的感受。攻防的点在哪里，面对实在在的东西才好分析研究。以后有机会拆车在来与大家分享具体的零部件分布以网络拓扑结构（先在这里立下一个FLAG）。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/-4plpuOoZvK8RhI6sJJlFw">大众ID.4电子电气架构剖析 </a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/ewA6CZT-DSGA1K6KLSbtcg">大众ID3架构深度分析：软件定义汽车还很遥远</a></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E4%BC%97%E9%9B%86%E5%9B%A2%E6%B1%BD%E8%BD%A6%E7%94%B5%E5%AD%90%E7%94%B5%E6%B0%94%E6%9E%B6%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">大众集团汽车电子电气架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%A7%E4%BC%97%E6%B1%BD%E8%BD%A6%E6%A8%A1%E5%9D%97%E5%8C%96%E5%B9%B3%E5%8F%B0"><span class="toc-number">1.1.</span> <span class="toc-text">大众汽车模块化平台</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MQB"><span class="toc-number">1.2.</span> <span class="toc-text">MQB</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BD%A6%E5%86%85%E7%BD%91%E8%B7%AF%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.1.</span> <span class="toc-text">车内网路结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BB%93%E6%9E%84-%E9%83%A8%E5%88%86"><span class="toc-number">1.2.2.</span> <span class="toc-text">重要系统的结构(部分)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.2.3.</span> <span class="toc-text">启动控制系统</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BD%A6%E8%81%94%E7%BD%91%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">车联网系统</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9D%97%E5%8C%96%E9%9B%B6%E9%83%A8%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">模块化零部件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.5.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/07/30/VW-Electronic/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/07/30/VW-Electronic/&text=车联网安全基础知识之大众集团汽车电子电气架构"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/07/30/VW-Electronic/&title=车联网安全基础知识之大众集团汽车电子电气架构"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/07/30/VW-Electronic/&is_video=false&description=车联网安全基础知识之大众集团汽车电子电气架构"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=车联网安全基础知识之大众集团汽车电子电气架构&body=Check out this article: http://delikey.github.io/2021/07/30/VW-Electronic/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/07/30/VW-Electronic/&title=车联网安全基础知识之大众集团汽车电子电气架构"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/07/30/VW-Electronic/&title=车联网安全基础知识之大众集团汽车电子电气架构"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/07/30/VW-Electronic/&title=车联网安全基础知识之大众集团汽车电子电气架构"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/07/30/VW-Electronic/&title=车联网安全基础知识之大众集团汽车电子电气架构"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/07/30/VW-Electronic/&name=车联网安全基础知识之大众集团汽车电子电气架构&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+

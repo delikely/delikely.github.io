@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="智能电视漏洞挖掘初探之 Getshell上周发了一篇智能电视历史漏洞的文章，这周来分享一下智能电视的攻击点以及怎么上手。智能电视不仅仅是用来看电视的，也可以是智能家居的枢纽。电视不是单独的存在，还能与手机、智能家居进行互动。正是由于应用场景的不断拓展，安全问题也逐渐显露。想象一下“ 你在看电视，电视却在看你 ”的诡异画面。曾有新闻报道，自己家电视的播放不受控制，莫名其妙的播放了一些奇奇怪怪的东西。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="智能电视漏洞挖掘初探之Getshell">
+<meta property="og:url" content="http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="智能电视漏洞挖掘初探之 Getshell上周发了一篇智能电视历史漏洞的文章，这周来分享一下智能电视的攻击点以及怎么上手。智能电视不仅仅是用来看电视的，也可以是智能家居的枢纽。电视不是单独的存在，还能与手机、智能家居进行互动。正是由于应用场景的不断拓展，安全问题也逐渐显露。想象一下“ 你在看电视，电视却在看你 ”的诡异画面。曾有新闻报道，自己家电视的播放不受控制，莫名其妙的播放了一些奇奇怪怪的东西。">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/image-20210409124747333.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/image-20210414153309098.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/image-20210430124157225.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/image-20210409143412979.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/image-20201111222737066.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/image-20201111221944259.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/image-20201124002645752.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/image-20210409152824481.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/image-20201112005628259.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/1.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/image-20210409163034559.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/image-20210409162807115.png">
+<meta property="article:published_time" content="2021-04-16T04:21:54.000Z">
+<meta property="article:modified_time" content="2021-06-26T14:00:28.000Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="IOT">
+<meta property="article:tag" content="TV">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/image-20210409124747333.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>智能电视漏洞挖掘初探之Getshell</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/04/10/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%B1%87%E6%80%BB/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
+      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
+      <span id="i-top" class="info" style="display:none;">Arriba</span>
+      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/&text=智能电视漏洞挖掘初探之Getshell"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/&title=智能电视漏洞挖掘初探之Getshell"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/&is_video=false&description=智能电视漏洞挖掘初探之Getshell"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=智能电视漏洞挖掘初探之Getshell&body=Check out this article: http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/&title=智能电视漏洞挖掘初探之Getshell"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/&title=智能电视漏洞挖掘初探之Getshell"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/&title=智能电视漏洞挖掘初探之Getshell"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/&title=智能电视漏洞挖掘初探之Getshell"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/&name=智能电视漏洞挖掘初探之Getshell&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell"><span class="toc-number">1.</span> <span class="toc-text">智能电视漏洞挖掘初探之 Getshell</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">1.1.</span> <span class="toc-text">信息收集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%86%E7%AE%B1"><span class="toc-number">1.2.</span> <span class="toc-text">拆箱</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B%E7%83%AD%E7%82%B9"><span class="toc-number">1.3.</span> <span class="toc-text">建立热点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%86%E8%A7%A3%E4%B8%9A%E5%8A%A1"><span class="toc-number">1.4.</span> <span class="toc-text">了解业务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A8%81%E8%83%81%E5%BB%BA%E6%A8%A1"><span class="toc-number">1.5.</span> <span class="toc-text">威胁建模</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8E%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%88%B0%E6%8F%90%E6%9D%83"><span class="toc-number">1.6.</span> <span class="toc-text">从端口扫描到提权</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E5%AF%B9%E5%A4%96%E5%BC%80%E6%94%BE%E7%9A%84%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.6.1.</span> <span class="toc-text">分析对外开放的服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B0%83%E8%AF%95%E5%85%A5%E5%8F%A3"><span class="toc-number">1.6.2.</span> <span class="toc-text">调试入口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8F%90%E6%9D%83"><span class="toc-number">1.6.3.</span> <span class="toc-text">提权</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B2%A1%E6%9C%89ADB%E4%BD%86%E5%8F%AF%E4%BB%A5%E5%AE%89%E8%A3%85%E4%BB%BB%E6%84%8F%E5%BA%94%E7%94%A8"><span class="toc-number">1.6.4.</span> <span class="toc-text">没有ADB但可以安装任意应用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A2%E6%B2%A1%E6%9C%89ADB%E4%B9%9F%E4%B8%8D%E8%83%BD%E5%AE%89%E8%A3%85%E4%BB%BB%E6%84%8F%E5%BA%94%E7%94%A8"><span class="toc-number">1.6.5.</span> <span class="toc-text">既没有ADB也不能安装任意应用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.7.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.8.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        智能电视漏洞挖掘初探之Getshell
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2021-04-16T04:21:54.000Z" itemprop="datePublished">2021-04-16</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/IOT/" rel="tag">IOT</a>, <a class="tag-link-link" href="/tags/TV/" rel="tag">TV</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="智能电视漏洞挖掘初探之-Getshell"><a href="#智能电视漏洞挖掘初探之-Getshell" class="headerlink" title="智能电视漏洞挖掘初探之 Getshell"></a>智能电视漏洞挖掘初探之 Getshell</h2><p>上周发了一篇智能电视历史漏洞的文章，这周来分享一下智能电视的攻击点以及怎么上手。智能电视不仅仅是用来看电视的，也可以是智能家居的枢纽。电视不是单独的存在，还能与手机、智能家居进行互动。正是由于应用场景的不断拓展，安全问题也逐渐显露。想象一下“ 你在看电视，电视却在看你 ”的诡异画面。曾有新闻报道，自己家电视的播放不受控制，莫名其妙的播放了一些奇奇怪怪的东西。这是怎么一回事儿呢，我们首先来了解一下电视。</p>
+<p>一般人很少全面的了解智能电视，一般就用刷刷剧，其中有不少人甚至不会用 DLNA 投屏服务。下面来看看，在挖掘智能电视漏洞之前需要了解的基础信息。</p>
+<p>很多人天天使用电视，却不知道电视使用什么系统。知道采用什么系统，心里就有最基本的方向了。智能电视使用的操作系统有 Android、WebOS、Tizen、TV OS(IOS)等。</p>
+<ul>
+<li><p><strong>Android</strong>：国内主流使用的电视操作系统，应用生态丰富，各大电视厂家进行了深度定制。</p>
+</li>
+<li><p><strong>WebOS</strong>: LG 电视使用 WebOS 操作系统，WebOS 以 Linux 内核为主体并加上专有转件的操作系统，几经转手现在归 LG 旗下。</p>
+</li>
+<li><strong>Tizen</strong>: 三星电视使用 Tizen 操作系统，同样基于Linux。Tizen 系统是英特尔 MeeGo 系统与三星 LiMo 系统整合而来的。</li>
+<li><strong>TV OS(IOS)</strong>: APPLE TV 使用的操作系统，由 IOS 分化而来，国内极少见。</li>
+</ul>
+<p>话说，还有华为鸿蒙，暂时还没有碰过，这里就不讨论了，哪位大大，能赞助一台华为智慧屏，咱们就来仔细聊聊。于国内而言，几乎一色的深度定制 Android 系统。下面我们就来看看采用 Android 系统的电视的漏洞挖掘。</p>
+<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>漏洞挖掘的第一步都是信息收集，需要对设备进行摸底，收集各类信息，设备架构、操作系统、外设、各类服务、供应链等。其中有不少的重要消息可以从互联网上找到。</p>
+<p>同一家的智能电视往往有很多共通之处，互联网上可以找到很多东西，如 “如何安装第三方应用”、“工程模式”、“怎么开启 ADB调试”、“如何进入Recovery模式” 等。 </p>
+<ul>
+<li><p><strong>第三方应用安装</strong>：电视内置的应用商店提供的应用都不太多，如果有个性化的需求，需要安装第三方的应用。怎么安装第三方应用呢。当下你肯定不是第一个有需求的人，上网搜一搜，很多电视的第三方应用安装方法就出来了。其中<a target="_blank" rel="noopener" href="http://www.tvhuan.com/jc">欢视网</a>就提供了主流品牌电视的第三方应用安装方法，新兴的小众品牌可以到论坛去找。</p>
+<p><img src="image-20210409124747333.png" alt="image-20210409124747333"></p>
+<p><a target="_blank" rel="noopener" href="https://www.znds.com/jc/">当贝市场</a> 也提供第三方应用安装方法。</p>
+<p><img src="image-20210414153309098.png" alt="image-20210414153309098"></p>
+<p><a target="_blank" rel="noopener" href="http://www.shafa.com/methods">沙发管家</a> 也提供第三方应用安装方法。</p>
+<p>通用的方法是，将第三方应用下载到 U 盘，插入到电视上进行安装。直接安装可能无法安装，有的需要开启文件管理器 APK 显示，有的要开启允许未知应用安装。</p>
+<p>欢视网、当贝市场等只涉及国内，没有国外电视工程模式进入的方法。国外电视可以在 <a target="_blank" rel="noopener" href="https://factory-reset.com/wiki/Category:Service_Menu">Category:Service Menu - Factory-Reset.com</a> 以及 <a target="_blank" rel="noopener" href="https://hardmasterreset.com/">Hard Master Reset</a> 上查询。上面不但有进入工程模式的方法，还有进入 Recovery 和本地刷机的方法。</p>
+<p><img src="image-20210430124157225.png" alt="image-20210430124157225"></p>
+</li>
+<li><p><strong>工程模式</strong>：与 Android 手机一样，电视也是有工程模式的。通过特殊的组合按键可以进去隐藏的工程模式。这里可以查看设备基本信息、设置系统参数等。以下是网络上收集的一些电视工程模式的进入方法。</p>
+<ul>
+<li><p><strong>长虹电视</strong></p>
+<ul>
+<li>新款带语音的遥控器：按【菜单键】后，当焦点移至 “情景模式” 下的 “标准模式” 菜单上时，按【上、右、右】组合键，弹出数字软键盘，当输入【0 8 1 6】进入工厂菜单。</li>
+<li>带数字按键的遥控：按电视遥控器的【节目源键】，把信号调节到 HDMI，按遥控器 【菜单键】 然后左侧出来菜单栏后，依次按数字键【 0 8 1 6】，然后，就进入工厂模式 了。</li>
+</ul>
+</li>
+<li><p><strong>TCL电视</strong>：将【音量】减到0，调出“主菜单”, 光标移至”对比度”并点击【确定键】；在 2 秒内迅速按数字键【9 7 3 5】可进入工厂模式。</p>
+</li>
+<li><p><strong>小米电视</strong>：在系统菜单中进入“设置”-&gt; “关于” -&gt; “联系客服”；在 “联系客服” 界面继续按住遥控器的 【下方向键】，即可看到 工厂模式 的入口。</p>
+</li>
+<li><p><strong>海信电视</strong>：按下遥控器的【菜单键】，在菜单键中选择“声音设置”，再之后选择平衡选项，输入0532，完成之后，即可进入到海信电视的工程模式。</p>
+</li>
+<li><p><strong>创维酷开电视</strong>：打开系统设置页面，进入到本机“详细信息”；遥控器依次按下【上上下下左右左右】方向键，就可以进入工程模式了。</p>
+</li>
+<li><p><strong>索尼电视</strong>：开机播放有线电视节目，按遥控器上【电源/待机键】，进入待机，然后依此按下 遥控器上的【屏显】、【5】、【音量+】、【电源/待机】，后进入工程模式。</p>
+</li>
+<li><p><strong>乐视电视</strong>：首先“开机” -&gt; “主页” -&gt; 按遥控器上数字键 【2580】，即可进入工程模式。</p>
+</li>
+<li><p><strong>三星电视</strong>：将电视进入待机状态，依次按下遥控器上的【显示键】、【项目键】、【静音键】、【电源键】，即进入工程模式，关闭电源就可以退出工程模式。</p>
+</li>
+<li><strong>康佳电视</strong>：按一下菜单按钮，画面弹出普通功能设置菜单。这时连续点按5次“回看”按钮，即可打开康佳电视工厂模式菜单。</li>
+</ul>
+</li>
+<li><p><strong>ADB</strong> : 一般在 “工程模式” 或 “开发者模式” 中开启 ADB 调试功能，甚至有点的智能电视直接默认开启了 ADB。</p>
+</li>
+<li><p><strong>Recovery 模式</strong>：Android 电视也有 Recovery 刷机模式，下面是一些电视的 Recovery 模式的进入方法。</p>
+<ul>
+<li><strong>创维</strong>：断电再重新通电的同时连续点按遥控的上键（I71和I71C、A818/A818C是点按遥控的左键），即可进入Recovery模式。</li>
+<li><strong>华为盒子</strong>: 先将盒子关机，然后开机，在开机时开始一直按遥控器的【菜单键】和【音量-】（不停点按两个键，不是长按），就会进入Recovery 模式。</li>
+<li><strong>小米</strong>：开机中，同时按住遥控器上的【主页键】和【菜单键】，机器进入Recovery 模式。</li>
+<li><strong>其他</strong>：有的还有像手机一样，开机按【电源键】和【音量-】进入 Recovery 模式，另外值得注意的是有些电视可以在 “工程模式” 中选择进入Recovery 模式。</li>
+</ul>
+</li>
+<li><p><strong>其他信息</strong>：如固件包等。</p>
+</li>
+</ul>
+<h3 id="拆箱"><a href="#拆箱" class="headerlink" title="拆箱"></a>拆箱</h3><p>收到电视，当然是最爱的拆箱环节，自己动手组装电视。组装之前，最好看一遍 “用户手册” ，看一看电视有哪些接口，遥控器的使用说明以及其他信息。</p>
+<p>接口，电视上一般有音频输入输出接口、网口、HDMI、USB、天线等。当然也可以直接看电视上的接口。</p>
+<p>遥控器，一个遥控器有什么好看的，谁还不会用啊？现在电商厂商玩的越来越花了，遥控器上除了红外，有的还有蓝牙和 NFC。看一下用户手册，了解是否有什么不常见的新功能以及如何使用。</p>
+<h3 id="建立热点"><a href="#建立热点" class="headerlink" title="建立热点"></a>建立热点</h3><p>开机之后先不要忙着连接 Wi-Fi ，建立一个热点，抓取初次连接的数据包。运气好的话，可以抓到明文传输的升级包以及设备激活信息。以下是某电视升级包的下载请求。</p>
+<p><img src="image-20210409143412979.png" alt="image-20210409143412979"></p>
+<h3 id="了解业务"><a href="#了解业务" class="headerlink" title="了解业务"></a>了解业务</h3><p>查看系统中有哪些内置应用，重点关注电视厂商自己的应用。如系统设置、投屏服务、智能家居联动服务等。</p>
+<h3 id="威胁建模"><a href="#威胁建模" class="headerlink" title="威胁建模"></a>威胁建模</h3><p>对智能电视有整体的了解后，就到了威胁建模的阶段。</p>
+<ul>
+<li><p>硬件安全</p>
+<p>拆机调试接口（串口）是否封闭，是否存在授权等。</p>
+<p>Flash 是否容被提权。</p>
+</li>
+<li><p>ADB 调试</p>
+<p>电视都有 ADB 调试，如何开启 ADB。</p>
+</li>
+<li><p>通信安全</p>
+<p>重要数据是否明文传输。特别是OTA，能否从 OTA 获取升级包地址，升级包能够被替换。此外有的遥控器也是有OTA的，这是容易被忽略的。</p>
+<p>蓝牙可能存在 nday。</p>
+</li>
+<li><p>电视与其他终端的交互安全</p>
+<p>电视与手机、IOT等设备之间的交互，这一类一般采用私有协议。其中存在隐私泄露、拒绝服务、服务被滥用等威胁。</p>
+</li>
+<li><p>系统以应用安全</p>
+<p>越权、命令执行、缓冲区溢出、敏感信息泄露等。</p>
+</li>
+</ul>
+<h3 id="从端口扫描到提权"><a href="#从端口扫描到提权" class="headerlink" title="从端口扫描到提权"></a>从端口扫描到提权</h3><p>利用端口扫描发现对外开放的服务，并利用之前收集的信息获取 ADB 权限，开始智能电视漏洞挖掘之旅。</p>
+<h4 id="分析对外开放的服务"><a href="#分析对外开放的服务" class="headerlink" title="分析对外开放的服务"></a>分析对外开放的服务</h4><p>智能电视是一个大屏手机，与手机不同的，电视会开放一些端口用于和其他设备交互，手机默认是不会开放端口的。通过端口扫描查看电视对外开放的端口，分析电视对外开放的开放服务。</p>
+<p>比如 TCL 某型号电视就默认就开启了 ADB。<code>adb connect ip:5555</code> 就能拿到交互式 shell，这对后续的分析很有帮助。 </p>
+<p><img src="image-20201111222737066.png" alt="image-20201111222737066"></p>
+<p>此外，还有 7983 端口，直接访问这不明显是<code>目录遍历</code>么。</p>
+<p><img src="image-20201111221944259.png" alt="image-20201111221944259"></p>
+<h4 id="调试入口"><a href="#调试入口" class="headerlink" title="调试入口"></a>调试入口</h4><p>对外开放的端口看完了，此时可能已经发现了一些问题，目录遍历、ADB等。但有些端口，直接是看不出来用途的，这时候需要进入系统去看端口对应的服务。</p>
+<p>如果运气好的话，开放了 ADB 可以直接连。如果没有就可以尝试上面提到的进入工程模式的方法，去找 ADB 开启选项是否在里面。</p>
+<p>例如，创维的某款电视，在<code>设置</code>进入<code>本机信息</code>后，在此界面按 <code>上上下下左右左右</code>进入工程模式。在进入工程模式之后，选择<code>通用设置</code>，进入后可以打开 ADB 调试。</p>
+<p><img src="image-20201124002645752.png" alt="image-20201124002645752"></p>
+<h4 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h4><p>有了 ADB 之后，去看监听端口的服务时，发现程序名为 <code>-</code>。其实这是权限的问题，普通用户查看，此时我们需要提权。</p>
+<p><img src="image-20210409152824481.png" alt="image-20210409152824481"></p>
+<p>Android 提权，分析系统中的应用，利用应用缺陷来提权。这一步至关重要，要 hook 应用等都需要 Root 权限。提权还是很费时间的，但是有的电视自带提权应用。TCL 就是其一，使用 <code>tclsu</code>就能从 shell 用户切换到 root 用户。</p>
+<p><img src="image-20201112005628259.png" alt="image-20201112005628259"></p>
+<p>另外，如果 Android 版本比较低的话可以用 Root 工具提权。</p>
+<p>到这里，就拿到了系统的 Root 权限，随后就可以深入的挖掘电视的漏洞了。</p>
+<h4 id="没有ADB但可以安装任意应用"><a href="#没有ADB但可以安装任意应用" class="headerlink" title="没有ADB但可以安装任意应用"></a>没有ADB但可以安装任意应用</h4><p>一切不可能这么顺利，有的电视 ADB 调试开关藏得就是很深，就是找不到，但是可以安装任意 APK 。这种情况下，可以安装神器 Termux，这不就有了一个 shell。后续可以把 /system 目录下的文件拖下来分析嘛。</p>
+<p><img src="1.png" alt="1"></p>
+<h4 id="既没有ADB也不能安装任意应用"><a href="#既没有ADB也不能安装任意应用" class="headerlink" title="既没有ADB也不能安装任意应用"></a>既没有ADB也不能安装任意应用</h4><p>不少也是预留有电视串口的，只是有的默认开启，有的需要在工程模式中打开。</p>
+<p><img src="image-20210409163034559.png" alt="image-20210409163034559" style="zoom:40%;" /></p>
+<p>串口进入一般是没有认证。</p>
+<p><img src="image-20210409162807115.png" alt="image-20210409162807115"></p>
+<p>再者，这些都不行。那就要一步一步的突破，想办法开启 ADB 调试或安装第三方应用，针对实际情况采取不同手段了。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>本文是智能电视漏挖掘的入门文章，从信息收集到 Getshell，但这只是漏洞挖掘的起点，更多的需要对APK、Native程序、乃至对 Android 系统底层的深入研究。</p>
+<p>后面有机会的话和大家分享漏洞挖掘的一些细节，敬请关注。点赞超过 20 ，更新”下一集”。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a target="_blank" rel="noopener" href="http://www.tvhuan.com/jc">欢视助手 安装教程</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.360doc.com/content/20/0104/14/33054362_884098583.shtml">常见电视或盒子进入Recovery模式的方法汇总</a></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell"><span class="toc-number">1.</span> <span class="toc-text">智能电视漏洞挖掘初探之 Getshell</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">1.1.</span> <span class="toc-text">信息收集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%86%E7%AE%B1"><span class="toc-number">1.2.</span> <span class="toc-text">拆箱</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B%E7%83%AD%E7%82%B9"><span class="toc-number">1.3.</span> <span class="toc-text">建立热点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%86%E8%A7%A3%E4%B8%9A%E5%8A%A1"><span class="toc-number">1.4.</span> <span class="toc-text">了解业务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A8%81%E8%83%81%E5%BB%BA%E6%A8%A1"><span class="toc-number">1.5.</span> <span class="toc-text">威胁建模</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8E%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%88%B0%E6%8F%90%E6%9D%83"><span class="toc-number">1.6.</span> <span class="toc-text">从端口扫描到提权</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E5%AF%B9%E5%A4%96%E5%BC%80%E6%94%BE%E7%9A%84%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.6.1.</span> <span class="toc-text">分析对外开放的服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B0%83%E8%AF%95%E5%85%A5%E5%8F%A3"><span class="toc-number">1.6.2.</span> <span class="toc-text">调试入口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8F%90%E6%9D%83"><span class="toc-number">1.6.3.</span> <span class="toc-text">提权</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B2%A1%E6%9C%89ADB%E4%BD%86%E5%8F%AF%E4%BB%A5%E5%AE%89%E8%A3%85%E4%BB%BB%E6%84%8F%E5%BA%94%E7%94%A8"><span class="toc-number">1.6.4.</span> <span class="toc-text">没有ADB但可以安装任意应用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A2%E6%B2%A1%E6%9C%89ADB%E4%B9%9F%E4%B8%8D%E8%83%BD%E5%AE%89%E8%A3%85%E4%BB%BB%E6%84%8F%E5%BA%94%E7%94%A8"><span class="toc-number">1.6.5.</span> <span class="toc-text">既没有ADB也不能安装任意应用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.7.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.8.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/&text=智能电视漏洞挖掘初探之Getshell"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/&title=智能电视漏洞挖掘初探之Getshell"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/&is_video=false&description=智能电视漏洞挖掘初探之Getshell"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=智能电视漏洞挖掘初探之Getshell&body=Check out this article: http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/&title=智能电视漏洞挖掘初探之Getshell"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/&title=智能电视漏洞挖掘初探之Getshell"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/&title=智能电视漏洞挖掘初探之Getshell"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/&title=智能电视漏洞挖掘初探之Getshell"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/04/16/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B-Getshell/&name=智能电视漏洞挖掘初探之Getshell&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+

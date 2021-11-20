@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="固件解密 加密固件之依据老固件进行解密 Linksys EA6100 固件解密分析 Unpacking HP Firmware Updates Breaking the D-Link DIR3060 Firmware Encryption - Recon - Part 1 Breaking the D-Link DIR3060 Firmware Encryption - Static analys">
+<meta property="og:type" content="article">
+<meta property="og:title" content="固件分析">
+<meta property="og:url" content="http://delikey.github.io/2099/01/01/firmware/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="固件解密 加密固件之依据老固件进行解密 Linksys EA6100 固件解密分析 Unpacking HP Firmware Updates Breaking the D-Link DIR3060 Firmware Encryption - Recon - Part 1 Breaking the D-Link DIR3060 Firmware Encryption - Static analys">
+<meta property="og:locale">
+<meta property="article:published_time" content="2099-01-01T11:30:00.000Z">
+<meta property="article:modified_time" content="2021-10-30T15:00:36.818Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="IOT">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>固件分析</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2099/01/01/automotive-security/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2099/01/01/IOT-Vulns/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
+      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
+      <span id="i-top" class="info" style="display:none;">Arriba</span>
+      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2099/01/01/firmware/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2099/01/01/firmware/&text=固件分析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2099/01/01/firmware/&title=固件分析"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2099/01/01/firmware/&is_video=false&description=固件分析"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=固件分析&body=Check out this article: http://delikey.github.io/2099/01/01/firmware/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2099/01/01/firmware/&title=固件分析"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2099/01/01/firmware/&title=固件分析"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2099/01/01/firmware/&title=固件分析"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2099/01/01/firmware/&title=固件分析"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2099/01/01/firmware/&name=固件分析&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6%E8%A7%A3%E5%AF%86"><span class="toc-number">1.</span> <span class="toc-text">固件解密</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%90%AF%E5%8A%A8"><span class="toc-number">2.</span> <span class="toc-text">安全启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bypass"><span class="toc-number">3.</span> <span class="toc-text">Bypass</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TEE"><span class="toc-number">4.</span> <span class="toc-text">TEE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6%E5%88%86%E6%9E%90"><span class="toc-number">5.</span> <span class="toc-text">固件分析</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        固件分析
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2099-01-01T11:30:00.000Z" itemprop="datePublished">2099-01-01</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/IOT/" rel="tag">IOT</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="固件解密"><a href="#固件解密" class="headerlink" title="固件解密"></a>固件解密</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://paper.seebug.org/1651/">加密固件之依据老固件进行解密</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/246659">Linksys EA6100 固件解密分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jsof-tech.com/unpacking-hp-firmware-updates-part-1/">Unpacking HP Firmware Updates</a></li>
+<li><a target="_blank" rel="noopener" href="https://0x00sec.org/t/breaking-the-d-link-dir3060-firmware-encryption-recon-part-1/21943">Breaking the D-Link DIR3060 Firmware Encryption - Recon - Part 1</a></li>
+<li><a target="_blank" rel="noopener" href="https://0x00sec.org/t/breaking-the-d-link-dir3060-firmware-encryption-static-analysis-of-the-decryption-routine-part-2-1/22099">Breaking the D-Link DIR3060 Firmware Encryption - Static analysis of the decryption routine - Part 2.1</a></li>
+</ul>
+<h2 id="安全启动"><a href="#安全启动" class="headerlink" title="安全启动"></a>安全启动</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://raelize.com/posts/espressif-esp32-bypassing-encrypted-secure-boot-cve-2020-13629/">Espressif ESP32: Bypassing Encrypted Secure Boot (CVE-2020-13629)</a></li>
+<li><a target="_blank" rel="noopener" href="https://limitedresults.com/2019/11/pwn-the-esp32-forever-flash-encryption-and-sec-boot-keys-extraction/">Pwn the ESP32 Forever: Flash Encryption and Sec. Boot Keys Extraction(CVE-2019-17391)</a></li>
+<li><a target="_blank" rel="noopener" href="https://limitedresults.com/2019/09/pwn-the-esp32-secure-boot/">Pwn the ESP32 Secure Boot</a></li>
+<li><a target="_blank" rel="noopener" href="https://limitedresults.com/2019/08/pwn-the-esp32-crypto-core/">Pwn the ESP32 crypto-core</a></li>
+<li><a target="_blank" rel="noopener" href="https://limitedresults.com/2020/01/nuvoton-m2351-mkrom-armv8-m-trustzone/">Nuvoton M2351 MKROM</a></li>
+<li><a target="_blank" rel="noopener" href="https://eclypsium.com/2020/07/29/theres-a-hole-in-the-boot/">CVE-2020-10713 BootHole: THERE’S A HOLE IN THE BOOT</a></li>
+</ul>
+<h2 id="Bypass"><a href="#Bypass" class="headerlink" title="Bypass"></a>Bypass</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://analogman.info/index.php/2019/01/20/bypass-secure-usb-debugging-prompt-on-phone-with-broken-screen/">Bypass secure USB debugging prompt on phone with broken screen</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.riverloopsecurity.com/blog/2020/10/hw-101-glitching/">Hardware Hacking 101: Glitching into Privileged Shells</a></li>
+</ul>
+<h2 id="TEE"><a href="#TEE" class="headerlink" title="TEE"></a>TEE</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://limitedresults.com/2020/01/nuvoton-m2351-mkrom-armv8-m-trustzone/">Nuvoton M2351 MKROM</a></li>
+<li><a target="_blank" rel="noopener" href="https://toothless.co/blog/bootloader-bypass-part1/">NXP LPC1343 Bootloader Bypass (Part 1) - Communicating with the bootloader</a></li>
+<li><a target="_blank" rel="noopener" href="https://toothless.co/blog/bootloader-bypass-part2/">NXP LPC1343 Bootloader Bypass (Part 2) - Dumping firmware with Python and building the logic for the glitcher</a></li>
+<li><a target="_blank" rel="noopener" href="https://toothless.co/blog/bootloader-bypass-part3/">NXP LPC1343 Bootloader Bypass (Part 3) - Putting it all together</a></li>
+<li><a target="_blank" rel="noopener" href="https://raelize.com/blog/qualcomm-ipq40xx-analysis-of-critical-qsee-vulnerabilities/">Qualcomm IPQ40xx: Analysis of Critical QSEE Vulnerabilities</a></li>
+</ul>
+<h2 id="固件分析"><a href="#固件分析" class="headerlink" title="固件分析"></a>固件分析</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.riverloopsecurity.com/blog/2021/07/nand-dump-repair/">Repairing a Broken Huawei NAND Dump and Single-Bit Errors</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/233361">Zyxel设备eCos固件加载地址分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-267719.htm">固件安全之加载地址分析</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.righto.com/2020/09/reverse-engineering-first-fpga-chip.html">Reverse-engineering the first FPGA chip, the XC2064</a></li>
+<li><a target="_blank" rel="noopener" href="https://boredpentester.com/reversing-esp8266-firmware-part-1/">Reversing ESP8266 Firmware</a></li>
+<li><a target="_blank" rel="noopener" href="https://scriptingxss.gitbook.io/firmware-security-testing-methodology/v/zhong-wen-fstm/">OWASP固件安全性测试指南</a></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6%E8%A7%A3%E5%AF%86"><span class="toc-number">1.</span> <span class="toc-text">固件解密</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%90%AF%E5%8A%A8"><span class="toc-number">2.</span> <span class="toc-text">安全启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bypass"><span class="toc-number">3.</span> <span class="toc-text">Bypass</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TEE"><span class="toc-number">4.</span> <span class="toc-text">TEE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6%E5%88%86%E6%9E%90"><span class="toc-number">5.</span> <span class="toc-text">固件分析</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2099/01/01/firmware/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2099/01/01/firmware/&text=固件分析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2099/01/01/firmware/&title=固件分析"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2099/01/01/firmware/&is_video=false&description=固件分析"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=固件分析&body=Check out this article: http://delikey.github.io/2099/01/01/firmware/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2099/01/01/firmware/&title=固件分析"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2099/01/01/firmware/&title=固件分析"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2099/01/01/firmware/&title=固件分析"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2099/01/01/firmware/&title=固件分析"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2099/01/01/firmware/&name=固件分析&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+

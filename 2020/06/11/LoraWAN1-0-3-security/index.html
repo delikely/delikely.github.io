@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="LWPANLPWAN（low-power Wide-Area Network，低功耗广域网）专为低带宽、低功耗、远距离、大量连接的物联网应用而设计。主流的技术有 NB-IoT、LoRa、eMTC、SigFox、RPMA、Weightless等。 NB-IOT 与  LoRa 对比LPWAN 中 NB-IOT 与 LoRa 使用应用较为广泛。  NB-IOT 与 LoRa 对比1      NB-I">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LoraWAN 1.0.3 安全综述">
+<meta property="og:url" content="http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="LWPANLPWAN（low-power Wide-Area Network，低功耗广域网）专为低带宽、低功耗、远距离、大量连接的物联网应用而设计。主流的技术有 NB-IoT、LoRa、eMTC、SigFox、RPMA、Weightless等。 NB-IOT 与  LoRa 对比LPWAN 中 NB-IOT 与 LoRa 使用应用较为广泛。  NB-IOT 与 LoRa 对比1      NB-I">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/compare.jpg">
+<meta property="og:image" content="http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/image-20200206121856850.png">
+<meta property="og:image" content="http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/image-20200206122207783.png">
+<meta property="og:image" content="http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/image-20200206163258251.png">
+<meta property="og:image" content="http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/image-20200206165323731.png">
+<meta property="og:image" content="http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/image-20200206181809995.png">
+<meta property="og:image" content="http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/image-20200207101925911.png">
+<meta property="og:image" content="http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/image-20200207111442783.png">
+<meta property="og:image" content="http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/image-20200207115019104.png">
+<meta property="og:image" content="http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/image-20200207163234651.png">
+<meta property="og:image" content="http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/image-20200207163922450.png">
+<meta property="article:published_time" content="2020-06-11T15:03:51.000Z">
+<meta property="article:modified_time" content="2021-06-26T13:50:06.000Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="IOT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/compare.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>LoraWAN 1.0.3 安全综述</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/01/11/%E5%85%8D%E6%8B%86%E8%8A%AF%E7%89%87%E6%8F%90%E5%8F%96%E5%9B%BA%E4%BB%B6/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/02/11/OpenWrt-LuCi-%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%9B%E5%BB%BA%E6%BC%8F%E6%B4%9E/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
+      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
+      <span id="i-top" class="info" style="display:none;">Arriba</span>
+      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/&text=LoraWAN 1.0.3 安全综述"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/&title=LoraWAN 1.0.3 安全综述"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/&is_video=false&description=LoraWAN 1.0.3 安全综述"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=LoraWAN 1.0.3 安全综述&body=Check out this article: http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/&title=LoraWAN 1.0.3 安全综述"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/&title=LoraWAN 1.0.3 安全综述"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/&title=LoraWAN 1.0.3 安全综述"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/&title=LoraWAN 1.0.3 安全综述"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/&name=LoraWAN 1.0.3 安全综述&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#LWPAN"><span class="toc-number">1.</span> <span class="toc-text">LWPAN</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NB-IOT-%E4%B8%8E-LoRa-%E5%AF%B9%E6%AF%94"><span class="toc-number">1.1.</span> <span class="toc-text">NB-IOT 与  LoRa 对比</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.1.1.</span> <span class="toc-text">参考</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LoRaWAN1-0-3-%E5%AE%89%E5%85%A8%E7%BB%BC%E8%BF%B0"><span class="toc-number">2.</span> <span class="toc-text">LoRaWAN1.0.3 安全综述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84"><span class="toc-number">2.1.</span> <span class="toc-text">网络架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6"><span class="toc-number">2.2.</span> <span class="toc-text">安全机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E5%A4%87%E6%BF%80%E6%B4%BB"><span class="toc-number">2.3.</span> <span class="toc-text">设备激活</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ABP"><span class="toc-number">2.3.1.</span> <span class="toc-text">ABP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OTAA"><span class="toc-number">2.3.2.</span> <span class="toc-text">OTAA</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LoRaWAN-v1-1-%E4%B8%AD%E7%9A%84%E5%AE%89%E5%85%A8%E6%94%B9%E8%BF%9B"><span class="toc-number">2.4.</span> <span class="toc-text">LoRaWAN v1.1  中的安全改进</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E9%A3%8E%E9%99%A9%E4%B8%8E%E5%A8%81%E8%83%81"><span class="toc-number">2.5.</span> <span class="toc-text">安全风险与威胁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A6%BB%E7%BA%BF%E5%AF%86%E9%92%A5%E6%94%BB%E5%87%BB"><span class="toc-number">2.6.</span> <span class="toc-text">离线密钥攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%B8%80%E4%B8%AA-JoinRequest-%E4%BB%A5%E5%8F%8A-%E4%B8%80%E4%B8%AAJoinAccept-%E6%88%96%E8%80%85-%E4%B8%A4%E4%B8%AAJoinRequest-JoinAccept-%E6%B6%88%E6%81%AF"><span class="toc-number">2.6.1.</span> <span class="toc-text">使用一个 JoinRequest 以及 一个JoinAccept  或者 两个JoinRequest&#x2F;JoinAccept 消息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%B8%80%E4%B8%AA-JoinAccept-%E6%B6%88%E6%81%AF%E5%92%8C-%E4%B8%80%E4%B8%AA%E6%95%B0%E6%8D%AE%E6%B6%88%E6%81%AF"><span class="toc-number">2.6.2.</span> <span class="toc-text">使用一个 JoinAccept 消息和 一个数据消息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%B8%A4%E4%B8%AA%E6%95%B0%E6%8D%AE%E6%B6%88%E6%81%AF"><span class="toc-number">2.6.3.</span> <span class="toc-text">使用两个数据消息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%86%E9%92%A5%E7%9A%84%E5%85%B6%E4%BB%96%E9%97%AE%E9%A2%98"><span class="toc-number">2.6.4.</span> <span class="toc-text">密钥的其他问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E6%94%BB%E9%99%B7%E5%AF%86%E9%92%A5%E5%90%8E%E5%8F%AF%E6%89%A7%E8%A1%8C%E7%9A%84%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95"><span class="toc-number">2.7.</span> <span class="toc-text">在攻陷密钥后可执行的攻击方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB"><span class="toc-number">2.7.1.</span> <span class="toc-text">拒绝服务攻击</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%91%E9%80%81%E8%99%9A%E5%81%87%E6%B6%88%E6%81%AF"><span class="toc-number">2.7.2.</span> <span class="toc-text">发送虚假消息</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E5%BE%A1%EF%BC%9A%E5%AE%A1%E8%AE%A1%E4%B8%8E%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B"><span class="toc-number">2.8.</span> <span class="toc-text">防御：审计与入侵检测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E4%BF%A1%E6%81%AF"><span class="toc-number">2.9.</span> <span class="toc-text">相关信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83-1"><span class="toc-number">2.10.</span> <span class="toc-text">参考</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LoRaWAN-%E5%AE%89%E5%85%A8%E5%AE%9E%E8%B7%B5"><span class="toc-number">3.</span> <span class="toc-text">LoRaWAN 安全实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90"><span class="toc-number">3.1.</span> <span class="toc-text">抓包分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B"><span class="toc-number">3.2.</span> <span class="toc-text">入侵检测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8%E5%BC%B1%E5%AF%86%E7%A0%81"><span class="toc-number">3.3.</span> <span class="toc-text">服务器使用弱密码</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        LoraWAN 1.0.3 安全综述
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2020-06-11T15:03:51.000Z" itemprop="datePublished">2020-06-11</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/IOT/" rel="tag">IOT</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="LWPAN"><a href="#LWPAN" class="headerlink" title="LWPAN"></a>LWPAN</h2><p>LPWAN（low-power Wide-Area Network，低功耗广域网）专为低带宽、低功耗、远距离、大量连接的物联网应用而设计。主流的技术有 NB-IoT、LoRa、eMTC、SigFox、RPMA、Weightless等。</p>
+<h3 id="NB-IOT-与-LoRa-对比"><a href="#NB-IOT-与-LoRa-对比" class="headerlink" title="NB-IOT 与  LoRa 对比"></a>NB-IOT 与  LoRa 对比</h3><p>LPWAN 中 NB-IOT 与 LoRa 使用应用较为广泛。</p>
+<ul>
+<li>NB-IOT 与 LoRa 对比<sup>1</sup></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>NB-IOT</th>
+<th>LoRa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>标准制定方</td>
+<td>3GPP</td>
+<td>LoRa 联盟（Semtech所有）</td>
+</tr>
+<tr>
+<td>技术特点</td>
+<td>蜂窝</td>
+<td>线性扩频</td>
+</tr>
+<tr>
+<td>部署方式</td>
+<td>与现有蜂窝网络复用</td>
+<td>独立建网</td>
+</tr>
+<tr>
+<td>自由度</td>
+<td>低，依赖运营商的基础设施</td>
+<td>高，自有部署</td>
+</tr>
+<tr>
+<td>最大传输距离</td>
+<td>城市1-2km，郊区20km</td>
+<td>20km</td>
+</tr>
+<tr>
+<td>频段</td>
+<td>运营商频段</td>
+<td>470MHz、920MHz、867MHz等</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>应用场景对比<sup>2</sup></p>
+<p><img src="compare.jpg" alt="应用场景分析"></p>
+</li>
+</ul>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
+<li><sup>1</sup><a target="_blank" rel="noopener" href="https://baijiahao.baidu.com/s?id=1613528481616705401&amp;wfr=spider&amp;for=pc">看懂物联网（4）LoRa VS NB-IoT的江湖</a></li>
+<li><sup>2</sup><a target="_blank" rel="noopener" href="https://baijiahao.baidu.com/s?id=1620998158592000869&amp;wfr=spider&amp;for=pc">物联网接入技术：NB-IOT与LoRa之争</a></li>
+</ul>
+<h2 id="LoRaWAN1-0-3-安全综述"><a href="#LoRaWAN1-0-3-安全综述" class="headerlink" title="LoRaWAN1.0.3 安全综述"></a>LoRaWAN<sub>1.0.3</sub> 安全综述</h2><p>Long Range (LoRa®)  是低功耗广域网络（LPWAN）技术之一，LoRa 由美国公司 Semtech 制定，属于私有技术。LoRa 采用非授权频段，不同的地区采用的频段也不相同。 LoRaWAN是为LoRa远距离通信网络设计的一套通讯协议和系统架构。它是一种媒体访问控制（MAC）层协议。</p>
+<p><img src="image-20200206121856850.png" alt="系统架构"></p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>应用实体</th>
+<th>冲突解决方案</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Class A（主流）</td>
+<td>电池供电传感器</td>
+<td>异步ALOHA协议</td>
+<td>最佳节能</td>
+<td>Server无法唤醒End Node</td>
+</tr>
+<tr>
+<td>Class B</td>
+<td>电池供电执行器</td>
+<td></td>
+<td>节能并唤醒时延可控</td>
+<td>复杂，实现代价大</td>
+</tr>
+<tr>
+<td>Class C</td>
+<td>市电供电执行器</td>
+<td></td>
+<td>随时唤醒通信</td>
+<td>耗能大</td>
+</tr>
+</tbody>
+</table>
+<h3 id="网络架构"><a href="#网络架构" class="headerlink" title="网络架构"></a>网络架构</h3><p><img src="image-20200206122207783.png" alt="网络架构"></p>
+<p>LoRaWAN 采用星星的网络拓扑结果， 网络中存在 4 类网络实体,上图中从左到右分别是：</p>
+<ul>
+<li><p>End Nodes（终端节点）</p>
+<p>终端节点通常搭配传感器使用，从环境中采集各种信息，如烟雾、天气等。终端设备在每次发送数据包都需要随机切换信道，以便降低同频干扰和无线信号衰减。</p>
+</li>
+<li><p>Gateway（网关）</p>
+<p>网关用于转发“终端节点”与“网络服务器”的之间的数据。<strong>网关</strong>与<strong>终端节点</strong>之间没有进行绑定，同一个节点的数据能被多个接收到，他们之间采用 LoRa RF 传输，国内采用 470MHz 频段。</p>
+</li>
+<li><p>Network Server（网络服务器）</p>
+<p>网络服务器用于把终端节点产生的数据转发给对应的应用服务器吗，并提供对终端节点认证和授权。网关与网络服务器之间使用 TCP/IP 协议栈，采用透明传输。常见的协议有Packet Forwarder（现在被归类为Legacy）、MQTT(主流)、CoAP、Protobuf。</p>
+</li>
+<li><p>Applicaton Server（应用服务器）</p>
+<p>应用服务器根据用户需要而设计，通常包括终端节点数据的展示（数据统计、异常数据告警）以及对节点的远程控制等。</p>
+<p>当前使用较为广泛的开源服务器是<a target="_blank" rel="noopener" href="https://www.chirpstack.io/">ChirpStack</a>。</p>
+</li>
+</ul>
+<p>数据传输的过程是：终端节点采集到数据通过 LoRa RF 直接传送给网关，再由网关将数据转发给服务器进行处理。流量上行这个过程也被成为 “uplink”，相反流量从服务器到终端节点的这个过程被成为 “downlink”。</p>
+<h3 id="安全机制"><a href="#安全机制" class="headerlink" title="安全机制"></a>安全机制</h3><p>LoRaWAN 在设计之初就考虑到了安全问题，定义了两个密钥（NwkSKey 和 APPSKey）。NwkSKey(Network Session Key ) 用于保障终端节点传输到网络服务器之间的数据的完整性；APPSKey(Application Session Key) 用于加密传输的数据，保障终端节点到应用服务器之间的数据的机密性。</p>
+<p><img src="image-20200206163258251.png" alt="Session Keys and Functions in LoRaWAN v1.0.3"></p>
+<p>下图是 LoRa 的<a target="_blank" rel="noopener" href="https://lora-alliance.org/sites/default/files/2018-07/lorawan1.0.3.pdf">消息帧格式</a>。</p>
+<p><img src="image-20200206165323731.png" alt="帧格式"></p>
+<ul>
+<li><p><strong>MIC(message integrity code）</strong>: 消息完整性代码为 4 个字节，用于确保数据的<strong>完整性</strong>（数据没有被篡改），计算公式如下。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">msg &#x3D; MHDR | FHDR | FPort | FRMPayload</span><br><span class="line">B0&#x3D; 0x49 | 4 * 0x00 | Dir | DevAddr| FCntUp or FCntDown | 0x00 |len(MHDR | MACPayload)</span><br><span class="line">cmac &#x3D; aes128_cmac(NwkSKey, B0 | MHDR | MACPayload)</span><br><span class="line">MIC &#x3D; cmac[0..3]</span><br></pre></td></tr></table></figure>
+<p>  <code>Dir</code>  在 uplink 帧中为 0，在downlink帧中为 1。   </p>
+</li>
+<li><p><strong>Frame counter (FCnt)</strong>  ：一个16位计数器，数据上下行中分别称为 uplink 计数器 和 downlink 计数器，FCnt 设计的目的是，防止<strong>重放攻击</strong>，即当接受方收到的 FCnt 比之前收到的 FCnt 小，接收方会丢弃这个数据包。</p>
+</li>
+<li><p><strong>MAC Frame Payload Encryption  (FRMPayload)</strong>: 如果数据帧携带有 payload，在计算 MIC 之前，需要使用 AES 进行加密，以保障数据的<strong>机密性</strong>。</p>
+</li>
+</ul>
+<h3 id="设备激活"><a href="#设备激活" class="headerlink" title="设备激活"></a>设备激活</h3><p>终端节点在加入 LoRaWAN 之前需要进行激活，也成为入网。入网有两种方式:ABP(Activation by Personalization，个性化激活) 和OTAA(Over-the-Air Activation，空中激活)。</p>
+<h4 id="ABP"><a href="#ABP" class="headerlink" title="ABP"></a>ABP</h4><p>ABP(Activation by Personalization，个性化激活)  是一种简单的入网机制，DevAddr、NwkSKey和AppSKey 硬编码保存在终端节点中，服务端也保存有这三个删除。这三个参数在整个生命周期中保持不变。这种入网方式不太安全，适合搭建私有网络。</p>
+<p>每一个终端节点都有一个DevEUI（Device Extended Unique Identifier，设备扩展唯一标识），最常见的做法是，取MCU的SN（Serial Number，序列号），经过某种算法得到64位的DevEUI。然后根据 DevEUI 采用某种算法得到DevAddr、NwkSKey和AppSKey。如果采用的算法过于简单，能够被攻击者猜解出来，攻击者便可以利用这些值<strong>伪造</strong>出虚无的终端节点。</p>
+<h4 id="OTAA"><a href="#OTAA" class="headerlink" title="OTAA"></a>OTAA</h4><p>OTAA(Over-the-Air Activation，空中激活) 需要与网络服务器协商产生所需的密钥 NwkSKey 和 AppSKey。 </p>
+<p><img src="image-20200206181809995.png" alt="OTAA"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AppSKey &#x3D; AES(AppKey, 0x1 + AppNonce + NetID + DevNonce)</span><br><span class="line">NwkSKey &#x3D; AES(AppKey, 0x2 + AppNonce + NetID + DevNonce)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>AppKey：AppKey 是一个128位的 AES-128 key  。</li>
+<li>DevNonce (JoinRequest)  和 AppNonce (JoinAccept)  ：是入网中引入的两个随机数，用于抵御重放攻击。</li>
+<li>Network Identifier (NetID)  ：在同一个LoRaWAN 中 所有的终端节点共享一个 NetID。</li>
+<li>End Device Address (DevAddr)  ：1个32位的标识，在当前网络中的终端节点唯一标识，相当于会话ID。</li>
+</ul>
+<h3 id="LoRaWAN-v1-1-中的安全改进"><a href="#LoRaWAN-v1-1-中的安全改进" class="headerlink" title="LoRaWAN v1.1  中的安全改进"></a>LoRaWAN v1.1  中的安全改进</h3><ol>
+<li>从 Network server 中独立出了 Join Server ，用于生成和管理密钥。Network server 不在处理 AppSKey  。</li>
+<li>新加入了一个根密钥 NwkKey ，现有两个根密钥 AppKey 以及 NwkKey。</li>
+<li><p>在网络层和应用层使用独立的随机数，位数从 16 位提高到了 32 位。</p>
+</li>
+<li><p>会话密钥从 2 个增加到 5个。</p>
+</li>
+</ol>
+<h3 id="安全风险与威胁"><a href="#安全风险与威胁" class="headerlink" title="安全风险与威胁"></a>安全风险与威胁</h3><p>LoRa 声称是一个安全的物联网协议，也得到了广泛的应用。LoRa 安全更多的是密钥的安全。密钥可以通过以下几种方式获取。</p>
+<ul>
+<li><p>通过逆向从固件中获取</p>
+<p><a target="_blank" rel="noopener" href="https://core.ac.uk/download/pdf/84932416.pdf">使用UART或者SPI 接口通过监听或者伪造 MCU 与 LoRa 模块的通信</a>；充设备中提取出固件，或从互联网上获取到固件，然后逆向分析出密钥；</p>
+</li>
+<li><p>设备标签</p>
+<p>不少设备上的标签以文本或二维码记录着DevEUI、AppKey  等敏感信息，如果部署后没有移除，攻击者通过物联接触能够轻松获取到。</p>
+</li>
+<li><p>硬编码在开源代码中</p>
+<p>在开源代码中的密钥未经修改直接应用到产品中。</p>
+</li>
+<li><p>易猜解的密钥</p>
+<p>厂商在设计时，使用过于简单的算法来实现，容易被攻击者猜解出来。例如，AppKey = DevEUI + AppEUI or AppKey = AppEUI + DevEUI、 AppKey  = DevEUI 、所有的设备采用相同的 AppEUI 等。</p>
+</li>
+<li><p>网络服务器中使用默认密码或弱口令</p>
+<p>使用 shodan 或 zoomeye 等检索出暴露在互联网上的网络服务器，不少的服务器使用了默认密码，如 admin:admin。攻击者可以在登录后获取到密钥</p>
+</li>
+<li><p>服务器存在安全漏洞</p>
+<p>服务器操作系统或者其他组件存在安全漏洞被入侵也可能导致密钥的泄露。</p>
+</li>
+<li><p>设备商被攻击</p>
+<p>设备商的网络被攻击导致密钥泄露。</p>
+</li>
+<li><p>设备/设施部署机制</p>
+<p>部署时常用计算机、手机APP或其他专用设备进行配置，密钥可能在部署后残留在部署的计算机、手机或其他专用设备中。</p>
+</li>
+<li><p>文件泄露</p>
+<p>设备制造商通常把密钥存储在文件中，并通过邮件等方式分享给客户。这些文件被多人经手或因管理不当导致密钥文件泄露。</p>
+</li>
+<li><p>服务提供商信息泄露</p>
+<p>网络服务器与应用服务器中存储有 APPKeys，密钥可能以文件形式被备份或保存在数据库中等。服务提供商数据泄露可导致用户的密钥被泄露。</p>
+</li>
+</ul>
+<h3 id="离线密钥攻击"><a href="#离线密钥攻击" class="headerlink" title="离线密钥攻击"></a>离线密钥攻击</h3><p>Appkey 可以使用字典进行暴力破解，实现攻击有以下几种方式：</p>
+<h4 id="使用一个-JoinRequest-以及-一个JoinAccept-或者-两个JoinRequest-JoinAccept-消息"><a href="#使用一个-JoinRequest-以及-一个JoinAccept-或者-两个JoinRequest-JoinAccept-消息" class="headerlink" title="使用一个 JoinRequest 以及 一个JoinAccept  或者 两个JoinRequest/JoinAccept 消息"></a>使用一个 JoinRequest 以及 一个JoinAccept  或者 两个JoinRequest/JoinAccept 消息</h4><p>通过计算并对比入网消息中的 MIC 来寻找 appkey。</p>
+<p><img src="image-20200207101925911.png" alt="暴力破解Appkey"></p>
+<p>首先使用字典中的 Appkey 计算出 MIC， 然后和 JoinRequest 消息中的 MIC 进行对比。如果 MIC 相同，这个 Appkey 可能真正的 Appkey，还需要进一步确认，因为 MIC 是取得前 4 个字节可能存在碰撞问题（不同的 Appkey 计算出相同的 MIC）。还需要进一步验证，使用这个 Appkey 按照下面的算法解密 JoinAccept 得到MIC。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aes128_decrypt(AppKey, AppNonce | NetID | DevAddr | DLSettings | RxDelay | CFList | MIC)</span><br></pre></td></tr></table></figure>
+<p>最后，把之前计算出 MIC 与解密出的 MIC 进行对比。如果相同，Appkey 就被找到了。</p>
+<p>使用两个JoinRequest/JoinAccept 消息的方法也相似，首先使用字典中的 Appkey 计算出 MIC， 然后和 JoinRequest 中的 MIC 进行对比。不过这时需要执行两次，如果有同一个 Appkey 计算出的 MIC 与 两个 JoinRequest 消息中的都相同，Appkey 就被找到了。使用两个 JoinAccept  消息唯一不同的需要解密出 MIC 然后对比。</p>
+<h4 id="使用一个-JoinAccept-消息和-一个数据消息"><a href="#使用一个-JoinAccept-消息和-一个数据消息" class="headerlink" title="使用一个 JoinAccept 消息和 一个数据消息"></a>使用一个 JoinAccept 消息和 一个数据消息</h4><p><img src="image-20200207111442783.png" alt="暴力破解Appkey"></p>
+<p>使用 Appkey 解密JoinAccept 消息得到 MIC  与直接计算的 MIC 相同，这个 Appkey 可能是真实的 Appkey。还需要进一步确认，对比 <strong>JoinAccept 消息中解密得到的 DevAdr</strong> 与 <strong>数据消息中明文的 DevAddr</strong> ，如果相同这个 Appkey 就是正确的。</p>
+<h4 id="使用两个数据消息"><a href="#使用两个数据消息" class="headerlink" title="使用两个数据消息"></a>使用两个数据消息</h4><p>下图是，通过遍历  DevNonce and AppNonce 来验证 Appkey 和 NetID 的过程。</p>
+<p><img src="image-20200207115019104.png" alt="暴力破解  DevNonce and AppNonce"></p>
+<p>使用这种方法效率很低，需要暴力破解出 DevNonce 、AppNonce、Appkey 以及 NetID。但是可以用来验证是否使用了脆弱的 Appkey（开源产品应用的或泄露）。</p>
+<h4 id="密钥的其他问题"><a href="#密钥的其他问题" class="headerlink" title="密钥的其他问题"></a>密钥的其他问题</h4><ul>
+<li>在许多场景中，同一组设备往往使用相同的密钥。</li>
+<li>在不部署时，没有替换默认的密钥，IOACTIVE 整理了一份<a target="_blank" rel="noopener" href="https://github.com/IOActive/laf/blob/master/auditing/analyzers/bruteforcer/keys.txt">字典</a>。</li>
+<li>密钥不可更改，一旦密钥被攻陷，将无法进行修补。</li>
+</ul>
+<h3 id="在攻陷密钥后可执行的攻击方法"><a href="#在攻陷密钥后可执行的攻击方法" class="headerlink" title="在攻陷密钥后可执行的攻击方法"></a>在攻陷密钥后可执行的攻击方法</h3><h4 id="拒绝服务攻击"><a href="#拒绝服务攻击" class="headerlink" title="拒绝服务攻击"></a>拒绝服务攻击</h4><ul>
+<li><p>发送大于真实 Fcnt 的 uplink 消息</p>
+<p>根据协议规范，服务器会拒绝接受 <strong>Fcnt</strong> 小于上次收到的 <strong>FCnt</strong> 。如果拥有会话密钥的攻击者发送一个大于真实设备的 FCnt 给服务器，那么真实的消息将会被拒绝接受。</p>
+</li>
+<li><p>重新生成会话密钥</p>
+<p>攻击者伪造 JoinRequest  请求发网络服务重新发起入网请求，产生了新的会话密钥，旧的会话密钥将失效。真实的设备节点使用旧的会话密钥生产的数据就会被服务器拒绝。</p>
+</li>
+<li><p>发送有效的 MAC 命令</p>
+<p>协议中定义了，MAC 命令用于网络管理，包含射频同步、信道管理、定时设置等。通过 FOpts 字段可以对通信的参数设置。攻击者可以伪装终端节点发送消息修改通信参数，当两端的通信参数不同时，通信将会受到影响。</p>
+</li>
+</ul>
+<h4 id="发送虚假消息"><a href="#发送虚假消息" class="headerlink" title="发送虚假消息"></a>发送虚假消息</h4><p>这是最为严重的情况，攻击者在获取到密钥后可以伪装成终端节点给服务器发送伪造的数据。在特殊敏感的场景中将会带来巨大的危害，如误报天然气管道气压，对天然气管道进行物理破坏，主营方没能及时发现修复，给企业带来经济损失，给环境带来破坏甚至可能发展成灾难等。</p>
+<h3 id="防御：审计与入侵检测"><a href="#防御：审计与入侵检测" class="headerlink" title="防御：审计与入侵检测"></a>防御：审计与入侵检测</h3><ul>
+<li><p>密钥生成规则要健壮，不易被攻击者猜解出来；</p>
+</li>
+<li><p>需要加强的密钥管理，防止密钥泄露；</p>
+</li>
+<li><p>在网络中添加入侵检测模块</p>
+<p>可以通过持续检测 <strong>FCnt</strong> 的值来检测攻击，这是因为攻击者发送伪造的消息或发起拒绝服务攻击， <strong>FCnt</strong> 的值会出现异样，在收到攻击者的消息后，真实中单节点发出的  <strong>FCnt</strong> 会小于等于攻击者发出的。</p>
+<p>通过分析流量，识别是否有同一设备出现平行会话的情况（devAddr），此时可能是攻击者通过重新入网发起了拒绝服务</p>
+<p>此外，还可以进一步分析数据中<strong>被丢弃的数据包</strong>被<strong>丢弃的原因</strong>来实现入侵检测。</p>
+</li>
+<li><p>尽量采用 OTTA 入网，因为使用 ABP 入网的终端节点中固化了密钥，密钥很容易被窃取。</p>
+</li>
+</ul>
+<h3 id="相关信息"><a href="#相关信息" class="headerlink" title="相关信息"></a>相关信息</h3><ul>
+<li><p>运营商</p>
+<p>Loriot、TheThingsNetwork、Sertone、Archos PicoWan</p>
+</li>
+<li><p>常见芯片</p>
+<p>SX1301/SX1272/SX1276</p>
+</li>
+<li><p>开源服务器</p>
+<p>ChirpStack Application Server</p>
+</li>
+</ul>
+<h3 id="参考-1"><a href="#参考-1" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a target="_blank" rel="noopener" href="http://www.loraapp.com/lora-university-case/201701051107/">LoRaWAN介绍</a></li>
+<li><a target="_blank" rel="noopener" href="https://lora-alliance.org/sites/default/files/2018-04/what-is-lorawan.pdf">What is LoRaWAN</a></li>
+<li><a target="_blank" rel="noopener" href="https://lora-alliance.org/sites/default/files/2018-07/lorawan1.0.3.pdf">LoRaWAN® 1.0.3 Specification</a></li>
+<li><a target="_blank" rel="noopener" href="https://act-on.ioactive.com/acton/attachment/34793/f-87b45f5f-f181-44fc-82a8-8e53c501dc4e/1/-/-/-/-/LoRaWAN Networks Susceptible to Hacking.pdf">LoRaWAN Networks Susceptible to Hacking</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/IOActive/laf">https://github.com/IOActive/laf</a></li>
+</ul>
+<h2 id="LoRaWAN-安全实践"><a href="#LoRaWAN-安全实践" class="headerlink" title="LoRaWAN 安全实践"></a>LoRaWAN 安全实践</h2><h3 id="抓包分析"><a href="#抓包分析" class="headerlink" title="抓包分析"></a>抓包分析</h3><p>待实现</p>
+<h3 id="入侵检测"><a href="#入侵检测" class="headerlink" title="入侵检测"></a>入侵检测</h3><p>待实现</p>
+<h3 id="服务器使用弱密码"><a href="#服务器使用弱密码" class="headerlink" title="服务器使用弱密码"></a>服务器使用弱密码</h3><p>使用 zoomeye 搜索暴露在公网的开源服务器 —— <a target="_blank" rel="noopener" href="https://www.zoomeye.org/searchResult?q=&quot;ChirpStack Application Server&quot; %2Bport:&quot;8080&quot;&amp;t=all">ChirpStack Application Server</a>，查询到 218 个，不少服务器使用了默认的账号 admin/admin。</p>
+<p><img src="image-20200207163234651.png" alt="查找 ChirpStack Application Serve"></p>
+<p><img src="image-20200207163922450.png" alt="使用默认密码的 ChirpStack 服务器"></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#LWPAN"><span class="toc-number">1.</span> <span class="toc-text">LWPAN</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NB-IOT-%E4%B8%8E-LoRa-%E5%AF%B9%E6%AF%94"><span class="toc-number">1.1.</span> <span class="toc-text">NB-IOT 与  LoRa 对比</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.1.1.</span> <span class="toc-text">参考</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LoRaWAN1-0-3-%E5%AE%89%E5%85%A8%E7%BB%BC%E8%BF%B0"><span class="toc-number">2.</span> <span class="toc-text">LoRaWAN1.0.3 安全综述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84"><span class="toc-number">2.1.</span> <span class="toc-text">网络架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6"><span class="toc-number">2.2.</span> <span class="toc-text">安全机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E5%A4%87%E6%BF%80%E6%B4%BB"><span class="toc-number">2.3.</span> <span class="toc-text">设备激活</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ABP"><span class="toc-number">2.3.1.</span> <span class="toc-text">ABP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OTAA"><span class="toc-number">2.3.2.</span> <span class="toc-text">OTAA</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LoRaWAN-v1-1-%E4%B8%AD%E7%9A%84%E5%AE%89%E5%85%A8%E6%94%B9%E8%BF%9B"><span class="toc-number">2.4.</span> <span class="toc-text">LoRaWAN v1.1  中的安全改进</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E9%A3%8E%E9%99%A9%E4%B8%8E%E5%A8%81%E8%83%81"><span class="toc-number">2.5.</span> <span class="toc-text">安全风险与威胁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A6%BB%E7%BA%BF%E5%AF%86%E9%92%A5%E6%94%BB%E5%87%BB"><span class="toc-number">2.6.</span> <span class="toc-text">离线密钥攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%B8%80%E4%B8%AA-JoinRequest-%E4%BB%A5%E5%8F%8A-%E4%B8%80%E4%B8%AAJoinAccept-%E6%88%96%E8%80%85-%E4%B8%A4%E4%B8%AAJoinRequest-JoinAccept-%E6%B6%88%E6%81%AF"><span class="toc-number">2.6.1.</span> <span class="toc-text">使用一个 JoinRequest 以及 一个JoinAccept  或者 两个JoinRequest&#x2F;JoinAccept 消息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%B8%80%E4%B8%AA-JoinAccept-%E6%B6%88%E6%81%AF%E5%92%8C-%E4%B8%80%E4%B8%AA%E6%95%B0%E6%8D%AE%E6%B6%88%E6%81%AF"><span class="toc-number">2.6.2.</span> <span class="toc-text">使用一个 JoinAccept 消息和 一个数据消息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%B8%A4%E4%B8%AA%E6%95%B0%E6%8D%AE%E6%B6%88%E6%81%AF"><span class="toc-number">2.6.3.</span> <span class="toc-text">使用两个数据消息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%86%E9%92%A5%E7%9A%84%E5%85%B6%E4%BB%96%E9%97%AE%E9%A2%98"><span class="toc-number">2.6.4.</span> <span class="toc-text">密钥的其他问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E6%94%BB%E9%99%B7%E5%AF%86%E9%92%A5%E5%90%8E%E5%8F%AF%E6%89%A7%E8%A1%8C%E7%9A%84%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95"><span class="toc-number">2.7.</span> <span class="toc-text">在攻陷密钥后可执行的攻击方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB"><span class="toc-number">2.7.1.</span> <span class="toc-text">拒绝服务攻击</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%91%E9%80%81%E8%99%9A%E5%81%87%E6%B6%88%E6%81%AF"><span class="toc-number">2.7.2.</span> <span class="toc-text">发送虚假消息</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E5%BE%A1%EF%BC%9A%E5%AE%A1%E8%AE%A1%E4%B8%8E%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B"><span class="toc-number">2.8.</span> <span class="toc-text">防御：审计与入侵检测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E4%BF%A1%E6%81%AF"><span class="toc-number">2.9.</span> <span class="toc-text">相关信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83-1"><span class="toc-number">2.10.</span> <span class="toc-text">参考</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LoRaWAN-%E5%AE%89%E5%85%A8%E5%AE%9E%E8%B7%B5"><span class="toc-number">3.</span> <span class="toc-text">LoRaWAN 安全实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90"><span class="toc-number">3.1.</span> <span class="toc-text">抓包分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B"><span class="toc-number">3.2.</span> <span class="toc-text">入侵检测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8%E5%BC%B1%E5%AF%86%E7%A0%81"><span class="toc-number">3.3.</span> <span class="toc-text">服务器使用弱密码</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/&text=LoraWAN 1.0.3 安全综述"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/&title=LoraWAN 1.0.3 安全综述"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/&is_video=false&description=LoraWAN 1.0.3 安全综述"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=LoraWAN 1.0.3 安全综述&body=Check out this article: http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/&title=LoraWAN 1.0.3 安全综述"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/&title=LoraWAN 1.0.3 安全综述"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/&title=LoraWAN 1.0.3 安全综述"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/&title=LoraWAN 1.0.3 安全综述"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2020/06/11/LoraWAN1-0-3-security/&name=LoraWAN 1.0.3 安全综述&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+

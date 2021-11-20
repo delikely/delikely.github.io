@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="从0到1建设物联网安全实验室之设备篇最近“嘉立创”推出了四层，双层，单层打样全免费，IOT安全圈大家开始躁动了，按捺不住想薅一把。到了要打什么板的时候了，有什么可以打的呢？总结了一些开源硬件项目放在文末，师傅们开整（下单）吧！  此文早在好数月前就已经完成了，只是误以为已经发过了，翻了翻发现还没有发过。 从事物联网安全设备拆解是基本操作，当然螺丝刀、万用表、逻辑分析仪等不可少。此外无线通信数据分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从0到1建设物联网安全实验室之设备篇">
+<meta property="og:url" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="从0到1建设物联网安全实验室之设备篇最近“嘉立创”推出了四层，双层，单层打样全免费，IOT安全圈大家开始躁动了，按捺不住想薅一把。到了要打什么板的时候了，有什么可以打的呢？总结了一些开源硬件项目放在文末，师傅们开整（下单）吧！  此文早在好数月前就已经完成了，只是误以为已经发过了，翻了翻发现还没有发过。 从事物联网安全设备拆解是基本操作，当然螺丝刀、万用表、逻辑分析仪等不可少。此外无线通信数据分析">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210701154715878.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/xxh.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/4236cd8d0cf2fdf6.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/TB26At_q_JYBeNjy1zeXXahzVXa_!!3372430436.jpg_430x430q90.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/O1CN01YNOvX41oxmVinX3tZ_!!0-item_pic.jpg_430x430q90.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210310123911511.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210312133909837.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/5537bbb42f2b2fd2.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/TB2vhEObuUXBuNjt_XBXXXeDXXa_!!2207691322.jpg_430x430q90.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210310130006599.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210312111608327.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/j-link_pro_500.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210310121516255.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210312115605414.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/O1CN01gs6vR61amsUbNz8l1_!!0-item_pic.jpg_430x430q90.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/d43f6b5c5fdde356.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210312130516920.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/hackrf.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210312130833564.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/EZ430-Chronos.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/wp-mk7_81d03a53-bf1a-426f-9425-a34c8b3d9c85_2000x.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210312133352324.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210312133438783.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210312140520886.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/apimote.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/1562234-500.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210312141221491.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210312163511342.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/P1090928_2000x.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/laptop2_2000x.progressive.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210701160518567.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/turtle-2_1400x.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210701161624309.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/backpc500_500x500.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210701163107041.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210312132745649.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/teensy41.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210701141143926.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210701141300335.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/3.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/facedancer21-454A9092b-1024.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210312113536430.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/237-05.jpg">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210312134718659.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210312134916571.png">
+<meta property="og:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/IMG_1188__01164.1531758295.1000.1200.jpg">
+<meta property="article:published_time" content="2021-07-05T16:07:46.000Z">
+<meta property="article:modified_time" content="2021-11-15T06:21:08.894Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="IOT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikey.github.io/2021/07/05/iot-security-lab-hardware/image-20210701154715878.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>从0到1建设物联网安全实验室之设备篇</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/06/24/Automotive-Security-Timeline/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
+      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
+      <span id="i-top" class="info" style="display:none;">Arriba</span>
+      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/07/05/iot-security-lab-hardware/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/07/05/iot-security-lab-hardware/&text=从0到1建设物联网安全实验室之设备篇"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/07/05/iot-security-lab-hardware/&title=从0到1建设物联网安全实验室之设备篇"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/07/05/iot-security-lab-hardware/&is_video=false&description=从0到1建设物联网安全实验室之设备篇"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=从0到1建设物联网安全实验室之设备篇&body=Check out this article: http://delikey.github.io/2021/07/05/iot-security-lab-hardware/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/07/05/iot-security-lab-hardware/&title=从0到1建设物联网安全实验室之设备篇"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/07/05/iot-security-lab-hardware/&title=从0到1建设物联网安全实验室之设备篇"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/07/05/iot-security-lab-hardware/&title=从0到1建设物联网安全实验室之设备篇"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/07/05/iot-security-lab-hardware/&title=从0到1建设物联网安全实验室之设备篇"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/07/05/iot-security-lab-hardware/&name=从0到1建设物联网安全实验室之设备篇&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E0%E5%88%B01%E5%BB%BA%E8%AE%BE%E7%89%A9%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E5%AE%9E%E9%AA%8C%E5%AE%A4%E4%B9%8B%E8%AE%BE%E5%A4%87%E7%AF%87"><span class="toc-number">1.</span> <span class="toc-text">从0到1建设物联网安全实验室之设备篇</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%A0%94%E7%A9%B6%E8%AE%BE%E5%A4%87"><span class="toc-number">1.1.</span> <span class="toc-text">基础研究设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%93%E7%94%A8%E8%AE%BE%E5%A4%87"><span class="toc-number">1.2.</span> <span class="toc-text">专用设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E6%BA%90%E7%A1%AC%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">开源硬件</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        从0到1建设物联网安全实验室之设备篇
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2021-07-05T16:07:46.000Z" itemprop="datePublished">2021-07-06</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/IOT/" rel="tag">IOT</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="从0到1建设物联网安全实验室之设备篇"><a href="#从0到1建设物联网安全实验室之设备篇" class="headerlink" title="从0到1建设物联网安全实验室之设备篇"></a>从0到1建设物联网安全实验室之设备篇</h2><p>最近“嘉立创”<strong>推出了四层，双层，单层打样全免费</strong>，IOT安全圈大家开始躁动了，按捺不住想薅一把。到了要打什么板的时候了，有什么可以打的呢？总结了一些开源硬件项目放在文末，师傅们开整（下单）吧！</p>
+<p><img src="image-20210701154715878.png" alt="image-20210701154715878"></p>
+<p>此文早在好数月前就已经完成了，只是误以为已经发过了，翻了翻发现还没有发过。</p>
+<p>从事物联网安全设备拆解是基本操作，当然螺丝刀、万用表、逻辑分析仪等不可少。此外无线通信数据分析也需要一些设备支持，做特定项目时需要特定工具等，确实需要不少的设备（对搞 IOT 就是烧钱）。</p>
+<p><img src="xxh.png" alt="img"></p>
+<p>正好要买了一些设备，于是记录一下。文章分为三个部分，第一个部分是基础的设备，第二部分是进阶的专用设备。第三部分是开源设备，可以自己打板制作。设备总结不免遗漏，欢迎补充。</p>
+<h3 id="基础研究设备"><a href="#基础研究设备" class="headerlink" title="基础研究设备"></a>基础研究设备</h3><ul>
+<li><p><strong>螺丝刀</strong></p>
+<p>螺丝刀套装的<strong>批头需要长一点</strong>的，遇到过米家螺丝刀（还容易生锈）批头太短伸不进去的情况。使用了很多螺丝刀，感觉南旗的用起来是还不错。</p>
+<p><img src="4236cd8d0cf2fdf6.jpg" alt="img" style="zoom:50%;" /></p>
+</li>
+<li><p><strong>万用表</strong></p>
+<p>万用表有些需要手动选择<strong>量程</strong>，个人比较懒，那必须的得来一个<strong>自动选择</strong>的。</p>
+<p><img src="TB26At_q_JYBeNjy1zeXXahzVXa_!!3372430436.jpg_430x430q90.jpg" alt="img" style="zoom: 80%;" /></p>
+<p>万用表用来主要用来分析电路结构，识别调试接口。</p>
+<p>使用较多的功能是连通性测试，一般用来找 GND。GND 找到之后就可调到电压档，识别出 VCC。</p>
+</li>
+<li><p><strong>逻辑分析仪</strong></p>
+<p>逻辑分析仪用来识别调试接口、分析芯片间的通信。</p>
+<p><img src="O1CN01YNOvX41oxmVinX3tZ_!!0-item_pic.jpg_430x430q90.jpg" alt="img" style="zoom: 67%;" /></p>
+</li>
+<li><p><strong>芯片测试夹</strong></p>
+<p>使用测试夹直接夹在芯片上进行测试，如提取固件、动态调试、监听通信内容。</p>
+<p><img src="image-20210310123911511.png" alt="image-20210310123911511"></p>
+<p><img src="image-20210312133909837.png" alt="image-20210312133909837" style="zoom: 33%;" /></p>
+</li>
+<li><p><strong>可调电源</strong></p>
+<p>Arduino 和 树莓派能提供 3.3V 和 5V 的电源，有时需要 12V 的电源。此时需要使用直流可调电源。一般电压在 0—24V就够用了。</p>
+<p><img src="5537bbb42f2b2fd2.jpg" alt="img"></p>
+</li>
+<li><p><strong>串口工具</strong>：FT232H(UART、JTAG、SWD、SPI)</p>
+<p>FT232H 多合一支持 UART、JTAG、SWD、SPI，功能强大且便宜。需要自己动手焊接，正好测试一下刚到手的焊台。</p>
+<p><img src="TB2vhEObuUXBuNjt_XBXXXeDXXa_!!2207691322.jpg_430x430q90.jpg" alt="img"></p>
+</li>
+<li><p><strong>编程器</strong>:（RT809H、CH341A）</p>
+<p>爱修 RT809H 是维修界应用最广的一款编程器。支持读取众多型号的 SPI/NOR/NAND/EMMC Flash，用于提取和烧录固件。读取 GBA 时还需要搭配 BGA返修台“食用“。</p>
+<p><img src="image-20210310130006599.png" alt="image-20210310130006599" style="zoom:50%;" /></p>
+<p>土豪金 CH341A 比较便宜，可以读取 W25/24 系列的 SPI Flash，但读写速度较慢。</p>
+<p><img src="image-20210312111608327.png" alt="image-20210312111608327" style="zoom:50%;" /></p>
+</li>
+<li><p>仿真器（ST-LINK、JLINK 等)</p>
+<p>按照设备的调试方法按需选购，JTAG 调试器必备。国产的 STLINK 也不错，便宜小巧同时支持 SWIM 和 JTAG。</p>
+<p><img src="j-link_pro_500.png" alt="img" style="zoom:50%;" /></p>
+</li>
+<li><p>USB 集线器</p>
+<p>测试设备较多时，有一个能单独开关的每个USB接口集线器，使用起来方便很多。</p>
+<p><img src="image-20210310121516255.png" alt="image-20210310121516255"></p>
+</li>
+<li><p>开发板：树莓派、Arduino、STM32、蓝牙开发板、315/433MHz 开发板等</p>
+<p>开发板可与设备之间进行通信，如 SPI、UASRT、蓝牙、433MHz 等。这些开发板搞IOT安全的或多手里都有点吧。</p>
+<p><img src="image-20210312115605414.png" alt="image-20210312115605414"></p>
+</li>
+</ul>
+<ul>
+<li><p>台钳、焊台、热风枪、热熔胶枪</p>
+<p>焊接套装用来拆解芯片、引出调试接口、固定位置等。入手了一个二合一的。</p>
+<p><img src="O1CN01gs6vR61amsUbNz8l1_!!0-item_pic.jpg_430x430q90.jpg" alt="img"></p>
+</li>
+<li><p>拆机套件、镊子</p>
+</li>
+<li><p>读卡器</p>
+<p>行车记录仪、家用摄像头一般可以插入SD卡，有些车也支持SD卡。SD卡中存储视频信息，有时还用来存储日志等调试信息。绿联多功能合一读卡器，持SD、TF、CF、MS卡。第一次接触 SF卡是在挖掘某网闸漏洞时，所以多合一读卡器可以备上。</p>
+<p><img src="d43f6b5c5fdde356.jpg" alt="img"></p>
+</li>
+</ul>
+<h3 id="专用设备"><a href="#专用设备" class="headerlink" title="专用设备"></a>专用设备</h3><p>这一部分包含软件无线电、蓝牙、RFID、Zigbee、Badusb、故障注入、调试器等专用设备。</p>
+<ul>
+<li><p><strong>软件无线电</strong></p>
+<ul>
+<li><p><strong>USRP、HackRF、BladeRF</strong>:研究无线型号必备，如汽车钥匙、蜂窝网络等。<br><img src="image-20210312130516920.png" alt="image-20210312130516920" style="zoom:50%;" /><br><img src="hackrf.png" alt="HackRF One" style="zoom:50%;" /></p>
+</li>
+<li><p><strong>YARD STICK ONE</strong>: 接收、发射低于 1GHz 的无线信号，如停车杆型号等。</p>
+<p><img src="image-20210312130833564.png" alt="image-20210312130833564"></p>
+</li>
+<li><p><strong>eZ430-Chronos </strong>：TI 的 eZ430-Chronos 手表也可以发射 1GHz 的无线信号，便携性好。</p>
+</li>
+</ul>
+<p><img src="EZ430-Chronos.png" alt="img"></p>
+</li>
+</ul>
+<ul>
+<li><p><strong>Wi-Fi</strong></p>
+<p> WiFi Pineapple 是由 Hak5 开发并售卖的一款无线安全测试神器。</p>
+<p><img src="wp-mk7_81d03a53-bf1a-426f-9425-a34c8b3d9c85_2000x.jpg" alt="WiFi Pineapple" style="zoom: 25%;" /></p>
+</li>
+<li><p><strong>蓝牙</strong></p>
+<ul>
+<li><p><strong>Ubertooth One</strong>：一个开放源代码的2.4 GHz的无线开发平台,它适于被动式的蓝牙监测。</p>
+<p><img src="image-20210312133352324.png" alt="image-20210312133352324"></p>
+</li>
+<li><p><strong>nRF52832 USBDongle、CC2540 USBDongle</strong>: BLE 抓包工具。</p>
+<p><img src="image-20210312133438783.png" alt="image-20210312133438783"></p>
+</li>
+</ul>
+</li>
+<li><p><strong>Zigbee</strong></p>
+<ul>
+<li><p><strong>CC2531 USBDongle</strong></p>
+<p><img src="image-20210312140520886.png" alt="image-20210312140520886" style="zoom:50%;" /></p>
+</li>
+<li><p><strong>APIMOTE</strong></p>
+<p><img src="apimote.jpg" alt="image-20210312133352324"></p>
+</li>
+<li><p><strong>ATAVR RZUSBSTICK</strong></p>
+<p><img src="1562234-500.jpg" alt="MICROCHIP ATAVRRZUSBSTICK"></p>
+</li>
+</ul>
+</li>
+<li><p><strong>NFC</strong></p>
+<ul>
+<li><p><strong>Proxmark33</strong>: 一款 RFID 工具，可以读写分析低频卡和高频卡。常用于破解复制 M1 卡。</p>
+<p><img src="image-20210312141221491.png" alt="image-20210312141221491" style="zoom:50%;" /></p>
+</li>
+<li><p><strong>Chameleon</strong>：用于模拟 NFC 卡。</p>
+<p><img src="image-20210312163511342.png" alt="image-20210312163511342" style="zoom: 33%;" /></p>
+</li>
+<li><p><strong>PN532</strong>：一款廉价的 NFC 读写工具。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>硬件中间人</strong></p>
+<ul>
+<li><p><strong>THROWING STAR LAN TAP/PLUNDER BUG LAN TAP</strong>: 在 RJ45 以太网上做中间人，嗅探上下行数据。</p>
+<p><img src="P1090928_2000x.jpg" alt="Throwing Star LAN Tap" style="zoom: 25%;" /></p>
+<p><img src="laptop2_2000x.progressive.jpg" alt="img" style="zoom:20%;" /></p>
+</li>
+<li><p><strong>Screen Crab</strong>：HDMI 中间人，监听屏幕，1080p 视频高清无线传输。</p>
+<p><img src="image-20210701160518567.png" alt="image-20210701160518567" style="zoom:50%;" /></p>
+</li>
+<li><p><strong>LAN TURTLE/PACKET SQUIRREL:</strong> 是由Hak5推出的用来截获数据包实施攻击的小型硬件设备，默认具有远程访问、数据包监听、DNS欺骗等功能。</p>
+<p><img src="turtle-2_1400x.jpg" alt="Man-in-the-Middle with Massive Storage"></p>
+<p><img src="image-20210701161624309.png" alt="image-20210701161624309" style="zoom:50%;" /></p>
+</li>
+<li><p>Wi-Fi 键盘记录</p>
+</li>
+</ul>
+<p><img src="backpc500_500x500.jpg" alt="img" style="zoom:50%;" /></p>
+<ul>
+<li><p>以太网、串口、I2C、SPI 监听</p>
+<p><img src="image-20210701163107041.png" alt="image-20210701163107041"></p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>Badusb</strong></p>
+<p>产品众多，有原始开发板外形的，也有伪装成 U 盘的、USB 线的。也有通过 WiFi、蓝牙下发指令的。手头有 Arduino 和 树莓派 Zero 也能玩。</p>
+<p><img src="image-20210312132745649.png" alt="image-20210312132745649" style="zoom:50%;" /></p>
+<p><img src="teensy41.jpg" alt="img"></p>
+<p><img src="image-20210701141143926.png" alt="image-20210701141143926" style="zoom:50%;" /></p>
+<p><img src="image-20210701141300335.png" alt="image-20210701141300335" style="zoom: 33%;" /></p>
+<p> <img src="3.png" alt="img" style="zoom:30%;" /></p>
+</li>
+<li><p><strong>Facedancer21</strong>： 模拟各类 USB 设备对 USB 接口进行模糊测试。</p>
+<p><img src="facedancer21-454A9092b-1024.jpg" alt="img"></p>
+</li>
+<li><p><strong>2.4G 无线鼠标</strong></p>
+<p>Crazyradio PA: 嗅探并重放罗技 2.4G 无线键盘鼠标信号。</p>
+<p><img src="image-20210312113536430.png" alt="image-20210312113536430"></p>
+</li>
+<li><p>调试接口适配器</p>
+<ul>
+<li><p><strong>Bus Pirate</strong>: 支持 1-Wire、I2C、SPI、JTAG、UART、 MIDI、PC keyboard、HD44780 LCDs 等多种协议。</p>
+<p><img src="237-05.jpg" alt="img" style="zoom: 33%;" /></p>
+</li>
+<li><p><strong>JTAGulator</strong>：一款自动化寻找 JTAG 引脚的工具</p>
+<p><img src="image-20210312134718659.png" alt="image-20210312134718659" style="zoom:50%;" /></p>
+</li>
+<li><p><strong>GoodFET41</strong>：JTAG 调试器。</p>
+<p><img src="image-20210312134916571.png" alt="image-20210312134916571" style="zoom:50%;" /></p>
+</li>
+</ul>
+</li>
+<li><p>ChipSHOUTER Kit 廉价的故障注入工具</p>
+<p><img src="IMG_1188__01164.1531758295.1000.1200.jpg" alt="img"></p>
+</li>
+</ul>
+<h3 id="开源硬件"><a href="#开源硬件" class="headerlink" title="开源硬件"></a>开源硬件</h3><p>最后一部分是开源硬件。研究人员开源了软硬件方案，爱好者可以自行定制打板制作。打板可以去嘉立创（打样免费），然后买芯片自己焊接/SMT贴片，最后刷写软件部分。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/greatscottgadgets/throwing-star-lan-tap">Throwing Star LAN TAP</a>: A passive tap for monitoring 10/100 Ethernet</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/grandideastudio/jtagulator">JTAGulator</a>: Assisted discovery of on-chip debug interfaces</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/whid-injector/Focaccia-Board">Focaccia-Board</a>:  Multipurpose Breakout for the FT232H</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/DangerousPrototypes/Bus_Pirate">Bus Pirate</a>:  An open source hacker multi-tool that talks to electronic stuff</li>
+<li><a target="_blank" rel="noopener" href="http://goodfet.sourceforge.net/hardware/goodfet41/">GoodFET41</a>: A nifty little tool for quickly exposing embedded system buses to userland Python code</li>
+<li><a target="_blank" rel="noopener" href="http://goodfet.sourceforge.net/hardware/facedancer21/">Facedancer21</a>:  An open-source USB emulator and fuzzer</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/tigard-tools/tigard">Tigard</a>: An FTDI FT2232H-based multi-protocol tool for hardware hacking</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/mossmann/hackrf">Hackrf</a>: Low cost software radio platform</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/sharebrained/portapack-hackrf">Portapack Hackrf</a>: Portability Add-On for the HackRF Software-Defined Radio</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ComThings/PandwaRF">PandwaRF</a>: A RF analysis tool with a sub-1 GHz wireless transceiver controlled by a smartphone or a PC</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/greatscottgadgets/yardstick">YARD Stick One</a>: A sub-1 GHz wireless transceiver controlled by your computer</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/greatscottgadgets/ubertooth">Ubertooth</a>: An open source wireless development platform suitable for Bluetooth experimentation</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Proxmark/proxmark3">Proxmark</a>:  A powerful general purpose RFID tool</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/emsec/ChameleonMini">ChameleonMini</a>: A versatile contactless smartcard emulator compliant to NFC</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/bitcraze/crazyradio-electronics">Crazyradio</a>:  A long range open USB radio dongle based on the nRF24LU1+ from Nordic Semiconductor</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/openvizsla/ov_ftdi">OpenVizsla</a>: FT2232H-based USB sniffer</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/riverloopsec/apimote">ApiMote</a>: IEEE 802.15.4/ZigBee Sniffing Hardware</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/UnicornTeam/hackcube">Hackcube</a>/<a target="_blank" rel="noopener" href="https://github.com/UnicornTeam/HackCube-Special">HackCube-Special</a> : 一款便携式无线电安全检测硬件平台，同时工作在多个无线射频频段可以非常方便对周围的射频信号进行逆向分析。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/newaetech/ChipSHOUTER">ChipSHOUTER</a>：The Electromagnetic Fault Injection (EMFI) Platform By NewAE Technology Inc</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Machine-Hum/wifiwart">Machine-Hum/wifiwart: Linux SBC featuring two wifi radios, masquerading as a USB charger.</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/starcat-io/hackeeg-shield">hackeeg-shield: HackEEG TI ADS1299 Arduino shield hardware design files and tools</a></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E0%E5%88%B01%E5%BB%BA%E8%AE%BE%E7%89%A9%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E5%AE%9E%E9%AA%8C%E5%AE%A4%E4%B9%8B%E8%AE%BE%E5%A4%87%E7%AF%87"><span class="toc-number">1.</span> <span class="toc-text">从0到1建设物联网安全实验室之设备篇</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%A0%94%E7%A9%B6%E8%AE%BE%E5%A4%87"><span class="toc-number">1.1.</span> <span class="toc-text">基础研究设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%93%E7%94%A8%E8%AE%BE%E5%A4%87"><span class="toc-number">1.2.</span> <span class="toc-text">专用设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E6%BA%90%E7%A1%AC%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">开源硬件</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/07/05/iot-security-lab-hardware/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/07/05/iot-security-lab-hardware/&text=从0到1建设物联网安全实验室之设备篇"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/07/05/iot-security-lab-hardware/&title=从0到1建设物联网安全实验室之设备篇"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/07/05/iot-security-lab-hardware/&is_video=false&description=从0到1建设物联网安全实验室之设备篇"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=从0到1建设物联网安全实验室之设备篇&body=Check out this article: http://delikey.github.io/2021/07/05/iot-security-lab-hardware/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/07/05/iot-security-lab-hardware/&title=从0到1建设物联网安全实验室之设备篇"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/07/05/iot-security-lab-hardware/&title=从0到1建设物联网安全实验室之设备篇"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/07/05/iot-security-lab-hardware/&title=从0到1建设物联网安全实验室之设备篇"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/07/05/iot-security-lab-hardware/&title=从0到1建设物联网安全实验室之设备篇"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/07/05/iot-security-lab-hardware/&name=从0到1建设物联网安全实验室之设备篇&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="2021WIDC信息安全挑战赛预赛回顾与OBD-II标准阅读周五参加了世界智能驾驶挑战赛(WIDC)信息安全挑战赛并通过了预赛，5月中旬将进行线下比拼。一共有 50多只队伍参赛，其中前13名晋级复赛。预赛为线上赛，比赛分为“基础理论”和“实操题”  。赛前根据主办方提供的竞赛范围，做了一些准备，主要是实操题中的车辆信息读取。没想到没用着，实操题做得并不好，没有理解出题人的出题思路，和技术支持聊聊，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2021WIDC 信息安全挑战赛预赛回顾与 OBD-II 标准阅读">
+<meta property="og:url" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="2021WIDC信息安全挑战赛预赛回顾与OBD-II标准阅读周五参加了世界智能驾驶挑战赛(WIDC)信息安全挑战赛并通过了预赛，5月中旬将进行线下比拼。一共有 50多只队伍参赛，其中前13名晋级复赛。预赛为线上赛，比赛分为“基础理论”和“实操题”  。赛前根据主办方提供的竞赛范围，做了一些准备，主要是实操题中的车辆信息读取。没想到没用着，实操题做得并不好，没有理解出题人的出题思路，和技术支持聊聊，">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/image-20210425121503713.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/image-20210425130928782.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/image-20210425142035297.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/image-20210425175202663.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/image-20210425164047714.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/image-20210425164630337.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/image-20210425164848728.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/image-20210425173716182.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/OBD2-frame-raw-mode-PID-ID-bytes.svg">
+<meta property="og:image" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/image-20210425185125354.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/image-20210425185224786.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/image-20210425190022597.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/image-20210425192400374.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/image-20210425192549565.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/image-20210425193914729.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/image-20210425201134157.png">
+<meta property="og:image" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/image-20210425203700327.png">
+<meta property="article:published_time" content="2021-04-30T03:20:24.000Z">
+<meta property="article:modified_time" content="2021-06-26T14:02:17.000Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="Automotive">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/image-20210425121503713.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>2021WIDC 信息安全挑战赛预赛回顾与 OBD-II 标准阅读</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/05/15/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E5%AF%BB%E6%89%BE%E5%B7%A5%E7%A8%8B%E6%A8%A1%E5%BC%8F%E7%83%AD%E9%94%AE/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
+      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
+      <span id="i-top" class="info" style="display:none;">Arriba</span>
+      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/&text=2021WIDC 信息安全挑战赛预赛回顾与 OBD-II 标准阅读"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/&title=2021WIDC 信息安全挑战赛预赛回顾与 OBD-II 标准阅读"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/&is_video=false&description=2021WIDC 信息安全挑战赛预赛回顾与 OBD-II 标准阅读"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=2021WIDC 信息安全挑战赛预赛回顾与 OBD-II 标准阅读&body=Check out this article: http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/&title=2021WIDC 信息安全挑战赛预赛回顾与 OBD-II 标准阅读"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/&title=2021WIDC 信息安全挑战赛预赛回顾与 OBD-II 标准阅读"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/&title=2021WIDC 信息安全挑战赛预赛回顾与 OBD-II 标准阅读"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/&title=2021WIDC 信息安全挑战赛预赛回顾与 OBD-II 标准阅读"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/&name=2021WIDC 信息安全挑战赛预赛回顾与 OBD-II 标准阅读&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#2021WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB"><span class="toc-number">1.</span> <span class="toc-text">2021WIDC信息安全挑战赛预赛回顾与OBD-II标准阅读</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE"><span class="toc-number">1.1.</span> <span class="toc-text">预赛回顾</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB"><span class="toc-number">1.2.</span> <span class="toc-text">标准阅读</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%8A%E6%96%AD%E6%B6%88%E6%81%AF%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.2.1.</span> <span class="toc-text">诊断消息格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%8A%E6%96%AD%E6%B6%88%E6%81%AF%E5%AE%9A%E4%B9%89"><span class="toc-number">1.2.2.</span> <span class="toc-text">诊断消息定义</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%B5%81%E6%8A%A5%E6%96%87-%E6%A8%A1%E5%BC%8F1"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">数据流报文(模式1)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E5%AE%9A%E4%B9%89"><span class="toc-number">1.2.2.1.1.</span> <span class="toc-text">格式定义</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E6%94%AF%E6%8C%81%E7%9A%84PID"><span class="toc-number">1.2.2.1.2.</span> <span class="toc-text">查询支持的PID</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E5%A4%9A%E4%B8%AA-PID"><span class="toc-number">1.2.2.1.3.</span> <span class="toc-text">请求多个 PID</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%89%8B%E5%8A%A8%E6%9E%84%E9%80%A0%E6%9F%A5%E8%AF%A2%E8%AF%B7%E6%B1%82"><span class="toc-number">1.2.2.1.4.</span> <span class="toc-text">手动构造查询请求</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">其他模式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.2.3.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.3.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        2021WIDC 信息安全挑战赛预赛回顾与 OBD-II 标准阅读
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2021-04-30T03:20:24.000Z" itemprop="datePublished">2021-04-30</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Automotive/" rel="tag">Automotive</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="2021WIDC信息安全挑战赛预赛回顾与OBD-II标准阅读"><a href="#2021WIDC信息安全挑战赛预赛回顾与OBD-II标准阅读" class="headerlink" title="2021WIDC信息安全挑战赛预赛回顾与OBD-II标准阅读"></a>2021WIDC信息安全挑战赛预赛回顾与OBD-II标准阅读</h1><p>周五参加了<code>世界智能驾驶挑战赛(WIDC)信息安全挑战赛</code>并通过了预赛，5月中旬将进行线下比拼。一共有 50多只队伍参赛，其中前13名晋级复赛。预赛为线上赛，比赛分为“基础理论”和“实操题”  。赛前根据主办方提供的竞赛范围，做了一些准备，主要是实操题中的车辆信息读取。没想到没用着，实操题做得并不好，没有理解出题人的出题思路，和技术支持聊聊，他说我想的太复杂了，他说考虑到参加的大多是学生，所以难度不会太高。下面简单回顾一下WIDC的预赛，然后记录一下OBD-II标准阅读及理解过程。</p>
+<h2 id="预赛回顾"><a href="#预赛回顾" class="headerlink" title="预赛回顾"></a>预赛回顾</h2><p><img src="image-20210425121503713.png" alt="image-20210425121503713" style="zoom:30%;" /></p>
+<p>预赛采用线上答题模式。理论环节，半小时时间，由于伙伴有事情不在一块，于是一个人答题，采用双机位监控，实实在在做了一套卷子，有一种回到学生时代的感觉。赛题以选择、判断、填空的形式， 涵盖车辆相关的车载网络安全、无线安全、密码安全、OTA 安全、Web 安全、APP 安全、硬件安全等信息安全理论。实际考了 CAN 的传输距离、RSA 计算、TLS1.2 建立过程等。</p>
+<p>实操部分，主要是考察对CAN报文的逆向分析，一共5题。前两题是<code>动作信号</code>分析，通过在页面触发开灯、开门等操作，在抓取的 CAN 报文中找到对应的报文。后面三题目是<code>车辆信息读取</code>，抽取车辆里程、故障码、VIN 码、车速、电池电量、车辆状态等 。</p>
+<p><img src="image-20210425130928782.png" alt="image-20210425130928782"></p>
+<ul>
+<li><p>动作信号</p>
+<p>开灯，点击三次。下载流量数据包，查找重复 3 次的报文。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">&quot;timestamp&quot;</span>:<span class="number">1619168439571</span>,<span class="attr">&quot;type&quot;</span>:<span class="string">&quot;request&quot;</span>,<span class="attr">&quot;id&quot;</span>:<span class="number">0x621</span>,<span class="attr">&quot;dlc&quot;</span>:<span class="number">8</span>,<span class="attr">&quot;data&quot;</span>:[<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>]&#125;</span><br><span class="line">&#123;<span class="attr">&quot;timestamp&quot;</span>:<span class="number">1619168440559</span>,<span class="attr">&quot;type&quot;</span>:<span class="string">&quot;request&quot;</span>,<span class="attr">&quot;id&quot;</span>:<span class="number">0x621</span>,<span class="attr">&quot;dlc&quot;</span>:<span class="number">8</span>,<span class="attr">&quot;data&quot;</span>:[<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>]&#125;</span><br><span class="line">&#123;<span class="attr">&quot;timestamp&quot;</span>:<span class="number">1619168441233</span>,<span class="attr">&quot;type&quot;</span>:<span class="string">&quot;request&quot;</span>,<span class="attr">&quot;id&quot;</span>:<span class="number">0x750</span>,<span class="attr">&quot;dlc&quot;</span>:<span class="number">8</span>,<span class="attr">&quot;data&quot;</span>:[<span class="number">0x40</span>,<span class="number">0x5</span>,<span class="number">0x30</span>,<span class="number">0x11</span>,<span class="number">0x0</span>,<span class="number">0x80</span>,<span class="number">0x0</span>,<span class="number">0x0</span>]&#125;</span><br><span class="line">&#123;<span class="attr">&quot;timestamp&quot;</span>:<span class="number">1619168442266</span>,<span class="attr">&quot;type&quot;</span>:<span class="string">&quot;request&quot;</span>,<span class="attr">&quot;id&quot;</span>:<span class="number">0x621</span>,<span class="attr">&quot;dlc&quot;</span>:<span class="number">8</span>,<span class="attr">&quot;data&quot;</span>:[<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>]&#125;</span><br><span class="line">&#123;<span class="attr">&quot;timestamp&quot;</span>:<span class="number">1619168443103</span>,<span class="attr">&quot;type&quot;</span>:<span class="string">&quot;request&quot;</span>,<span class="attr">&quot;id&quot;</span>:<span class="number">0x750</span>,<span class="attr">&quot;dlc&quot;</span>:<span class="number">8</span>,<span class="attr">&quot;data&quot;</span>:[<span class="number">0x40</span>,<span class="number">0x5</span>,<span class="number">0x30</span>,<span class="number">0x11</span>,<span class="number">0x0</span>,<span class="number">0x80</span>,<span class="number">0x0</span>,<span class="number">0x0</span>]&#125;</span><br><span class="line">&#123;<span class="attr">&quot;timestamp&quot;</span>:<span class="number">1619168444135</span>,<span class="attr">&quot;type&quot;</span>:<span class="string">&quot;request&quot;</span>,<span class="attr">&quot;id&quot;</span>:<span class="number">0x621</span>,<span class="attr">&quot;dlc&quot;</span>:<span class="number">8</span>,<span class="attr">&quot;data&quot;</span>:[<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>]&#125;</span><br><span class="line">&#123;<span class="attr">&quot;timestamp&quot;</span>:<span class="number">1619168444212</span>,<span class="attr">&quot;type&quot;</span>:<span class="string">&quot;request&quot;</span>,<span class="attr">&quot;id&quot;</span>:<span class="number">0x750</span>,<span class="attr">&quot;dlc&quot;</span>:<span class="number">8</span>,<span class="attr">&quot;data&quot;</span>:[<span class="number">0x40</span>,<span class="number">0x5</span>,<span class="number">0x30</span>,<span class="number">0x11</span>,<span class="number">0x0</span>,<span class="number">0x80</span>,<span class="number">0x0</span>,<span class="number">0x0</span>]&#125;</span><br><span class="line">&#123;<span class="attr">&quot;timestamp&quot;</span>:<span class="number">1619168445242</span>,<span class="attr">&quot;type&quot;</span>:<span class="string">&quot;request&quot;</span>,<span class="attr">&quot;id&quot;</span>:<span class="number">0x621</span>,<span class="attr">&quot;dlc&quot;</span>:<span class="number">8</span>,<span class="attr">&quot;data&quot;</span>:[<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>,<span class="number">0x1</span>]&#125;</span><br></pre></td></tr></table></figure>
+<p> 得到结果 <code>id: 0x750    dlc:8    data:0x40,0x5,0x30,0x11,0x0,0x80,0x0,0x0</code>，最后发送此报文验证一下即可。其他的动作分析同理。</p>
+</li>
+<li><p>车辆信息读取</p>
+<p>车辆信息读取，看到题目就想到 UDS 和 SAE J1979( ISO 15031-5:2015 )，但是实际测试没有响应。</p>
+<p><img src="image-20210425142035297.png" alt="image-20210425142035297" style="zoom: 67%;" /></p>
+<p>赛题解析还没出来，先谈谈之前准备的思路。以车速为例。查询车速的 CAN 报文如下。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">7DF [8] 02 01 0D 55 55 55 55 55</span><br></pre></td></tr></table></figure>
+<p>ECU 收到消息后，回复的报文如下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">7E8 [8] 03 41 0D 32 AA AA AA AA</span><br></pre></td></tr></table></figure>
+<p>那么，速度就是32(0x20)Km/h。请求报文是怎么构造的，响应报文该如何解析。之前这类数据一直用诊断仪读，没有手动获取过，乘这次机会学习一下。</p>
+</li>
+</ul>
+<h2 id="标准阅读"><a href="#标准阅读" class="headerlink" title="标准阅读"></a>标准阅读</h2><p>之前没有手动分析 OBD-II 的数据，打开英文的标准完全看不懂，现在稍微理清了，记录一下如何阅读 SAE J1979（ ISO 15031-5:2015）。标准主要有两部分构成，K线 和 CAN 的诊断服务定义，以下仅讲解 CAN 诊断部分。标准可以分为三个部分，消息格式定义、诊断服务详细定义以及附录。</p>
+<p>表 1 中结合OSI 七层模型解释了 OBD-II 诊断所采用协议的层级关系，可以看出 SAE J1979 属于应用层协议。 </p>
+<p><img src="image-20210425175202663.png" alt="image-20210425175202663"></p>
+<h3 id="诊断消息格式"><a href="#诊断消息格式" class="headerlink" title="诊断消息格式"></a>诊断消息格式</h3><p>标准中定义了请求和响应包的格式。OBD-II 中 CAN 诊断使用 ISO 15765-4 中定义的消息格式。</p>
+<p>表6中是请求消息的格式， ISO 15765-4  中的 SID 在  SAE J1979 中是等价的，即OBD-II 的模式(Mode)就是ISO 15765-4  中的SID。</p>
+<p><img src="image-20210425164047714.png" alt="image-20210425164047714"></p>
+<p>表8 是肯定响应的格式，SID+0x40 为肯定响应。</p>
+<p><img src="image-20210425164630337.png" alt="image-20210425164630337"></p>
+<p>表9是否定响应的格式，否定响应的SID为 0x7F。具体的错误码定义可以标准的表10。</p>
+<p><img src="image-20210425164848728.png" alt="image-20210425164848728"></p>
+<p>还有一个比较重要的表格（表13），表中列举了数据的格式。有些数据的格式是在其他标准定义的，这里也给出了如具体的标准编号，如 3、7 服务中 DTC(诊断码)参见 SAE J2012。还有正文与附录的关系，如附录B 是 PID 详细定义。 </p>
+<p><img src="image-20210425173716182.png" alt="image-20210425173716182"></p>
+<h3 id="诊断消息定义"><a href="#诊断消息定义" class="headerlink" title="诊断消息定义"></a>诊断消息定义</h3><p>诊断消息的第二部分是基于 CAN 总线的诊断消息定义，标准中定义了9个模式，汽车制造商并不需要支持所有的模式，每个制造商也可以自行定义额外的模式，这9种模式如下： </p>
+<ul>
+<li><p><strong>模式01: 请求动力系诊断数据</strong></p>
+<p>  识别动力系统信息并在诊断设备上显示当前可用数据，故障码定义车载测试状态和车辆数据（比如，发动机转速、温度、点火提前角、空气流量、燃油系统的闭环状态、车速、档位、电池电压、油量、油耗、总里程、本次里程等）。</p>
+</li>
+<li><p><strong>模式02: 请求冻结帧数据</strong></p>
+<p>  和模式1中的数据相同，但它是在一个故障发生和一个故障码被定义时获得并存储的。模式1中的某些参数识别(PIDs)在该模式中不适用。</p>
+</li>
+<li><p><strong>模式03: 请求排放相关的诊断故障码</strong></p>
+<p>  相关的故障码由识别故障的5位数编码组成。如果应答信息的数据字节中含多个故障码信息或多个ECU计算机进行应答，则可能产生多个应答信息。</p>
+</li>
+<li><p><strong>模式04: 清楚/复位与排放相关的诊断信息</strong></p>
+<p>  用于清除故障码和冻结帧数据。这将清除所有定义的故障码，包括冻结帧数据和就绪检测器定义的。</p>
+</li>
+<li><p><strong>模式05: 请求氧传感器监测测试结果</strong></p>
+<p>  该模式显示氧传感器检测页面和收集到的关于氧传感器的测试结果。有9个号码可用于诊断。</p>
+<ol>
+<li>01 浓到稀，氧传感器阈值电压;</li>
+<li>02 稀到浓，氧传感器阈值电压;</li>
+<li>03 转换时间计算时传感器电压低；</li>
+<li>04 转换时间计算时传感器电压高；</li>
+<li>05 浓到稀切换时间，以ms为单位；</li>
+<li>06 稀到浓切换时间，以ms为单位；</li>
+<li>07 测试最小电压；</li>
+<li>08 测试最大电压；</li>
+<li>09 电压转换之间的时间，以ms为单位；</li>
+</ol>
+</li>
+<li><p><strong>模式06: 请求非连续监测系统测试结果</strong></p>
+<p>  通常有一个最小值，一个最大值，以及每个非连续监测系统的当前值。这项数据是可选项，如果需要，它由车辆制造商来定义。</p>
+</li>
+<li><p><strong>模式07: 请求连续检测系统测试结构（只能在当前或最近的驾驶周期中检测）</strong></p>
+<p>  在一次驾驶循环进行后，需要来自连续监测系统的故障码（未决）以判断固定问题需要维修。维修技术人员用此来确认是否正确维修且清除了故障码。**</p>
+</li>
+<li><p><strong>模式08: 请求诊断组件/系统的控制操作</strong></p>
+<p>  这个特殊控制模式需要车载系统，测试，或双向元件（如适合）的控制。这种模式是制造商指定的。</p>
+</li>
+<li><p><strong>模式09: 请求车辆信息</strong></p>
+<p>  该信息包括存储在车辆发动机控制单元（ECUs）中的车辆VIN码和标定信息。如车厂、型号、品牌、车架号、发动机号等。</p>
+</li>
+</ul>
+<p>在这部分中对每一个模式都进行详细的介绍，包含请求和响应消息的格式，以及每个字段的定义，也给出了实例。下面来看一下模式1 和模式9。</p>
+<h4 id="数据流报文-模式1"><a href="#数据流报文-模式1" class="headerlink" title="数据流报文(模式1)"></a>数据流报文(模式1)</h4><p>读取速度、里程、油量等属于模式1 的动力系诊断数据，读取这些数据通称作<code>读取数据流</code>。</p>
+<h5 id="格式定义"><a href="#格式定义" class="headerlink" title="格式定义"></a>格式定义</h5><p>消息的传输层使用 ISO-TP 协议。OBD 中 CAN 报文使用 11个字节的CAN ID(通常用3个十六进制表示)，数据部分由1个字节的数据长度（bytes）、1个字节的模式（Mode）、1个字节的 PID 以及 4 个字节的数据组成。</p>
+<p><img src="OBD2-frame-raw-mode-PID-ID-bytes.svg" alt="OBD2 PIDs OBD-ii Message Structure Breakdown Explained"></p>
+<ul>
+<li><strong>CAN ID</strong>: 在 OBD-II 消息总，请求 CAN ID 为 7DF，响应 CAN ID  在 7E8 到 7EF 之间，7E8 一般是核心 ECU（行车电脑） 响应使用。 </li>
+<li><strong>长度</strong>: CAN 数据的长度，从Mode到有效数据结尾的字节数。</li>
+<li><p><strong>模式</strong>：OBD-II 中定义了 10种模式，取值范围为 0x1~0xA。响应报文中，会根据请求报文中模式加上 0x40 计算得到响应报文中的模式值。在当前模式下，请求报文中模式的值为 0x1，响应报文汇总模式值为 0x41。</p>
+</li>
+<li><p><strong>PID(parameter identification)</strong>: PID 可以理解为子服务，与 UDS 中的子服务相似，PID 的定义在附录A中 。 </p>
+</li>
+<li><strong>数据</strong>: 4个字节的十六进制数据，响应包中的数据解析需要参考附录B。</li>
+</ul>
+<h5 id="查询支持的PID"><a href="#查询支持的PID" class="headerlink" title="查询支持的PID"></a>查询支持的PID</h5><p>PID 的范围在 0x00~0xc0之间，但不是每个ECU都支持每一个PID，使用之前可以通过发送请求查询哪些 PID 可用，格式固定如下表。</p>
+<p><img src="image-20210425185125354.png" alt="image-20210425185125354"></p>
+<p>然后 ECU 收到之后，回复报文如下表。支持哪些 PID 需要根据附件 A 进行解析。</p>
+<p><img src="image-20210425185224786.png" alt="image-20210425185224786"></p>
+<p>附录 A 中对响应包解析进行了说明。请求报文以每 0x20（32）个 PID 分组查询，响应报文中以 4个字节（32为）数据进行回应，每一个位表示一个 PID 是否支持。</p>
+<p>以上表126中的第三个字节为例，10111111b（Data A），属于对 0~0x20 PID的查询，在表 A1 中找到 PID 为 00的请求的数据行，然后找到 Data A ，依此分析每一位，从高位开始，如果值为 1 ，就表示支持，否则就是不支持。</p>
+<p><img src="image-20210425190022597.png" alt="image-20210425190022597"></p>
+<h5 id="请求多个-PID"><a href="#请求多个-PID" class="headerlink" title="请求多个 PID"></a>请求多个 PID</h5><p>获取到支持的 PID后，根据PID查询数据流，可以多个 PID 一起查询，当然也可以只查询一个。查询请求格式如下表。</p>
+<p><img src="image-20210425192400374.png" alt="image-20210425192400374"></p>
+<p>CAN 发送广播消息后，ECU 接收消息，判断是否需要自己处理，如果需要则回复相关的报文。其中 ECU2 回复了车速查询请求等。车速的 PID 为 0x0D，返回的数据为 0x23。关于 PID 的定义与数据字段的含义需要查询附录B。</p>
+<p><img src="image-20210425192549565.png" alt="image-20210425192549565"></p>
+<p>从附录B 中对 PID  0x0D 车速的描述，可以看到数据为只有一个字节A，速度范围在0~255km/s。数据字节说明写到，每一个bit代表一个1km/h，上面 ECU 回复数据为 0x23，于是计算出速度为 35km/h。</p>
+<p><img src="image-20210425193914729.png" alt="image-20210425193914729"></p>
+<p>看到这里兴许有点疑问，消息这些消息为什么只有7个字节，从Byte1~Byte7，Byte0 在哪里，这个字节的值是什么。这也是我最初比较疑惑的地方，尝试通过其他标准来理解。之前有了解过 UDS 的结构，就拿来对比。回头看看对应的 OSI 7层模型就豁然开朗了，Byte0 是 ISO-TP 中的数据长度，在这个标准中省略掉了。</p>
+<h5 id="手动构造查询请求"><a href="#手动构造查询请求" class="headerlink" title="手动构造查询请求"></a>手动构造查询请求</h5><p>还是以获取速度为例，获取速度。其他数据流的查询请求也类似。</p>
+<ol>
+<li><p>首先确定CAN ID,OBD 请求中 CAN ID 为 0x7DF;</p>
+</li>
+<li><p>然后确定模式/SID, 车速为动力总线数据，所以模式/SID为 0x01；</p>
+</li>
+<li><p>因为模式/SID为 0x01，接下就是 PID，从附录B中找到速度的 PID 值 0x0D；</p>
+</li>
+<li><p>数据一共有两个字节所以数据长度为 0x02；</p>
+</li>
+<li><p>CAN 的单条数据有 8个字节，使用 0x55 填充剩余的字节；</p>
+</li>
+<li>最后，将报文整合起来，得到 <code>7DF [8] 02 01 0D 55 55 55 55 55</code>。</li>
+</ol>
+<p>使用 CAN 卡发送请求后，收到肯定响应报文<code>7E8 [8] 03 41 0D 32 AA AA AA AA</code>，按照附录B 进行解析得到车速 50（0x32）km/s。</p>
+<h4 id="其他模式"><a href="#其他模式" class="headerlink" title="其他模式"></a>其他模式</h4><p>其他模式的分析方法和上述模式1 的相似，并且较少使用附件，看起来相对容易一些。这里值讲解一下 VIN 码获取的部分。</p>
+<p>VIN 俗称车架号，一般在驾驶员前侧前挡风玻璃左侧。查询 VIN，属于模式/SID 9(请求车辆信息)。查询 VIN 的消息类型为 0x02，请求报文如下。</p>
+<p><img src="image-20210425201134157.png" alt="image-20210425201134157"></p>
+<p>响应报文如下，查询到 VIN 的个数为1，VIN 的值为 1G1JC5444R7252367。</p>
+<p><img src="image-20210425203700327.png" alt="image-20210425203700327"></p>
+<p>根据上面两个表封装成的 CAN 报文如下。</p>
+<ul>
+<li><p>请求: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">7DF  [8]  02 09 02 00 00 00 00 00 </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>响应: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">7E8  [8]  10 14 49 02 01 31 47 31 </span><br><span class="line">7E8  [8]  21 4a 43 35 34 34 34 52 </span><br><span class="line">7E8  [8]  22 37 32 35 32 33 36 37</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>虽然此次为赛前准备的东西没有用上，但是通过这个过程较为深入的学习 OBD-II 诊断协议。由于不是出自汽车领域，对协议细节不是很了解，以前一直依靠于工具获取，不知道具体的字段定义，经过这次的学习，弄清楚了 SAE J1979 标准，还有它与 UDS(ISO 14429 的关系)。它们的使用场景不同，但有着相似消息结构。也知道了为什么 UDS 的 SID 是从0x10 开始的，是为了兼容 SAE J1979。车联网的通信协议众多，各种协议相互交叉应用，阅读理解起来确实不易，日拱一卒。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.sae.org/standards/content/j1979_201202/">J1979: E/E Diagnostic Test Modes - SAE International</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.iso.org/standard/66368.html">ISO - ISO 15031-5:2015 - Road vehicles — Communication between vehicle and external equipment for emissions-related diagnostics — Part 5: Emissions-related diagnostic services</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.csselectronics.com/screen/page/simple-intro-obd2-explained/language/en">OBD2 Explained - A Simple Intro (2021) </a></p>
+</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#2021WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB"><span class="toc-number">1.</span> <span class="toc-text">2021WIDC信息安全挑战赛预赛回顾与OBD-II标准阅读</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE"><span class="toc-number">1.1.</span> <span class="toc-text">预赛回顾</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB"><span class="toc-number">1.2.</span> <span class="toc-text">标准阅读</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%8A%E6%96%AD%E6%B6%88%E6%81%AF%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.2.1.</span> <span class="toc-text">诊断消息格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%8A%E6%96%AD%E6%B6%88%E6%81%AF%E5%AE%9A%E4%B9%89"><span class="toc-number">1.2.2.</span> <span class="toc-text">诊断消息定义</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%B5%81%E6%8A%A5%E6%96%87-%E6%A8%A1%E5%BC%8F1"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">数据流报文(模式1)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E5%AE%9A%E4%B9%89"><span class="toc-number">1.2.2.1.1.</span> <span class="toc-text">格式定义</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E6%94%AF%E6%8C%81%E7%9A%84PID"><span class="toc-number">1.2.2.1.2.</span> <span class="toc-text">查询支持的PID</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E5%A4%9A%E4%B8%AA-PID"><span class="toc-number">1.2.2.1.3.</span> <span class="toc-text">请求多个 PID</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%89%8B%E5%8A%A8%E6%9E%84%E9%80%A0%E6%9F%A5%E8%AF%A2%E8%AF%B7%E6%B1%82"><span class="toc-number">1.2.2.1.4.</span> <span class="toc-text">手动构造查询请求</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">其他模式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.2.3.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.3.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/&text=2021WIDC 信息安全挑战赛预赛回顾与 OBD-II 标准阅读"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/&title=2021WIDC 信息安全挑战赛预赛回顾与 OBD-II 标准阅读"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/&is_video=false&description=2021WIDC 信息安全挑战赛预赛回顾与 OBD-II 标准阅读"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=2021WIDC 信息安全挑战赛预赛回顾与 OBD-II 标准阅读&body=Check out this article: http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/&title=2021WIDC 信息安全挑战赛预赛回顾与 OBD-II 标准阅读"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/&title=2021WIDC 信息安全挑战赛预赛回顾与 OBD-II 标准阅读"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/&title=2021WIDC 信息安全挑战赛预赛回顾与 OBD-II 标准阅读"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/&title=2021WIDC 信息安全挑战赛预赛回顾与 OBD-II 标准阅读"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/04/29/2021-WIDC%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B%E5%9B%9E%E9%A1%BE%E4%B8%8EOBD-II%E6%A0%87%E5%87%86%E9%98%85%E8%AF%BB/&name=2021WIDC 信息安全挑战赛预赛回顾与 OBD-II 标准阅读&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+

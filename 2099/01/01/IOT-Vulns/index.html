@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="2021  CVE-2021-34991|Netgear SOHO Devices upnpd Service Pre-Authentication Stack Overflow 以Tenda AC15 CVE-2018-5767为例进行fuzz测试 Reverse-engineering the Yamaha DX7 synthesizer’s sound chip from die photo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IOT 漏洞收集">
+<meta property="og:url" content="http://delikey.github.io/2099/01/01/IOT-Vulns/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="2021  CVE-2021-34991|Netgear SOHO Devices upnpd Service Pre-Authentication Stack Overflow 以Tenda AC15 CVE-2018-5767为例进行fuzz测试 Reverse-engineering the Yamaha DX7 synthesizer’s sound chip from die photo">
+<meta property="og:locale">
+<meta property="article:published_time" content="2099-01-01T11:00:00.000Z">
+<meta property="article:modified_time" content="2021-11-20T04:54:55.660Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="IOT">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>IOT 漏洞收集</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2099/01/01/firmware/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2099/01/01/ICS-Vulns/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
+      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
+      <span id="i-top" class="info" style="display:none;">Arriba</span>
+      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2099/01/01/IOT-Vulns/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2099/01/01/IOT-Vulns/&text=IOT 漏洞收集"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2099/01/01/IOT-Vulns/&title=IOT 漏洞收集"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2099/01/01/IOT-Vulns/&is_video=false&description=IOT 漏洞收集"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=IOT 漏洞收集&body=Check out this article: http://delikey.github.io/2099/01/01/IOT-Vulns/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2099/01/01/IOT-Vulns/&title=IOT 漏洞收集"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2099/01/01/IOT-Vulns/&title=IOT 漏洞收集"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2099/01/01/IOT-Vulns/&title=IOT 漏洞收集"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2099/01/01/IOT-Vulns/&title=IOT 漏洞收集"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2099/01/01/IOT-Vulns/&name=IOT 漏洞收集&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#2021"><span class="toc-number">1.</span> <span class="toc-text">2021</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2020"><span class="toc-number">2.</span> <span class="toc-text">2020</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2019"><span class="toc-number">3.</span> <span class="toc-text">2019</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2018"><span class="toc-number">4.</span> <span class="toc-text">2018</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2017"><span class="toc-number">5.</span> <span class="toc-text">2017</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016"><span class="toc-number">6.</span> <span class="toc-text">2016</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E7%A0%94%E7%A9%B6"><span class="toc-number">7.</span> <span class="toc-text">安全研究</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86"><span class="toc-number">8.</span> <span class="toc-text">标准</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        IOT 漏洞收集
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2099-01-01T11:00:00.000Z" itemprop="datePublished">2099-01-01</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/IOT/" rel="tag">IOT</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="2021"><a href="#2021" class="headerlink" title="2021"></a>2021</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/grimm-co/NotQuite0DayFriday/tree/trunk/2021.11.16-netgear-upnp"> CVE-2021-34991|Netgear SOHO Devices upnpd Service Pre-Authentication Stack Overflow</a></li>
+<li><a target="_blank" rel="noopener" href="https://p1kk.github.io/2021/03/29/iot/Tenda AC15 CVE-2018-5767 CVE-2020-10987/">以Tenda AC15 CVE-2018-5767为例进行fuzz测试</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.righto.com/2021/11/reverse-engineering-yamaha-dx7.html">Reverse-engineering the Yamaha DX7 synthesizer’s sound chip from die photos </a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.scrt.ch/2021/11/15/tpm-sniffing">TPM sniffing</a></li>
+<li><a target="_blank" rel="noopener" href="https://securitylab.github.com/research/qualcomm_npu">Fall of the machines: Exploiting the Qualcomm NPU (neural processing unit) kernel driver</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.forescout.com/blog/new-critical-vulnerabilities-found-on-nucleus-tcp-ip-stack/">NUCLEUS:13 - New Critical Vulnerabilities Found on Nucleus TCP/IP Stack</a></li>
+<li><a target="_blank" rel="noopener" href="https://wololo.net/2021/01/12/psp-release-baryon-sweeper-lets-you-unbrick-psp-2000-3000-pandora-battery-style/">Baryon Sweeper lets you unbrick PSP 2000/3000, Pandora battery style</a></li>
+<li><a target="_blank" rel="noopener" href="https://wzt.ac.cn/2021/11/02/TFC2021-AX56U/">Tianfu Cup 2021 RT-AX56U RCE</a></li>
+<li><a target="_blank" rel="noopener" href="https://sec-consult.com/vulnerability-lab/advisory/critical-vulnerabilities-in-altus-sistemas-de-automacao-products/">Critical Vulnerabilities in Altus Sistemas de Automacao products (命令注入、硬编码、CSRF)</a></li>
+<li><a target="_blank" rel="noopener" href="https://sec-consult.com/vulnerability-lab/advisory/critical-vulnerabilities-in-hikam-high-infinity-technology/">Critical Vulnerabilities in HiKam - High Infinity Technology (认证绕过、信息泄露…)</a></li>
+<li><a target="_blank" rel="noopener" href="https://research.nccgroup.com/2021/10/11/the-challenges-of-fuzzing-5g-protocols/">The Challenges of Fuzzing 5G Protocols</a></li>
+<li><a target="_blank" rel="noopener" href="https://research.nccgroup.com/2021/10/06/technical-advisory-open5gs-stack-buffer-overflow-during-pfcp-session-establishment-on-upf-cve-2021-41794/">CVE-2021-41794|Open5GS Stack Buffer Overflow During PFCP Session Establishment on UPF</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.synacktiv.com/publications/your-vulnerability-is-in-another-oem.html">Your vulnerability is in another OEM! (Western Digital PR4100 NAS)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.iot-inspector.com/blog/advisory-cisco-ata19x-privilege-escalation-rce/">CVE-2021-34710|Cisco ATA19X Privilege Escalation and RCE - IoT Inspector (命令注入)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cyberark.com/resources/threat-research-blog/cracking-wifi-at-scale-with-one-simple-trick">Cracking WiFi at Scale with One Simple Trick</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.iot-inspector.com/blog/broadcom-sdk-vulnerabilities-bug-reports/">Swimming Upstream: Uncovering Broadcom SDK vulnerabilities from bug reports(SSDP M-SEARCH 溢出))</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.trendmicro.com/fr_fr/research/21/j/forced-entry-a-security-test-for-automatic-garage-doors.html">Forced Entry: A Security Test for Automatic Garage Doors </a><a target="_blank" rel="noopener" href="https://www.trendmicro.com/content/dam/trendmicro/global/en/research/21/j/forced-entry-a-security-test-for-automatic-garage-doors/TechnicalBrief-A-Security-Analysis-of-Garage-Door-Remotes-and-the-Danger-of-DOR-Attacks.pdf">Detail</a></li>
+<li><a target="_blank" rel="noopener" href="https://insinuator.net/2021/10/change-your-ble-passkey-like-you-change-your-underwear/">Change Your BLE Passkey Like You Change Your Underwear</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.somersetrecon.com/blog/2021/hacking-the-furbo-part-1">Hacking the Furbo Dog Camera: Part I</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.somersetrecon.com/blog/2021/hacking-the-furbo-dog-camera-part-ii">Hacking the Furbo Dog Camera: Part II</a></li>
+<li><a target="_blank" rel="noopener" href="https://swarm.ptsecurity.com/cisco-hyperflex-how-we-got-rce-through-login-form-and-other-findings/">Cisco Hyperflex: How We Got RCE Through Login Form and Other Findings</a></li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/geekculture/hacking-lg-webos-smart-tvs-using-a-phone-3fedba5d6f50">Hacking LG WebOS Smart TVs Using A Phone</a></li>
+<li><a target="_blank" rel="noopener" href="https://ssd-disclosure.com/ssd-advisory-dd-wrt-upnp-buffer-overflow/">DD-WRT UPNP Buffer Overflow (缓冲区溢出)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.iot-inspector.com/blog/broadcom-sdk-vulnerabilities-bug-reports/">Swimming Upstream: Uncovering Broadcom SDK Vulnerabilities from Bug Reports(堆溢出)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bitdefender.com/files/News/CaseStudies/study/402/Bitdefender-PR-Whitepaper-VictureIPC-creat5590-en-EN.pdf">Cracking the Victure IPC360 Monitor (访问控制不当、缓冲区溢出、私有协议分析)</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/mcw0/PoC/blob/master/Dahua%20authentication%20bypass.txt">Dahua authentication bypass</a></li>
+<li><a target="_blank" rel="noopener" href="https://learncctv.com/how-to-reset-h-264-network-dvr/">How to reset H.264 Network DVR (for lost password)</a></li>
+<li><a target="_blank" rel="noopener" href="https://watchfulip.github.io/2021/09/18/Hikvision-IP-Camera-Unauthenticated-RCE.html">Unauthenticated Remote Code Execution (RCE) vulnerability in Hikvision IP camera/NVR firmware (CVE-2021-36260)</a> <a target="_blank" rel="noopener" href="https://github.com/Aiminsun/CVE-2021-36260/blob/main/CVE-2021-36260.py">POC</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.nksc.lt/doc/en/analysis/2021-08-23_5G-CN-analysis_env3.pdf">ANALYSIS OF PRODUCTS MADE BY Huawei, Xiaomi and OnePlus</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.grimm-co.com/2021/09/mama-always-told-me-not-to-trust.html">Mama Always Told Me Not to Trust Strangers without Certificates</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.shielder.it/advisories/qnap-musicstation-malwareremover-pre-auth-remote-code-execution/?utm_source=pocket_mylist">QNAP MusicStation/MalwareRemover Pre-Auth Remote Code Execution</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/nanomq/nanomq/issues/203?fbclid=IwAR0dfQrgHknG6ZsEv5WDJnpzaxyjUdQ-BtLC0ON4RkJHQm6dnB1HA4Bu1w8">NanoMQ: Improper Handling of Payload Length</a></li>
+<li><a target="_blank" rel="noopener" href="https://nns.ee/blog/2021/04/03/modem-rce.html">Code execution as root via AT commands on the Quectel EG25-G modem</a></li>
+<li><a target="_blank" rel="noopener" href="https://infosecwriteups.com/full-disclosure-0-day-rce-backdoor-in-teradek-ip-video-device-firmwares-85a16f346e15">Full disclosure: 0-day RCE backdoor in Teradek IP video device firmwares</a></li>
+<li><a target="_blank" rel="noopener" href="https://research.checkpoint.com/2021/i-can-take-over-your-kindle/">Do you like to read? I can take over your Kindle with an e-book</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.pentestpartners.com/security-blog/breaking-the-android-bootloader-on-the-qualcomm-snapdragon-660/">Breaking the Android Bootloader on the Qualcomm Snapdragon 660</a></li>
+<li><a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-268758.htm">Cisco RV160W系列路由器漏洞：从1day分析到0day挖掘</a></li>
+<li><a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-268623.htm">家用路由器漏洞挖掘实例分析 图解D-LINK DIR-815多次溢出漏洞</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.iot-inspector.com/blog/advisory-multiple-issues-realtek-sdk-iot-supply-chain/">Advisory: Multiple Issues in Realtek SDK Affects Hundreds of Thousands of Devices Down the Supply Chain</a></li>
+<li><a target="_blank" rel="noopener" href="https://tnpitsecurity.com/blog/gaining-root-on-sonos-speakers/">Gaining root access on Sonos Play (1st gen and 2nd gen ‘One’)(DMA 攻击)</a></li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/tenable-techblog/bypassing-authentication-on-arcadyan-routers-with-cve-2021-20090-and-rooting-some-buffalo-ea1dd30980c2">Bypassing Authentication on Arcadyan Routers with CVE-2021–20090 and rooting some Buffalo</a></li>
+<li><a target="_blank" rel="noopener" href="https://starlabs.sg/blog/2021/08/identifying-bugs-in-router-firmware-at-scale-with-taint-analysis/">Identifying Bugs in Router Firmware at Scale with Taint Analysis</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cyberark.com/resources/threat-research-blog/bypassing-windows-hello-without-masks-or-plastic-surgery">Bypassing Windows Hello Without Masks or Plastic Surgery</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.zecops.com/research/meet-wifidemon-ios-wifi-rce-0-day-vulnerability-and-a-zero-click-vulnerability-that-was-silently-patched/">Meet WiFiDemon: iOS WiFi RCE 0-Day Vulnerability &amp; a ‘Zero-Click’ Vulnerability That was Silently Patched</a></li>
+<li><a target="_blank" rel="noopener" href="https://labs.sentinelone.com/cve-2021-3438-16-years-in-hiding-millions-of-printers-worldwide-vulnerable/">CVE-2021-3438: 16 Years In Hiding - Millions of Printers Worldwide Vulnerable</a> <a target="_blank" rel="noopener" href="https://voidsec.com/root-cause-analysis-of-cve-2021-3438/">Analysis</a></li>
+<li><a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-268572.htm">云丁鹿客门锁BLE通信的分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/391832240">CVE-2021-35973：Netgear wac104 身份认证绕过</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.randorisec.fr/udp-technology-ip-camera-vulnerabilities/">UDP Technology IP Camera vulnerabilities</a></li>
+<li><a target="_blank" rel="noopener" href="https://alephsecurity.com/2021/07/15/aruba-instant/">Aruba in Chains: Chaining Vulnerabilities for Fun and Profit</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.esat.kuleuven.be/cosic/blog/dumping-and-extracting-the-spacex-starlink-user-terminal-firmware/">Dumping and extracting the SpaceX Starlink User Terminal firmware</a></li>
+<li><a target="_blank" rel="noopener" href="https://rbaron.net/blog/2021/07/06/Reverse-engineering-the-M6-smart-fitness-band.html">Reverse Engineering the M6 Smart Fitness Bracelet</a> <a target="_blank" rel="noopener" href="https://www.4hou.com/posts/L04g">译文</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/pvvx/ATC_MiThermometer">ATC_MiThermometer: Custom firmware for the Xiaomi Thermometers and Telink Flasher via USB to Serial converter(SWire Debug)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.microsoft.com/security/blog/2021/06/30/microsoft-finds-new-netgear-firmware-vulnerabilities-that-could-lead-to-identity-theft-and-full-system-compromise/">Microsoft finds new NETGEAR firmware vulnerabilities that could lead to identity theft and full system compromise(认证绕过、侧信道)</a> <a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/246028">译文</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/183998">如何日穿自家光猫(后门、命令入住)</a></li>
+<li><a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-268031.htm">记一次网关设备的pwn-智能设备(硬编码、栈溢出)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/hac425/p/14872442.html">开源USB协议栈漏洞挖掘</a></li>
+<li><a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-267916.htm">手环BLE蓝牙认证绕过，可实现远程控制</a></li>
+<li><a target="_blank" rel="noopener" href="https://research.checkpoint.com/2021/pwn2own-qualcomm-dsp/">Pwn2Own Qualcomm DSP</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.zerodayinitiative.com/blog/2021/5/24/cve-2021-22909-digging-into-a-ubiquiti-firmware-update-bug">DIGGING INTO A UBIQUITI FIRMWARE UPDATE BUG(curl -k insecure option MITM)</a></li>
+<li><a target="_blank" rel="noopener" href="https://sec-consult.com/vulnerability-lab/advisory/multiple-critical-vulnerabilities-in-korenix-technology-westermo-pepperl-fuchs/">Multiple Critical Vulnerabilities in Korenix Technology, Westermo and Pepperl+Fuchs products</a></li>
+<li><a target="_blank" rel="noopener" href="https://airbus-seclab.github.io/#2021">Attacking Xerox multi function printers</a> <a target="_blank" rel="noopener" href="https://delikely.github.io/2099/01/01/IOT-Vulns/syscall.eu/pdf/INFILTRATE2020-RIGO-Xerox-final.pdf">Slide</a> <a target="_blank" rel="noopener" href="https://vimeo.com/showcase/8085537/video/539693997">video</a></li>
+<li><a target="_blank" rel="noopener" href="https://elongl.github.io/exploitation/2021/05/30/pwning-home-router.html">Pwning Home Router - Linksys WRT54G</a></li>
+<li><a target="_blank" rel="noopener" href="https://gynvael.coldwind.pl/?id=733">NETGEAR Switches Pre-Authentication Command Injection</a></li>
+<li><a target="_blank" rel="noopener" href="https://msrc-blog.microsoft.com/2021/04/29/badalloc-memory-allocation-vulnerabilities-could-affect-wide-range-of-iot-and-ot-devices-in-industrial-medical-and-enterprise-networks/">BadAlloc: Memory allocation vulnerabilities could affect wide range of IoT and OT devices</a></li>
+<li><a target="_blank" rel="noopener" href="https://positive.security/blog/send-my">Send My: Arbitrary data transmission via Apple’s Find My network</a></li>
+<li><a target="_blank" rel="noopener" href="https://naehrdine.blogspot.com/2021/04/bluetooth-wi-fi-code-execution-wi-fi.html">Bluetooth → Wi-Fi Code Execution &amp; Wi-Fi Debugging</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.vdoo.com/blog/realtek-wifi-vulnerabilities-zero-day">Realtek RTL8710C WPA2 handshake mechanism buffer overflow(缓冲区溢出)</a></li>
+<li><a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-265744.htm">CVE-2020-12351：Linux蓝牙模块拒绝服务漏洞分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.talosintelligence.com/2021/04/vuln-spotlight-co.html">Remote code execution vulnerabilities in Cosori smart air fryer(溢出、命令执行)</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/BenChaliah/Tenda_D151_D301_POC">Tenda D151 D301 exploit(未授权配置文件下载)</a></li>
+<li><a target="_blank" rel="noopener" href="https://ssd-disclosure.com/ssd-advisory-netgear-nighthawk-r7000-httpd-preauth-rce/">NETGEAR Nighthawk R7000 httpd PreAuth RCE(堆溢出)</a></li>
+<li><a target="_blank" rel="noopener" href="https://starlabs.sg/advisories/21-0254/">Junos OS overlayd service bss Buffer Overflow</a></li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/tenable-techblog/inside-simplisafe-alarm-system-291a8c3e4d89">Inside SimpliSafe Alarm System</a></li>
+<li><a target="_blank" rel="noopener" href="https://quentinkaiser.be/security/2021/03/09/voodoo/">VOOdoo - Remotely Compromising VOO Cable Modems</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.synacktiv.com/publications/dumping-the-sonos-one-smart-speaker.html">DUMPING THE SONOS ONE SMART SPEAKER</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.synacktiv.com/en/publications/pwn2own-tokyo-2020-defeating-the-tp-link-ac1750.html">PWN2OWN TOKYO 2020: DEFEATING THE TP-LINK AC1750</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.softscheck.com/en/reverse-engineering-tp-link-hs110/">Reverse Engineering the TP-Link HS110</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/IY6j0v9pG4j-JlozEk7Jzw">破解与攻击智能门锁</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/darrenmartyn/visualdoor">VisualDoor: SonicWall SSL-VPN Exploit</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/o9v4V673ayyMTY1vGjveFg">Netgear固件分析与后门植入</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.crowdstrike.com/blog/pwn2own-tale-of-a-bug-found-and-lost-again/">Pwn2Own: A Tale of a Bug Found and Lost Again</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/yumusb/EgGateWayGetShell_py">锐捷网络-EWEB网管系统(命令注入)</a></li>
+<li><a target="_blank" rel="noopener" href="https://labs.ioactive.com/2021/02/a-practical-approach-to-attacking-iot.html">A Practical Approach To Attacking IoT Embedded Designs (I)</a></li>
+<li><a target="_blank" rel="noopener" href="https://research.nccgroup.com/2021/01/31/2020-annual-research-report/">NCC Group’s 2020 Annual Research Report</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.vdoo.com/blog/realtek-rtl8195a-vulnerabilities-discovered">Major Vulnerabilities discovered and patched in Realtek RTL8195A Wi-Fi Module</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.refirmlabs.com/florida-tech-cybersecurity-researchers-discover-hidden-vulnerabilities-in-wireless-doorbells-cameras/">Hidden Vulnerabilities in Wireless Doorbells, Cameras</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.0xlabs.com/2021/02/wavlink-rce-CVE-2020-13117.html">CVE-2020-13117| Wavlink Multiple AP Products: Unauthenticated Remote Root Command Execution</a></li>
+<li><a target="_blank" rel="noopener" href="https://security.tencent.com/index.php/blog/msg/181">物联网开源组件安全Node-RED白盒审计</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.fireeye.com/blog/threat-research/2021/02/solarcity-exploitation-of-x2e-iot-device-part-two.html">Shining a Light on SolarCity: Practical Exploitation of the X2e IoT Device (Part Two)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.fireeye.com/blog/threat-research/2021/02/solarcity-exploitation-of-x2e-iot-device-part-one.html">Shining a Light on SolarCity: Practical Exploitation of the X2e IoT Device (Part One)</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.recurity-labs.com/2021-02-03/webOS_Pt1.html">CVE-2020-XXXXX - Getting root on webOS</a> <a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/231495">译文</a></li>
+<li><a target="_blank" rel="noopener" href="https://pierrekim.github.io/blog/2021-01-12-fiberhome-ont-0day-vulnerabilities.html">Multiple vulnerabilities found in FiberHome HG6245D routers</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jsof-tech.com/disclosures/dnspooq/">DNSpooq: 7 vulnerabilities in Dnsmasq</a></li>
+<li><a target="_blank" rel="noopener" href="https://research.nccgroup.com/2021/03/08/technical-advisory-multiple-vulnerabilities-in-netgear-prosafe-plus-jgs516pe-gs116ev2-switches/">Multiple Vulnerabilities in Netgear ProSAFE Plus JGS516PE / GS116Ev2 Switches</a></li>
+<li><a target="_blank" rel="noopener" href="https://pollevanhoof.be/nuggets/smart_cards/nespresso">Exploiting the Nespresso smart cards for fun and profit coffee</a></li>
+<li><a target="_blank" rel="noopener" href="https://ssd-disclosure.com/ssd-advisory-hongdian-h8922-multiple-vulnerabilities/">Hongdian H8922 Multiple Vulnerabilities(硬编码/命令注入)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.iot-inspector.com/blog/advisory-multiple-issues-libre-wireless-ls9/">Multiple Issues in Libre Wireless LS9 Modules(认证绕过/信息泄露)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.iot-inspector.com/blog/advisory-d-link-dir-3060/">CVE-2021-28144|D-Link DIR-3060 Authenticated RCE(命令注入)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.iot-inspector.com/blog/advisory-cisco-rv34x-authentication-bypass-remote-command-execution/">Cisco RV34X Series – Authentication Bypass and Remote Command Execution</a></li>
+<li><a target="_blank" rel="noopener" href="https://gynvael.coldwind.pl/?id=733">NETGEAR Switches Pre-Authentication Command Injection</a></li>
+</ul>
+<h2 id="2020"><a href="#2020" class="headerlink" title="2020"></a>2020</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.synacktiv.com/publications/treasure-chest-party-quest-from-doom-to-exploit">Zombies ate my printer’s ink Attacking a Canon printer, from firmware gathering to remote code execution</a> <a target="_blank" rel="noopener" href="https://www.synacktiv.com/sites/default/files/2022-06/thcon2021_canon_printer.pdf">Silde</a></li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/@anderson_pablo/iptv-smarters-exploit-cve-2020-9380-22d4b21f5da7">CVE-2020–9380 IPTV Smarters Exploit</a> <a target="_blank" rel="noopener" href="https://github.com/migueltarga/CVE-2020-9380">Github</a></li>
+<li><a target="_blank" rel="noopener" href="https://labs.f-secure.com/advisories/xiaomi-mi9/">CVE-2020-9530 CVE-2020-9531|exploited the Xiaomi Mi9 through NFC tag</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/245070099">CVE-2020-11959/11960|实战逻辑漏洞：三个漏洞搞定一台路由器(小米AIoT路由器AX3600)</a> <a target="_blank" rel="noopener" href="https://hitcon.org/2020/slides/Exploit%20%28Almost%29%20All%20Xiaomi%20Routers%20Using%20Logical%20Bugs.pdf">Slides</a> <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1gf4y1D7L2">Video</a></li>
+<li><a target="_blank" rel="noopener" href="https://bbs.hassbian.com/thread-11139-1-1.html">逆向分析下小爱音箱root密码</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csftech.net/xiaomi-ai-speaker-authenticated-rce-i-firmware-analysis">CVE-2020-14096|Xiaomi AI Speaker Authenticated</a> <a target="_blank" rel="noopener" href="https://blog.csftech.net/xiaomi-ai-speaker-authenticated-rce-ii-how-does-mico-ota-update-work/">Part 2</a> <a target="_blank" rel="noopener" href="https://blog.csftech.net/xiaomi-ai-speaker-authenticated-rce-iii-cve-2020-14096/">Part 3</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Jian-Xian/CVE-POC">XIAOMI AI speaker get root shell by accessing UART</a></li>
+<li><a target="_blank" rel="noopener" href="https://thehackernews.com/2021/01/secret-backdoor-account-found-in.html">CVE-2020-29583|Undocumented user account in Zyxel products</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.claroty.com/2020/11/17/blog-research-rta-enip-stack-vulnerability/">LINGERING RTA ENIP STACK VULNERABILITY POSES RISK TO ICS DEVICES</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.netlab.360.com/another-lilin-dvr-0-day-being-used-to-spread-mirai/">LILIN DVR/NVR 在野0-day漏洞攻击报告2</a></li>
+<li><a target="_blank" rel="noopener" href="https://sick.codes/extraordinary-vulnerabilities-discovered-in-tcl-android-tvs-now-worlds-3rd-largest-tv-manufacturer/">Extraordinary Vulnerabilities Discovered in TCL Android TVs, Now World’s 3rd Largest TV Manufacturer</a></li>
+<li><a target="_blank" rel="noopener" href="https://sec-consult.com/en/blog/advisories/multiple-vulnerabilities-in-zte-wlan-router-mf253v/">MULTIPLE VULNERABILITIES IN ZTE WLAN ROUTER MF253V</a></li>
+<li><a target="_blank" rel="noopener" href="https://james-clee.com/2020/04/18/multiple-wavlink-vulnerabilities/">Multiple Vulnerabilities in Wavlink Router leads to Unauthenticated RCE – CVE-2020-10971 and CVE-2020-10972</a> <a target="_blank" rel="noopener" href="https://james-clee.com/2020/04/23/more-information-disclosure-in-wavlink-devices/">More</a></li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/tenable-techblog/tp-link-takeover-with-a-flash-drive-d493666f6b39">Crafting symbolic links to root a TP-Link AC1750</a></li>
+<li><a target="_blank" rel="noopener" href="https://iryl.info/2020/11/27/exploiting-samsung-router-wlan-ap-wea453e/">Exploiting Samsung Router WLAN AP WEA453e</a></li>
+<li><a target="_blank" rel="noopener" href="https://alephsecurity.com/2020/10/14/ruckus-wireless-2/">Don’t Ruck Us Again - The Exploit Returns</a></li>
+<li><a target="_blank" rel="noopener" href="https://adepts.of0x.cc/ruckus-vriot-rce/">Remote Command Execution in Ruckus IoT Controller (CVE-2020-26878 &amp; CVE-2020-26879)</a></li>
+<li><a target="_blank" rel="noopener" href="https://myakupa.github.io/write-up-damn-vulnerable-arm-router">[write Up] Damn Vulnerable Arm Router</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.pentestpartners.com/security-blog/smart-male-chastity-lock-cock-up/">Smart male chastity lock cock-up</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.guardicore.com/2020/10/wareztheremote-turning-remotes-into-listening-devices/">WarezTheRemote: Turning Remotes Into Listening Devices</a></li>
+<li><a target="_blank" rel="noopener" href="https://asset-group.github.io/disclosures/sweyntooth/">SweynTooth Cybersecurity Vulnerabilities May Affect Certain Medical Devices: FDA Safety Communication</a> <a target="_blank" rel="noopener" href="https://asset-group.github.io/disclosures/sweyntooth/sweyntooth.pdf">White Paper</a></li>
+<li><a target="_blank" rel="noopener" href="https://gitlab.com/gitlab-com/gl-security/security-operations/gl-redteam/red-team-tech-notes/-/tree/master/firefox-android-2020">Abuse UPnP,Firefox for Android LAN-Based Intent Triggering</a></li>
+<li><a target="_blank" rel="noopener" href="https://raelize.com/posts/espressif-esp32-bypassing-encrypted-secure-boot-cve-2020-13629/">Espressif ESP32: Bypassing Encrypted Secure Boot (CVE-2020-13629)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.mcafee.com/blogs/other-blogs/mcafee-labs/call-an-exorcist-my-robots-possessed/">Call an Exorcist! My Robot’s Possessed!</a></li>
+<li><a target="_blank" rel="noopener" href="https://kojenov.com/2020-09-15-hisilicon-encoder-vulnerabilities/">Backdoors and other vulnerabilities in HiSilicon based hardware video encoders</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.pentestpartners.com/security-blog/speed-2-the-poseidon-adventure-when-cruise-ships-attack-part-1/">Speed 2 – The Poseidon Adventure</a> <a target="_blank" rel="noopener" href="https://www.pentestpartners.com/security-blog/speed-2-the-poseidon-adventure-when-cruise-ships-attack-part-2/">PART-2</a></li>
+<li><a target="_blank" rel="noopener" href="https://labs.ioactive.com/2020/09/no-buffers-harmed-rooting-sierra.html?spref=tw">No buffers harmed: Rooting Sierra Wireless AirLink devices through logic bugs</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.pentestpartners.com/security-blog/360lock-smart-lock-review/">360lock Smart Lock Review</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.criticalstart.com/critical-vulnerabilities-discovered-in-mofi-routers/">Critical Vulnerabilities Discovered in MoFi Routers</a></li>
+<li><a target="_blank" rel="noopener" href="https://ssd-disclosure.com/ssd-advisory-netgear-nighthawk-r8300-upnpd-preauth-rce/">Netgear Nighthawk R8300 upnpd PreAuth RCE</a> <a target="_blank" rel="noopener" href="https://paper.seebug.org/1311/">分析与复现</a></li>
+<li><a target="_blank" rel="noopener" href="https://research.checkpoint.com/2020/dont-be-silly-its-only-a-lightbulb/">Don’t be silly – it’s only a lightbulb</a></li>
+<li><a target="_blank" rel="noopener" href="https://faruktuygun.com/directorytraversal.html">Ruijie Networks Switch Version S29_RGOS 11.4(1)B12P11 eWeb Directory Traversal</a></li>
+<li><a target="_blank" rel="noopener" href="https://research.loginsoft.com/vulnerability/multiple-vulnerabilities-discovered-in-the-d-link-firmware-dir-816l/">Multiple Vulnerabilities discovered in the D-link Firmware DIR-816L</a> <a target="_blank" rel="noopener" href="https://www.4hou.com/posts/7Ozy">译文</a></li>
+<li><a target="_blank" rel="noopener" href="https://guillaumebour.fr/articles/security_testing_pacemaker_ecosystem/part_1_introduction_context_methodology/">Security testing of the pacemaker ecosystem Part 1</a> <a target="_blank" rel="noopener" href="https://guillaumebour.fr/articles/">ALL</a> <a target="_blank" rel="noopener" href="https://www.4hou.com/posts/RwrO">译文 Part1</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.pentestpartners.com/security-blog/threat-modelling-and-iot-hubs/">INTERNET OF THINGS Threat modelling and IoT hubs</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.securityevaluators.com/tenda-ac1900-vulnerabilities-discovered-and-exploited-e8e26aa0bc68">Tenda AC15 AC1900 Vulnerabilities Discovered and Exploited</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.karansaini.com/os-command-injection-v-sol/">ARBITRARY OS COMMAND INJECTION ON V-SOL HOME ROUTERS</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.mcafee.com/blogs/other-blogs/mcafee-labs/my-adventures-hacking-the-iparcelbox/?hilite=&#39;iParcelBox&#39;">My Adventures Hacking the iParcelBox</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.pentestpartners.com/security-blog/hacking-smart-devices-to-convince-dementia-sufferers-to-overdose/">Hacking smart devices to convince dementia sufferers to overdose</a></li>
+<li><a target="_blank" rel="noopener" href="https://pierrekim.github.io/blog/2020-07-07-cdata-olt-0day-vulnerabilities.html">Multiple vulnerabilities found in CDATA OLTs</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.pentestpartners.com/security-blog/pwning-smart-garage-door-openers/">Pwning smart garage door openers</a></li>
+<li><a target="_blank" rel="noopener" href="https://full-disclosure.eu/reports/2019/FDEU-CVE-2019-10222-telia-savitarna-backdoor.html">RCE on Telia Routers</a></li>
+<li><a target="_blank" rel="noopener" href="https://lp.firedome.io/hubfs/Yale%20WIPC-301W%20RCE%20Vulnerability%20Report%205-6.pdf">0-Day Vulnerabilities in Yale IP Cameras</a></li>
+<li><a target="_blank" rel="noopener" href="https://securityintelligence.com/posts/vulnerable-powerline-extenders-underline-lax-iot-security/">Multiple vulnerabilities in Tenda PA6 Wi-Fi Powerline extender</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.zerodayinitiative.com/blog/2020/6/24/zdi-20-709-heap-overflow-in-the-netgear-nighthawk-r6700-router">ZDI-20-709: HEAP OVERFLOW IN THE NETGEAR NIGHTHAWK R6700 ROUTER</a> <a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/209217">译文</a> <a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/209232">分析</a> <a target="_blank" rel="noopener" href="https://github.com/pedrib/PoC/blob/master/advisories/Pwn2Own/Tokyo_2019/tokyo_drift/tokyo_drift.md">Github</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.grimm-co.com/2020/06/soho-device-exploitation.html">79 Netgear router models httpd Firmware Upload Stack-based Buffer Overflow Remote Code</a> <a target="_blank" rel="noopener" href="https://github.com/grimm-co/NotQuite0DayFriday/tree/master/2020.06.15-netgear">POC</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jsof-tech.com/ripple20/">Ripple20: 19 Zero-Day Vulnerabilities Amplified by the Supply Chain</a> <a target="_blank" rel="noopener" href="https://www.jsof-tech.com/wp-content/uploads/2020/06/JSOF_Ripple20_Technical_Whitepaper_June20.pdf">Whitepaper 1</a></li>
+<li><a target="_blank" rel="noopener" href="https://unit42.paloaltonetworks.com/6-new-d-link-vulnerabilities-found-on-home-routers/">6 New Vulnerabilities Found on D-Link Home Routers</a></li>
+<li><a target="_blank" rel="noopener" href="https://limitedresults.com/2020/06/nrf52-debug-resurrection-approtect-bypass/">nRF52 Debug Resurrection (APPROTECT Bypass)</a></li>
+<li><a target="_blank" rel="noopener" href="https://callstranger.com/">CVE-2020-12695: UPnP CallStranger</a></li>
+<li><a target="_blank" rel="noopener" href="https://douevenknow.us/post/619763074822520832/an-el1el3-coldboot-vulnerability">An EL1/EL3 coldboot vulnerability affecting 7 years of LG Android devices</a></li>
+<li><a target="_blank" rel="noopener" href="https://research.hisolutions.com/2020/04/open-the-gates-insecurity-of-cloudless-smart-door-systems/">Open the Gates! The (In)Security of Cloudless Smart Door Systems</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/chengcheng227/CVE-POC">ASUS and Xiaomi smart home devices</a></li>
+<li><a target="_blank" rel="noopener" href="https://surfingattack.github.io/">SurfingAttack: 超声波与语音助手交互的隐秘攻击</a></li>
+<li><a target="_blank" rel="noopener" href="https://cablehaunt.com/">博通内核漏洞 Cable Haunt</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.welivesecurity.com/wp-content/uploads/2020/02/ESET_Kr00k.pdf">CVE-2019-15126:Kr00k Wi-Fi 加密缺陷</a></li>
+<li><a target="_blank" rel="noopener" href="https://research.nccgroup.com/2020/02/10/interfaces-d-to-rce/">Mozilla WebThings IoT gateway Interfaces.d to RCE</a></li>
+<li><a target="_blank" rel="noopener" href="https://habr.com/en/post/486856/">0day vulnerability (backdoor) in firmware for HiSilicon-based DVRs, NVRs and IP cameras</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.simonweckert.com/googlemapshacks.html">Google Maps Hacks</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.checkpoint.com/2020/02/05/the-dark-side-of-smart-lighting-check-point-research-shows-how-business-and-home-networks-can-be-hacked-from-a-lightbulb/">How Business and Home Networks Can Be Hacked from a Lightbulb</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/355484418">CNVD-2021-14536 锐捷 RG-UAC 统一上网行为管理审计系统信息泄露漏洞</a></li>
+</ul>
+<h2 id="2019"><a href="#2019" class="headerlink" title="2019"></a>2019</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://pulsesecurity.co.nz/articles/TPM-sniffing">Extracting BitLocker keys from a TPM</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.caict.ac.cn/kxyj/qwfb/bps/201911/P020191115523217021278.pdf">物联网终端安全白皮书(2019)</a></li>
+<li><a target="_blank" rel="noopener" href="https://note.youdao.com/coshare/index.html?token=91D38BE5B19F41A3865D62A6D1D11D53&amp;gid=101995961">智慧城市网络安全白皮书</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.caict.ac.cn/kxyj/qwfb/bps/201912/P020191219401564573602.pdf">2019互联网设备-智能音箱安全白皮书</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/suXWmn_PM6zmm3loYO1Zgw">启明星辰ADLab：智能音箱网络安全与隐私研究报告</a></li>
+<li><a target="_blank" rel="noopener" href="https://lightcommands.com/">激光入侵语音控制系统</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.armis.com/bleedingbit/">BLEEDINGBIT:THE HIDDEN ATTACK SURFACE WITHIN BLE CHIPS</a></li>
+<li><a target="_blank" rel="noopener" href="https://paper.seebug.org/1039/">CVE-2019-1663 Cisco 的多个低端设备的堆栈缓冲区溢出漏洞分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/oreosES/exploits/tree/master/CVE-2019-12272">CVE-2019-12272 OpenWrt图形化管理界面LuCI命令注入</a></li>
+<li><a target="_blank" rel="noopener" href="https://gsec.hitb.org/sg2019/sessions/4g-lte-man-in-the-middle-attacks-with-a-hacked-femtocell/">4G LTE Man in the Middle Attacks with a Hacked Femtocell</a> <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=EXNgKpCWbCM">Video</a> <a target="_blank" rel="noopener" href="https://gsec.hitb.org/materials/sg2019/D2%20-%204G%20LTE%20Man%20in%20the%20Middle%20Attacks%20with%20a%20Hacked%20Femtocell%20-%20Xiaodong%20Zou.pdf">Silde</a></li>
+<li><a target="_blank" rel="noopener" href="https://airbus-seclab.github.io/ilo/INSOMNIHACK2019-Slides-Riding_the_lightning_iLO4_5_BMC_security_wrapup-perigaud-gazet-czarny.pdf">Riding the lightning: iLO4&amp;5 BMC security wrap-up</a></li>
+<li><a target="_blank" rel="noopener" href="https://airbus-seclab.github.io/embedded_controller/BH2019-Slides-Breaking_Through_Another_Side_Bypassing_Firmware_Security_Boundaries_from_Embedded_Controller-matrosov-gazet.pdf">Breaking Through Another Side: Bypassing Firmware Security Boundaries from Embedded Controller</a></li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/@s1kr10s/d-link-dir-859-rce-unautenticated-cve-2019-17621-en-d94b47a15104">D-Link DIR-859 —Unauthenticated RCE (CVE-2019–17621) UPnP Command Injection</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.pentestpartners.com/security-blog/hacking-hardware-password-managers-royal-vault-password-keeper/">Hacking Hardware Password Managers: Royal Vault Password Keeper(COMS Flash)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.pentestpartners.com/security-blog/hacking-hardware-password-managers-passwordsfast/">Hacking Hardware Password Managers: passwordsFAST(I2C Flash)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.pentestpartners.com/security-blog/hacking-hardware-password-managers-the-reczone/">Hacking Hardware Password Managers: The RecZone(SPI Flash)</a></li>
+<li><a target="_blank" rel="noopener" href="https://mjg59.dreamwidth.org/53968.html">Wifi deauthentication attacks and home security</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.rapid7.com/2019/12/11/iot-vuln-disclosure-childrens-gps-smart-watches-r7-2019-57/">Children’s GPS Smart Watches (R7-2019-57)</a></li>
+<li><a target="_blank" rel="noopener" href="https://puzzor.github.io/Linksys-Velop-Authentication-bypass">Linksys velop authentication bypass</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/UltramanGaia/Xiaomi_Mi_WiFi_R3G_Vulnerability_POC/blob/master/report/report.md">小米系列路由器远程命令执行漏洞(CVE-2019-18370、CVE-2019-18371)</a></li>
+<li><a target="_blank" rel="noopener" href="https://alephsecurity.com/2019/07/01/xiaomi-zigbee-1/">Xiaomi Smart Plug (ZNCZ02LM)</a> <a target="_blank" rel="noopener" href="https://alephsecurity.com/2019/07/09/xiaomi-zigbee-2/">Part 2:Beyond Architecture</a> <a target="_blank" rel="noopener" href="https://alephsecurity.com/2019/07/15/xiaomi-zigbee-3/">Part 3:Live Debugging</a></li>
+<li><a target="_blank" rel="noopener" href="https://bbs.hassbian.com/thread-8903-1-1.html">绿板小爱同学升级启用root密码后的故事。。</a></li>
+<li><a target="_blank" rel="noopener" href="https://sec-consult.com/vulnerability-lab/advisory/multiple-vulnerabilities-in-zte-mobile-hotspot-ms910s-cve-2019-3422/">Multiple Vulnerabilities in ZTE mobile Hotspot MS910S(硬编码、nday)</a></li>
+<li><a target="_blank" rel="noopener" href="https://devco.re/blog/2019/11/11/HiNet-GPON-Modem-RCE/">中華電信數據機遠端代碼執行漏洞</a></li>
+<li><a target="_blank" rel="noopener" href="http://0x42424242.in/xiongmai/">Xiongmai Camera - Investigational Journey</a></li>
+<li><a target="_blank" rel="noopener" href="https://lightcommands.com/">Laser-Based Audio Injection on Voice-Controllable Systems</a></li>
+<li><a target="_blank" rel="noopener" href="https://hacked.camera/">Security cameras vulnerable to hijacking</a></li>
+<li><a target="_blank" rel="noopener" href="https://srlabs.de/bites/sim_attacks_demystified/">After SIMJacker, WIBattack hacking technique disclosed. Billions of users at risk</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.pentestpartners.com/security-blog/cve-2019-12103-analysis-of-a-pre-auth-rce-on-the-tp-link-m7350-with-ghidra/">CVE-2019-12103 – Analysis of a Pre-Auth RCE on the TP-Link M7350</a></li>
+<li><a target="_blank" rel="noopener" href="https://research.checkpoint.com/say-cheese-ransomware-ing-a-dslr-camera/">Say Cheese: Ransomware-ing a DSLR Camera</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.rapid7.com/2019/08/01/r7-2019-18-multiple-hickory-smart-lock-vulnerabilities/">Multiple Hickory Smart Lock Vulnerabilities</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh-cn.tenable.com/security/research/tra-2019-36?tns_redirect=true">大华部分产品VideoTalk音频下载功能未授权访问</a></li>
+<li><a target="_blank" rel="noopener" href="http://github.com/mame82/UnifyingVulnsDisclosureRepo">Logitech Unifying Vluns</a></li>
+<li><a target="_blank" rel="noopener" href="https://blackmarble.sh/zipato-smart-hub/">Breaking &amp; Entering with Zipato SmartHubs</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.pentestpartners.com/security-blog/ewon-flexy-iot-router-a-deep-dive/">Ewon Flexy IoT Router. A Deep dive</a></li>
+<li><a target="_blank" rel="noopener" href="https://securityintelligence.com/buffer-overflow-vulnerability-in-tp-link-routers-can-allow-remote-attackers-to-take-control/">Buffer Overflow Vulnerability in TP-Link Routers Can Allow Remote Attackers to Take Control</a></li>
+<li><a target="_blank" rel="noopener" href="https://research.checkpoint.com/we-decide-what-you-see-remote-code-execution-on-a-major-iptv-platform/">We Decide What You See: Remote Code Execution on a Major IPTV Platform</a></li>
+<li><a target="_blank" rel="noopener" href="https://securityintelligence.com/posts/critical-rce-vulnerability-in-tp-link-wi-fi-extenders-can-grant-attackers-remote-control/">CVE-2019-7406: Critical RCE Vulnerability in TP-Link Wi-Fi Extenders Can Grant Attackers Remote Control</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/175625">路由器漏洞挖掘之 DIR-805L 越权文件读取漏洞分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.zerodayinitiative.com/blog/2019/6/6/mindshare-hardware-reversing-with-the-belkin-surf-n300-router">MINDSHARE: HARDWARE REVERSING WITH THE BELKIN SURF N300 ROUTER</a></li>
+<li><a target="_blank" rel="noopener" href="https://research.checkpoint.com/we-decide-what-you-see-remote-code-execution-on-a-major-iptv-platform/">乌克兰IPTV平台——Infomir的远程代码执行漏洞利用分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/bnbdr/wd-rce/">WD My Cloud RCE</a></li>
+<li><a target="_blank" rel="noopener" href="https://ezequieltbh.me/posts/2019/05/love-is-in-the-air-reverse-engineering-a-shitty-drone/">Love is in the air: Reverse Engineering a shitty drone</a></li>
+<li><a target="_blank" rel="noopener" href="https://fidusinfosec.com/exploiting-10000-devices-used-by-britains-most-vulnerable/">EXPLOITING 10,000+ DEVICES USED BY BRITAIN’S MOST VULNERABLE</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.securityevaluators.com/invading-your-personal-cloud-ise-labs-exploits-the-seagate-stcr3000101-ecf89de2170">Invading Your Personal Cloud — ISE Labs Exploits the Seagate stcr3000101</a></li>
+<li><a target="_blank" rel="noopener" href="https://badpackets.net/over-25000-linksys-smart-wi-fi-routers-vulnerable-to-sensitive-information-disclosure-flaw/">Over 25,000 Linksys Smart Wi-Fi routers vulnerable to sensitive information disclosure flaw</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.tenable.com/security/research/tra-2019-20">OEM Presentation Platform Vulnerabilities</a></li>
+<li><a target="_blank" rel="noopener" href="https://ssd-disclosure.com/archives/2910">ZyXEL / Billion Multiple Vulnerabilities</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.tenable.com/security/research/tra-2019-20">Barco/AWIND OEM Presentation Platform Unauthenticated Remote Command Injection</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.talosintelligence.com/2019/04/vulnerability-sierra-airlink.html">Multiple vulnerabilities in Sierra Wireless AirLink ES450</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/tiagorlampert/CHAOS">CVE-2019-1652/CVE-2019-1653 Exploits For Cisco RV320</a></li>
+<li><a target="_blank" rel="noopener" href="https://twitter.com/mjg59/status/1111106885736787975">Arbitrary Command Execution On The TP-Link SR20 Smart Hub And Router</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/scarvell/grandstream_exploits/">Grandstream 设备中的 RCE 漏洞 EXPLOIT 集合</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cymotive.com/wp-content/uploads/2019/03/Hell2CAP-0day.pdf">BlueSDK Hell2CAP 0day</a></li>
+<li><a target="_blank" rel="noopener" href="https://blackmarble.sh/zipato-smart-hub/">Breaking &amp; Entering with Zipato SmartHubs</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.fortinet.com/blog/threat-research/d-link-routers-found-vulnerable-rce">Multiple D-Link Routers Found Vulnerable To Unauthenticated Remote Code Execution(命令注入)</a></li>
+<li><a target="_blank" rel="noopener" href="https://talosintelligence.com/vulnerability_reports/TALOS-2018-0749">Sierra Wireless AirLink ES450 ACEManager upload.cgi Unverified Password Change Vulnerabilit</a></li>
+</ul>
+<h2 id="2018"><a href="#2018" class="headerlink" title="2018"></a>2018</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://www.caict.ac.cn/kxyj/qwfb/bps/201809/P020180919390470911802.pdf">《物联网安全白皮书(2018)》</a></li>
+<li><a target="_blank" rel="noopener" href="https://research.nccgroup.com/2020/12/18/domestic-iot-nightmares-smart-doorbells/">Domestic IoT Nightmares: Smart Doorbells()</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/tencentbladeteam/Exploit-Amazon-Echo">[DEF CON 26] Breaking Smart Speaker - Exploit Amazon Echo</a> <a target="_blank" rel="noopener" href="http://m.elecfans.com/article/729418.html">如何黑入亚马逊Echo音箱——窃听、录音</a></li>
+<li><a target="_blank" rel="noopener" href="https://talosintelligence.com/vulnerability_reports/TALOS-2018-0512">CVE-2018-3833|Insteon Hub PubNub Firmware Downgrade Vulnerability</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/airbus-seclab/ilo4_toolbox">Toolbox for HPE iLO4 &amp; iLO5 analysis</a></li>
+<li><a target="_blank" rel="noopener" href="https://airbus-seclab.github.io/ilo/ZERONIGHTS2018-Slides-EN-Turning_your_BMC_into_a_revolving_door-perigaud-gazet-czarny.pdf">Slide: Turning your BMC into a revolving door</a></li>
+<li><a target="_blank" rel="noopener" href="https://airbus-seclab.github.io/ilo/SSTIC2018-Article-subverting_your_server_through_its_bmc_the_hpe_ilo4_case-gazet_perigaud_czarny.pdf">Backdooring your server through its BMC</a> <a target="_blank" rel="noopener" href="https://airbus-seclab.github.io/ilo/SSTIC2018-Article-subverting_your_server_through_its_bmc_the_hpe_ilo4_case-gazet_perigaud_czarny.pdf">Slide</a></li>
+<li><a target="_blank" rel="noopener" href="https://airbus-seclab.github.io/ilo/RECONBRX2018-Slides-Subverting_your_server_through_its_BMC_the_HPE_iLO4_case-perigaud-gazet-czarny.pdf">Slide: Subverting your server through its BMC</a></li>
+<li><a target="_blank" rel="noopener" href="https://airbus-seclab.github.io/embedded_controller/BH2019-Slides-Breaking_Through_Another_Side_Bypassing_Firmware_Security_Boundaries_from_Embedded_Controller-matrosov-gazet.pdf">Breaking Through Another Side: Bypassing Firmware Security Boundaries from Embedded Controller</a></li>
+<li><a target="_blank" rel="noopener" href="https://research.checkpoint.com/2018/sending-fax-back-to-the-dark-ages/">Faxploit: Sending Fax Back to the Dark Age</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.talosintelligence.com/2019/01/vulnerability-deep-dive-tp-link.html">TP-Link TL-R600 VPN remote code execution vulnerabilities</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/iceMatcha/Some-Vulnerabilities-of-D-link-Dir815/blob/master/Vulnerabilities_Summary.md">CVE-2018-10106|D-Link DIR-815 permission bypass and information disclosure</a> <a target="_blank" rel="noopener" href="https://ray-cp.github.io/archivers/d-link-getcfg_php-info-leak">分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.schneider-electric.com/en/download/document/SEVD-2018-354-01/">Security Notification – EVLink Parking</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.0dayallday.org/guardzilla-video-camera-hard-coded-aws-credentials/">Guardzilla IoT Video Camera Hard-Coded Credentials (CVE-2018-5560)</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.securityevaluators.com/terramaster-nas-vulnerabilities-discovered-and-exploited-b8e5243e7a63">TerraMaster NAS Vulnerabilities Discovered and Exploited</a></li>
+<li><a target="_blank" rel="noopener" href="https://ssd-disclosure.com/ssd-advisory-terramaster-os-exportuser-php-remote-code-execution/">TerraMaster OS exportUser.php Remote Code Execution</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.talosintelligence.com/2018/07/sony-ipela-vulnerability-spotlight-multiple.html">Multiple Vulnerabilities in Sony IPELA E Series Camera</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.talosintelligence.com/2018/07/samsung-smartthings-vulns.html?m=1">Multiple Vulnerabilities in Samsung SmartThings Hub</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.pentestpartners.com/security-blog/hacking-swann-home-security-camera-video/">Hacking Swann &amp; FLIR/Lorex home security camera video</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.vdoo.com/2018/06/18/vdoo-discovers-significant-vulnerabilities-in-axis-cameras/">VDOO Discovers Significant Vulnerabilities in Axis Cameras</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.vdoo.com/2018/06/06/vdoo-has-found-major-vulnerabilities-in-foscam-cameras/">Major Vulnerabilities in Foscam Cameras</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/yough3rt/IOT-pwn-for-fun/">CVE-2018-11481:多款TP-LINK产品远程代码执行安全漏洞</a></li>
+<li><a target="_blank" rel="noopener" href="https://embedi.com/blog/whos-watching-the-watchers-vol-ii-norton-core-secure-wifi-router/">Who’s Watching the Watchers (Vol. II): Norton Core Secure WiFi Router</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.coresecurity.com/advisories/quest-dr-series-disk-backup-multiple-vulnerabilities">Quest DR Series Disk Backup Multiple Vulnerabilities</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.indigofuzz.com/article.php?docid=talktalk1430">TalkTalk Router - WPS Exploit</a></li>
+<li><a target="_blank" rel="noopener" href="https://securelist.com/backdoors-in-d-links-backyard/85530/">Backdoors in D-Link’s backyard (Multiple vulnerabilities in D-Link DIR-620 router)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.draytek.co.uk/support/security-advisories/kb-advisory-csrf-and-dns-dhcp-web-attacks">DrayTek Routers: CSRF &amp; DNS Changed Web Interface Attacks</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ezelf/CVE-2018-9995_dvr_credentials">CVE-2018-9995: Get DVR Credentials</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.fireeye.com/blog/threat-research/2018/05/rooting-logitech-harmony-hub-improving-iot-security.html">Rooting a Logitech Harmony Hub: Improving Security in Today’s IoT World</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.vpnmentor.com/blog/critical-vulnerability-found-majority-lg-nas-devices/">Critical Vulnerability Found in Majority of LG NAS Devices</a> <a target="_blank" rel="noopener" href="https://www.cesafe.com/html/3962.html">译文</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.vpnmentor.com/blog/critical-vulnerability-gpon-router/">Critical RCE Vulnerability Found in Over a Million GPON Home Routers</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bleepingcomputer.com/news/security/5-000-routers-with-no-telnet-password-nothing-to-see-here-move-along/">巴西5000台路由器默认未设置Telnet密码，可被轻易劫持</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.exploit-db.com/exploits/40500/">AVTECH IP Camera/NVR/DVR Devices - Multiple Vulnerabilities</a></li>
+</ul>
+<h2 id="2017"><a href="#2017" class="headerlink" title="2017"></a>2017</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.exploit-db.com/docs/english/44003-hisilicon-dvr-hack.pdf">HiSilicon DVR hack</a></li>
+<li><a target="_blank" rel="noopener" href="https://conference.hitb.org/hitbsecconf2017ams/sessions/femtocell-hacking-from-zero-to-zero-day/#">Femtocell Hacking: From Zero to Zero Day</a> <a target="_blank" rel="noopener" href="http://conference.hitb.org/hitbsecconf2017ams/materials/D1T2%20-%20JeongHoon%20Shin%20-%20Femotcell%20Hacking.pdf">Silde</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bastille.net/research/vulnerabilities/cabletap/cabletap-affected-devices">CableTap: a wide array of critical vulnerabilities in ISP-provided, RDK-based wireless gateways and set-top boxes</a> <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/BastilleResearch/CableTap/master/doc/pdf/DEFCON-25-Marc-Newlin-CableTap-White-Paper.pdf">White Paper</a></li>
+<li><a target="_blank" rel="noopener" href="https://paper.seebug.org/488/">GoAhead远程代码执行漏洞(CVE-2017-17562)分析及实战</a></li>
+<li><a target="_blank" rel="noopener" href="http://blog.asiantuntijakaveri.fi/2017/03/backdoor-and-root-shell-on-zte-mf286.html">Backdoor and root shell on ZTE MF286</a></li>
+</ul>
+<h2 id="2016"><a href="#2016" class="headerlink" title="2016"></a>2016</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/jacob-baines/veralite_upnp_exploit_poc">Veralite UPnP Exploit</a></li>
+<li><a target="_blank" rel="noopener" href="http://colinoflynn.com/2016/07/getting-root-on-philips-hue-bridge-2-0/">Getting Root on Philips Hue Bridge 2.0</a> <a target="_blank" rel="noopener" href="http://colinoflynn.com/wp-content/uploads/2016/08/Towards-a-Lightbulb-Worm-Combined.pdf">Silde1</a> <a target="_blank" rel="noopener" href="http://colinoflynn.com/wp-content/uploads/2016/08/us-16-OFlynn-A-Lightbulb-Worm-wp.pdf">Silde2</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.coresecurity.com/advisories/tp-link-tddp-multiple-vulnerabilities">TP-LINK TDDP Multiple Vulnerabilities</a></li>
+</ul>
+<h2 id="安全研究"><a href="#安全研究" class="headerlink" title="安全研究"></a>安全研究</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.3or.de/starting-embedded-reverse-engineering-freertos-libopencm3-on-stm32f103c8t6.html">Starting Embedded Reverse Engineering: FreeRTOS, libopencm3 on STM32F103C8T6</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.3or.de/arm-exploitation-return-oriented-programming.html">ARM Exploitation: Return oriented Programming</a></li>
+<li><a target="_blank" rel="noopener" href="https://cwe.mitre.org/scoring/lists/2021_CWE_MIHW.html">CWE Most Important Hardware Weaknesses</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.riverloopsecurity.com/blog/2021/09/introducing-flash-bash/">Introducing Flash BASH(uboot Glitching)</a></li>
+<li><a target="_blank" rel="noopener" href="https://carvesystems.com/news/pin2pwn-how-to-root-an-embedded-linux-box-with-a-sewing-needle/">pin2pwn: How to Root an Embedded Linux Box with a Sewing Needle</a></li>
+</ul>
+<h2 id="标准"><a href="#标准" class="headerlink" title="标准"></a>标准</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://c.gb688.cn/bzgk/gb/showGb?type=online&amp;hcno=BBE3572A88B87C3D92AF6DE2C424E0BB">信息安全技术 物联网安全参考模型及通用要求</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.miit.gov.cn/gzcy/yjzj/art/2021/art_de99ecee64884ecda932604c32631b76.html">《物联网基础安全标准体系建设指南》（征求意见稿）</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.etsi.org/deliver/etsi_en/303600_303699/303645/02.01.01_60/en_303645v020101p.pdf">EN 303 645 - V2.1.1 - CYBER; Cyber Security for Consumer Internet of Things: Baseline Requirements</a></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#2021"><span class="toc-number">1.</span> <span class="toc-text">2021</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2020"><span class="toc-number">2.</span> <span class="toc-text">2020</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2019"><span class="toc-number">3.</span> <span class="toc-text">2019</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2018"><span class="toc-number">4.</span> <span class="toc-text">2018</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2017"><span class="toc-number">5.</span> <span class="toc-text">2017</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016"><span class="toc-number">6.</span> <span class="toc-text">2016</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E7%A0%94%E7%A9%B6"><span class="toc-number">7.</span> <span class="toc-text">安全研究</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86"><span class="toc-number">8.</span> <span class="toc-text">标准</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2099/01/01/IOT-Vulns/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2099/01/01/IOT-Vulns/&text=IOT 漏洞收集"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2099/01/01/IOT-Vulns/&title=IOT 漏洞收集"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2099/01/01/IOT-Vulns/&is_video=false&description=IOT 漏洞收集"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=IOT 漏洞收集&body=Check out this article: http://delikey.github.io/2099/01/01/IOT-Vulns/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2099/01/01/IOT-Vulns/&title=IOT 漏洞收集"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2099/01/01/IOT-Vulns/&title=IOT 漏洞收集"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2099/01/01/IOT-Vulns/&title=IOT 漏洞收集"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2099/01/01/IOT-Vulns/&title=IOT 漏洞收集"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2099/01/01/IOT-Vulns/&name=IOT 漏洞收集&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Inicio</a></li>
+         
+          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+         
+          <li><a href="/archives/">Articulos</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
