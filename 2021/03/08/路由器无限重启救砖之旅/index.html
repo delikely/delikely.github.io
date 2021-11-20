@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang=en>
+<html lang=zh>
 <head>
     <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
     <meta charset="utf-8">
@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/index.html">
 <meta property="og:site_name" content="Delikely&#39;s Blog">
 <meta property="og:description" content="路由器无限重启救砖之旅挖掘路由器漏洞时，发现了一个命令执行漏洞，正好有重启设备的需求，于是通过漏洞传递 reboot 命令重启，没想到的是设备变砖了。分析变砖原因，发现传递的参数会保存 NVRAM 中，开机的时候会读取并执行，于是造成了设备的拒绝服务。手头这个设备也是好不容易淘来的，这可怎么是好。开始救砖吧！ 尝试一——恢复记忆由于 reboot 命令存储到了路由器的 NVRAM 配置中，将路由器">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale">
 <meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210217162552577.png">
 <meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210203132138347.png">
 <meta property="og:image" content="http://delikey.github.io/2021/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E6%97%A0%E9%99%90%E9%87%8D%E5%90%AF%E6%95%91%E7%A0%96%E4%B9%8B%E6%97%85/image-20210217162647088.png">

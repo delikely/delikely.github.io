@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang=en>
+<html lang=zh>
 <head>
     <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
     <meta charset="utf-8">
@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/index.html">
 <meta property="og:site_name" content="Delikely&#39;s Blog">
 <meta property="og:description" content="智能电视漏洞挖掘初探之从文件系统分析到提权上一篇文章讲到，通过工程模式等方法获取到了 Android ADB 的 shell，现在就来讲讲后续。 研究智能电视和分析其他 IOT 设备相似，ADB 进来之后，首先看运行的程序、 开放的端口信息。当输入命令 netstat -antp 我都愣住了，长期使用 root 权限的我，从来没见过这阵仗，PID&#x2F;Program Name 中全是 -，这就很尴尬了">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale">
 <meta property="og:image" content="http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/image-20210416102733258.png">
 <meta property="og:image" content="http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/image-20210416104114570.png">
 <meta property="og:image" content="http://delikey.github.io/2021/04/23/%E6%99%BA%E8%83%BD%E7%94%B5%E8%A7%86%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E5%88%9D%E6%8E%A2%E4%B9%8B%E4%BB%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%88%B0%E6%8F%90%E6%9D%83/image-20210415170638241.png">

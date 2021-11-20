@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang=en>
+<html lang=zh>
 <head>
     <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
     <meta charset="utf-8">
@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://delikey.github.io/2021/03/10/Tesla%E8%BD%A6%E6%9C%BA%E5%9B%BA%E4%BB%B6%E5%88%86%E6%9E%90%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E4%BB%8E%E7%A3%81%E7%9B%98%E6%98%A0%E5%83%8F%E4%B8%AD%E6%8F%90%E5%8F%96%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/index.html">
 <meta property="og:site_name" content="Delikely&#39;s Blog">
 <meta property="og:description" content="Tesla车机固件分析第一步：从磁盘映像中提取文件系统提取磁盘映像文件近期拿到了一个车机的磁盘映像文件，文件是从 Flash 上提取出来的。文件大小为 59.2G，估计是个 64G 的 Flash。 平常分析的设备 Flash 小的就几百KB，大的也不会超过百兆。一朋友想 binwalk 一把梭，这得提取到猴年马月，拿回来的东西还能看吗（结构可能混乱）。 拿到手 64G，然后是个车机的，根据车型可">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale">
 <meta property="og:image" content="http://delikey.github.io/2021/03/10/Tesla%E8%BD%A6%E6%9C%BA%E5%9B%BA%E4%BB%B6%E5%88%86%E6%9E%90%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E4%BB%8E%E7%A3%81%E7%9B%98%E6%98%A0%E5%83%8F%E4%B8%AD%E6%8F%90%E5%8F%96%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/image-20210221171753886.png">
 <meta property="og:image" content="http://delikey.github.io/2021/03/10/Tesla%E8%BD%A6%E6%9C%BA%E5%9B%BA%E4%BB%B6%E5%88%86%E6%9E%90%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E4%BB%8E%E7%A3%81%E7%9B%98%E6%98%A0%E5%83%8F%E4%B8%AD%E6%8F%90%E5%8F%96%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/image-20210221224245419.png">
 <meta property="og:image" content="http://delikey.github.io/2021/03/10/Tesla%E8%BD%A6%E6%9C%BA%E5%9B%BA%E4%BB%B6%E5%88%86%E6%9E%90%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E4%BB%8E%E7%A3%81%E7%9B%98%E6%98%A0%E5%83%8F%E4%B8%AD%E6%8F%90%E5%8F%96%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/image-20210221223841984.png">
