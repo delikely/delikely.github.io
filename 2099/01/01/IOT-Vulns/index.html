@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="2021 Hideez Key 2 FAIL: How a good idea turns into a SPF (Security Product Failure)  Reverse Engineering Radios - ARM Binary Images in IDA Pro Vulnerabilities in metal detector peripheral could allow">
+    <meta name="description" content="2022 LoRaWAN’s Protocol Stacks: The Forgotten Targets at Risk Whitepaper FIRMWIRE: Transparent Dynamic Analysis for Cellular Baseband Firmware)  Uniview PreAuth RCE - SSD Secure Disclosure (栈溢出) Raspb">
 <meta property="og:type" content="article">
 <meta property="og:title" content="IOT 漏洞收集">
 <meta property="og:url" content="http://delikey.github.io/2099/01/01/IOT-Vulns/index.html">
 <meta property="og:site_name" content="Delikely&#39;s Blog">
-<meta property="og:description" content="2021 Hideez Key 2 FAIL: How a good idea turns into a SPF (Security Product Failure)  Reverse Engineering Radios - ARM Binary Images in IDA Pro Vulnerabilities in metal detector peripheral could allow">
+<meta property="og:description" content="2022 LoRaWAN’s Protocol Stacks: The Forgotten Targets at Risk Whitepaper FIRMWIRE: Transparent Dynamic Analysis for Cellular Baseband Firmware)  Uniview PreAuth RCE - SSD Secure Disclosure (栈溢出) Raspb">
 <meta property="og:locale">
 <meta property="article:published_time" content="2099-01-01T11:00:00.000Z">
-<meta property="article:modified_time" content="2022-01-08T15:27:00.822Z">
+<meta property="article:modified_time" content="2022-01-26T09:40:50.123Z">
 <meta property="article:author" content="Delikely">
 <meta property="article:tag" content="IOT">
 <meta name="twitter:card" content="summary">
@@ -101,7 +101,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#2021"><span class="toc-number">1.</span> <span class="toc-text">2021</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2020"><span class="toc-number">2.</span> <span class="toc-text">2020</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2019"><span class="toc-number">3.</span> <span class="toc-text">2019</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2018"><span class="toc-number">4.</span> <span class="toc-text">2018</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2017"><span class="toc-number">5.</span> <span class="toc-text">2017</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016"><span class="toc-number">6.</span> <span class="toc-text">2016</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E7%A0%94%E7%A9%B6"><span class="toc-number">7.</span> <span class="toc-text">安全研究</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86"><span class="toc-number">8.</span> <span class="toc-text">标准</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%99%E7%82%B9"><span class="toc-number">9.</span> <span class="toc-text">站点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%A6%E7%B1%8D"><span class="toc-number">10.</span> <span class="toc-text">书籍</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#2022"><span class="toc-number">1.</span> <span class="toc-text">2022</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2021"><span class="toc-number">2.</span> <span class="toc-text">2021</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2020"><span class="toc-number">3.</span> <span class="toc-text">2020</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2019"><span class="toc-number">4.</span> <span class="toc-text">2019</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2018"><span class="toc-number">5.</span> <span class="toc-text">2018</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2017"><span class="toc-number">6.</span> <span class="toc-text">2017</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016"><span class="toc-number">7.</span> <span class="toc-text">2016</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E7%A0%94%E7%A9%B6"><span class="toc-number">8.</span> <span class="toc-text">安全研究</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86"><span class="toc-number">9.</span> <span class="toc-text">标准</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%99%E7%82%B9"><span class="toc-number">10.</span> <span class="toc-text">站点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%A6%E7%B1%8D"><span class="toc-number">11.</span> <span class="toc-text">书籍</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -140,7 +140,15 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h2 id="2021"><a href="#2021" class="headerlink" title="2021"></a>2021</h2><ul>
+    <h2 id="2022"><a href="#2022" class="headerlink" title="2022"></a>2022</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.trendmicro.com/en_us/research/22/a/lorawans-protocol-stacks-the-forgotten-targets-at-risk.html">LoRaWAN’s Protocol Stacks: The Forgotten Targets at Risk</a> <a target="_blank" rel="noopener" href="https://documents.trendmicro.com/images/TEx/pdf/Technical-Brief---LoRaWANs-Protocol-Stacks-The-Forgotten-Targets-at-Risk.pdf">Whitepaper</a></li>
+<li><a href="[firmwire-ndss22-hernandez.pdf](https://hernan.de/research/papers/firmwire-ndss22-hernandez.pdf">FIRMWIRE: Transparent Dynamic Analysis for Cellular Baseband Firmware</a>)</li>
+<li><a target="_blank" rel="noopener" href="https://ssd-disclosure.com/ssd-advisory-uniview-preauth-rce/"> Uniview PreAuth RCE - SSD Secure Disclosure (栈溢出)</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.tomtombinary.xyz/articles/pi-gpu/">Raspberry Pi - GPU Exploitation</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/jbaines-r7/badblood">CVE-2021-20038 | SonicWall SMA-100 Unauth RCE Exploit （栈溢出）</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.sentinelone.com/labs/cve-2021-45608-netusb-rce-flaw-in-millions-of-end-user-routers/">CVE-2021-45608 | NetUSB RCE Flaw in Millions of End User Routers </a></li>
+</ul>
+<h2 id="2021"><a href="#2021" class="headerlink" title="2021"></a>2021</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://infosecwriteups.com/full-disclosure-hideez-key-2-fail-how-a-good-idea-turns-into-a-spf-security-product-failure-c90a4533fda9">Hideez Key 2 FAIL: How a good idea turns into a SPF (Security Product Failure) </a></li>
 <li><a target="_blank" rel="noopener" href="https://do1alx.de/2022/reverse-engineering-radios-arm-binary-images-in-ida-pro/">Reverse Engineering Radios - ARM Binary Images in IDA Pro</a></li>
 <li><a target="_blank" rel="noopener" href="https://blog.talosintelligence.com/2021/12/vuln-spotlight-garrett-metal-detector.html">Vulnerabilities in metal detector peripheral could allow attackers to manipulate security devices</a></li>
@@ -152,7 +160,7 @@
 <li><a target="_blank" rel="noopener" href="https://research.nccgroup.com/2021/11/16/exploit-the-fuzz-exploiting-vulnerabilities-in-5g-core-networks/">Exploit the Fuzz – Exploiting Vulnerabilities in 5G Core Networks</a></li>
 <li><a target="_blank" rel="noopener" href="https://eddiez.me/hacking-the-nokia-fastmile/">Hacking the Nokia Fastmile</a> </li>
 <li><a target="_blank" rel="noopener" href="https://blog.talosintelligence.com/2021/12/vuln-spotlight-garrett-metal-detector.html">Vulnerabilities in metal detector peripheral could allow attackers to manipulate security devices</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.redteam-pentesting.de/2021/inside-a-pbx/">Discovering a Firmware Backdoor</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.redteam-pentesting.de/2021/inside-a-pbx/">Discovering a Firmware Backdoor</a> <a target="_blank" rel="noopener" href="https://tttang.com/archive/1398/">译文</a></li>
 <li><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2112.05719.pdf">Attacks on Wireless Coexistence: Exploiting Cross-Technology Performance Features for Inter-Chip Privilege Escalation</a></li>
 <li><a target="_blank" rel="noopener" href="https://labs.f-secure.com/publications/printing-shellz">CVE-2021-39238|Printing Shellz:affect more than 150 HP multi-function printers</a> <a target="_blank" rel="noopener" href="https://labs.f-secure.com/assets/BlogFiles/Printing-Shellz.pdf">Whitepapaer</a> <a target="_blank" rel="noopener" href="https://blog.f-secure.com/hp-printer-vulnerabilities/">FAQ</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.reddit.com/r/hacking/comments/ksanug/how_we_hacked_a_tplink_router_and_took_home_55000/">How We Hacked a TP-Link Router and Took Home $55.000 in Pwn2Own:hacking</a> <a target="_blank" rel="noopener" href="https://youtu.be/zjafMP7EgEA">Video</a></li>
@@ -434,6 +442,7 @@
 <li><a target="_blank" rel="noopener" href="https://www.coresecurity.com/advisories/tp-link-tddp-multiple-vulnerabilities">TP-LINK TDDP Multiple Vulnerabilities</a></li>
 </ul>
 <h2 id="安全研究"><a href="#安全研究" class="headerlink" title="安全研究"></a>安全研究</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://secnigma.wordpress.com/2022/01/18/a-beginners-guide-into-router-hacking-and-firmware-emulation/">A Beginner’s guide into Router Hacking and Firmware Emulation</a></li>
 <li><a target="_blank" rel="noopener" href="https://blog.3or.de/starting-embedded-reverse-engineering-freertos-libopencm3-on-stm32f103c8t6.html">Starting Embedded Reverse Engineering: FreeRTOS, libopencm3 on STM32F103C8T6</a></li>
 <li><a target="_blank" rel="noopener" href="https://lupyuen.github.io/articles/wifi">Reverse Engineering WiFi on RISC-V BL602</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.devalias.net/devalias/2018/05/13/usb-reverse-engineering-down-the-rabbit-hole/">USB Reverse Engineering: Down the rabbit hole</a></li>
@@ -479,7 +488,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#2021"><span class="toc-number">1.</span> <span class="toc-text">2021</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2020"><span class="toc-number">2.</span> <span class="toc-text">2020</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2019"><span class="toc-number">3.</span> <span class="toc-text">2019</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2018"><span class="toc-number">4.</span> <span class="toc-text">2018</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2017"><span class="toc-number">5.</span> <span class="toc-text">2017</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016"><span class="toc-number">6.</span> <span class="toc-text">2016</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E7%A0%94%E7%A9%B6"><span class="toc-number">7.</span> <span class="toc-text">安全研究</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86"><span class="toc-number">8.</span> <span class="toc-text">标准</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%99%E7%82%B9"><span class="toc-number">9.</span> <span class="toc-text">站点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%A6%E7%B1%8D"><span class="toc-number">10.</span> <span class="toc-text">书籍</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#2022"><span class="toc-number">1.</span> <span class="toc-text">2022</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2021"><span class="toc-number">2.</span> <span class="toc-text">2021</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2020"><span class="toc-number">3.</span> <span class="toc-text">2020</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2019"><span class="toc-number">4.</span> <span class="toc-text">2019</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2018"><span class="toc-number">5.</span> <span class="toc-text">2018</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2017"><span class="toc-number">6.</span> <span class="toc-text">2017</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016"><span class="toc-number">7.</span> <span class="toc-text">2016</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E7%A0%94%E7%A9%B6"><span class="toc-number">8.</span> <span class="toc-text">安全研究</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86"><span class="toc-number">9.</span> <span class="toc-text">标准</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%99%E7%82%B9"><span class="toc-number">10.</span> <span class="toc-text">站点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%A6%E7%B1%8D"><span class="toc-number">11.</span> <span class="toc-text">书籍</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

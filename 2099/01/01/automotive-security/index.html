@@ -14,7 +14,7 @@
 <meta property="og:description" content="汽车信息安全事件时间轴: timeline.icvsec.com 漏洞 【KeenLab Tech Talk（三）】Android Auto 中一个普通的堆漏洞 Car hijacking swapping a single bit  腾讯科恩实验室：梅赛德斯-奔驰汽车信息安全研究综述报告 技术白皮书 TBONE – A zero-click exploit for Tesla MCUs BAM">
 <meta property="og:locale">
 <meta property="article:published_time" content="2099-01-01T12:00:00.000Z">
-<meta property="article:modified_time" content="2022-01-08T15:26:10.950Z">
+<meta property="article:modified_time" content="2022-01-26T09:39:41.207Z">
 <meta property="article:author" content="Delikely">
 <meta property="article:tag" content="Automotive">
 <meta name="twitter:card" content="summary">
@@ -101,7 +101,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text">漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%85%E7%94%B5%E6%A1%A9%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.</span> <span class="toc-text">充电桩漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6"><span class="toc-number">3.</span> <span class="toc-text">技术研究</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86"><span class="toc-number">4.</span> <span class="toc-text">标准</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%95%E8%A7%84"><span class="toc-number">5.</span> <span class="toc-text">法规</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BD%E7%9A%AE%E4%B9%A6"><span class="toc-number">6.</span> <span class="toc-text">白皮书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E5%8D%97"><span class="toc-number">7.</span> <span class="toc-text">指南</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7"><span class="toc-number">8.</span> <span class="toc-text">工具</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text">漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%85%E7%94%B5%E6%A1%A9%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.</span> <span class="toc-text">充电桩漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6"><span class="toc-number">3.</span> <span class="toc-text">技术研究</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BA%E6%96%87"><span class="toc-number">4.</span> <span class="toc-text">论文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86"><span class="toc-number">5.</span> <span class="toc-text">标准</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%95%E8%A7%84"><span class="toc-number">6.</span> <span class="toc-text">法规</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BD%E7%9A%AE%E4%B9%A6"><span class="toc-number">7.</span> <span class="toc-text">白皮书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E5%8D%97"><span class="toc-number">8.</span> <span class="toc-text">指南</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7"><span class="toc-number">9.</span> <span class="toc-text">工具</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -160,6 +160,7 @@
 <li><a target="_blank" rel="noopener" href="https://skygo.360.cn/2020/07/20/mercedes-benz-research-report/">360 Sky-Go团队发布《梅赛德斯-奔驰安全研究报告》</a></li>
 <li><a target="_blank" rel="noopener" href="https://keenlab.tencent.com/zh/2020/03/30/Tencent-Keen-Security-Lab-Experimental-Security-Assessment-on-Lexus-Cars/#more">腾讯科恩实验室：雷克萨斯汽车安全研究综述报告</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.rapid7.com/blog/post/2017/04/25/r7-2017-02-hyundai-blue-link-potential-info-disclosure-fixed">R7-2017-02: Hyundai Blue Link Potential Info Disclosure</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/shipcod3/mazda_getInfo/blob/master/README.md">mazda_getInfo: A PoC that the USB port is an attack surface for a Mazda car’s infotainment system</a></li>
 <li><a target="_blank" rel="noopener" href="http://jcarlosnorte.com/security/2016/03/06/hacking-tachographs-from-the-internets.html">TBOX | Hacking industrial vehicles from the internet</a> <a target="_blank" rel="noopener" href="https://www.shodan.io/search?query=port%3A23+gps+&quot;on+console&quot;">公网暴露设备</a> <a target="_blank" rel="noopener" href="https://fccid.io/A6GC4MAX-3GNA/Users-Manual/User-manual-2655341.pdf">C4MAX-3GNA Installation Guide</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.vice.com/en_us/article/zmpx4x/hacker-monitor-cars-kill-engine-gps-tracking-apps">Hacker Finds He Can Remotely Kill Car Engines After Breaking Into GPS Tracking Apps</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.usenix.org/conference/woot16/workshop-program/presentation/mazloom">A Security Analysis of an In-Vehicle Infotainment and App Platform(MirrorLink)</a> <a target="_blank" rel="noopener" href="https://www.usenix.org/system/files/conference/woot16/woot16-paper-mazloom.pdf">Paper</a> <a target="_blank" rel="noopener" href="https://www.usenix.org/sites/default/files/conference/protected-files/woot16_slides_mazloom_0.pdf">Sildes</a></li>
@@ -183,6 +184,9 @@
 <li><a target="_blank" rel="noopener" href="https://www.sohu.com/a/259418261_391288">e 充电 “捏枪法”、“卡秒法” 案例</a></li>
 </ul>
 <h2 id="技术研究"><a href="#技术研究" class="headerlink" title="技术研究"></a>技术研究</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.cs.bham.ac.uk/~garciaf/publications/BtB.pdf">Beneath the Bonnet: a Breakdown of Diagnostic Security</a></li>
+<li><a target="_blank" rel="noopener" href="https://visteon.com/wp-content/uploads/2019/01/securing-inter-processor-communication-in-automotive-ecus.pdf">Securing Inter-Processor Communication in Automotive ECUs</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/jilleb/mqb-soundaktor">mqb-soundaktor: 010 Editor template to parse the contents of MQB Soundaktor data</a></li>
 <li><a target="_blank" rel="noopener" href="https://blog.willemmelching.nl/carhacking/2022/01/02/vw-part1/">Hacking a VW Golf Power Steering ECU</a></li>
 <li><a target="_blank" rel="noopener" href="https://jazdw.net/tp20">VW Transport Protocol 2.0 (TP 2.0) for CAN bus</a></li>
 <li><a target="_blank" rel="noopener" href="https://hufman.github.io/stories/bmwconnectedapps">BMW Connected Apps Protocol</a><a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-257530-1.htm">翻译</a></li>
@@ -212,6 +216,9 @@
 <li><a target="_blank" rel="noopener" href="http://opengarages.org/index.php/Main_Page">opengarages.org</a></li>
 <li><a target="_blank" rel="noopener" href="http://illmatics.com/carhacking.html">illmatics</a></li>
 </ul>
+<h2 id="论文"><a href="#论文" class="headerlink" title="论文"></a>论文</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.usenix.org/conference/usenixsecurity21/presentation/groza">CANARY - a reactive defense mechanism for Controller Area Networks based on Active RelaYs</a></li>
+</ul>
 <h2 id="标准"><a href="#标准" class="headerlink" title="标准"></a>标准</h2><ul>
 <li>ISO 26262</li>
 <li>SAE J3601 Cybersecurity Guidebook for Cyber-Physical Vehicle System</li>
@@ -239,7 +246,8 @@
 </ul>
 <h2 id="白皮书"><a href="#白皮书" class="headerlink" title="白皮书"></a>白皮书</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/IL1fIpylqImFie-vQcLDOg">腾讯安全《车联网数据安全体系建设指南》</a> <a target="_blank" rel="noopener" href="https://share.weiyun.com/Wupmgp7r">附件</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.ccidgroup.com/system/_content/download.jsp?urltype=news.DownloadAttachUrl&amp;owner=1661492338&amp;wbfileid=4701729">CSTC白皮书 智能网联汽车安全渗透白皮书（2020年）</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cstc.org.cn/zhinengwanglianqicheanquanshentoubaipishu2.0.pdf">CSTC 智能网联汽车安全渗透白皮书 2.0（2021 年)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.ccidgroup.com/system/_content/download.jsp?urltype=news.DownloadAttachUrl&amp;owner=1661492338&amp;wbfileid=4701729">CSTC 智能网联汽车安全渗透白皮书（2020年）</a></li>
 <li><a target="_blank" rel="noopener" href="http://www.caict.ac.cn/kxyj/qwfb/bps/201912/P020191226516585677051.pdf">车联网白皮书（C-V2X分册）2019</a></li>
 <li><a target="_blank" rel="noopener" href="https://book.yunzhan365.com/juql/lfws/mobile/index.html">《智能网联汽车信息安全评测白皮书 2019》</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.tc260.org.cn/file/qcdz.pdf">汽车电子网络安全标准化白皮书 2018</a></li>
@@ -281,7 +289,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text">漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%85%E7%94%B5%E6%A1%A9%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.</span> <span class="toc-text">充电桩漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6"><span class="toc-number">3.</span> <span class="toc-text">技术研究</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86"><span class="toc-number">4.</span> <span class="toc-text">标准</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%95%E8%A7%84"><span class="toc-number">5.</span> <span class="toc-text">法规</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BD%E7%9A%AE%E4%B9%A6"><span class="toc-number">6.</span> <span class="toc-text">白皮书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E5%8D%97"><span class="toc-number">7.</span> <span class="toc-text">指南</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7"><span class="toc-number">8.</span> <span class="toc-text">工具</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text">漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%85%E7%94%B5%E6%A1%A9%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.</span> <span class="toc-text">充电桩漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6"><span class="toc-number">3.</span> <span class="toc-text">技术研究</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BA%E6%96%87"><span class="toc-number">4.</span> <span class="toc-text">论文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86"><span class="toc-number">5.</span> <span class="toc-text">标准</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%95%E8%A7%84"><span class="toc-number">6.</span> <span class="toc-text">法规</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BD%E7%9A%AE%E4%B9%A6"><span class="toc-number">7.</span> <span class="toc-text">白皮书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E5%8D%97"><span class="toc-number">8.</span> <span class="toc-text">指南</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7"><span class="toc-number">9.</span> <span class="toc-text">工具</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
