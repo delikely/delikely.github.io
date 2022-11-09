@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="车联网安全基础知识之USB SPH2.0线束制作车机&#x2F;TBOX使用的USB接口有好几个类型，不同车型的线序也可能存在差异。USB TYPE-A 双工头线相比搞车的必定人手一条。在对单个模块的测试中，此时只有双公头TYPE-A 是不行的，设备上的USB口是插针式的公头，此时我们就需要一些不太常见的USB公头转TYPE-A转接线。TBOX和车机上常见的USB接头有 SPH2.0、HSD等。这些异形的插">
+<meta property="og:type" content="article">
+<meta property="og:title" content="车联网安全基础知识之USB SPH2.0线束制作">
+<meta property="og:url" content="http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="车联网安全基础知识之USB SPH2.0线束制作车机&#x2F;TBOX使用的USB接口有好几个类型，不同车型的线序也可能存在差异。USB TYPE-A 双工头线相比搞车的必定人手一条。在对单个模块的测试中，此时只有双公头TYPE-A 是不行的，设备上的USB口是插针式的公头，此时我们就需要一些不太常见的USB公头转TYPE-A转接线。TBOX和车机上常见的USB接头有 SPH2.0、HSD等。这些异形的插">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/image-20221018093807275.png">
+<meta property="og:image" content="http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/image-20221018094629425.png">
+<meta property="og:image" content="http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/image-20221018142545857.png">
+<meta property="og:image" content="http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/image-20221018100836355.png">
+<meta property="og:image" content="http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/image-20221018101106499.png">
+<meta property="og:image" content="http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/image-20221018095832468.png">
+<meta property="og:image" content="http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/image-20221018100617596.png">
+<meta property="og:image" content="http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/image-20221018001231089.png">
+<meta property="article:published_time" content="2022-10-19T06:12:34.000Z">
+<meta property="article:modified_time" content="2022-11-09T09:17:31.809Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="Automotive">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/image-20221018093807275.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>车联网安全基础知识之USB SPH2.0线束制作</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/2018/04/11/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2099/01/01/genius-vulns/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2022/05/19/trail-of-chentian/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/&text=车联网安全基础知识之USB SPH2.0线束制作"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/&title=车联网安全基础知识之USB SPH2.0线束制作"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/&is_video=false&description=车联网安全基础知识之USB SPH2.0线束制作"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=车联网安全基础知识之USB SPH2.0线束制作&body=Check out this article: http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/&title=车联网安全基础知识之USB SPH2.0线束制作"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/&title=车联网安全基础知识之USB SPH2.0线束制作"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/&title=车联网安全基础知识之USB SPH2.0线束制作"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/&title=车联网安全基础知识之USB SPH2.0线束制作"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/&name=车联网安全基础知识之USB SPH2.0线束制作&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B9%8BUSB-SPH2-0%E7%BA%BF%E6%9D%9F%E5%88%B6%E4%BD%9C"><span class="toc-number">1.</span> <span class="toc-text">车联网安全基础知识之USB SPH2.0线束制作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%AD%E4%B9%B0%E6%9D%90%E6%96%99"><span class="toc-number">1.1.</span> <span class="toc-text">购买材料</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E9%92%88%E8%84%9A%E5%AE%9A%E4%B9%89"><span class="toc-number">1.2.</span> <span class="toc-text">分析针脚定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%B6%E4%BD%9C"><span class="toc-number">1.3.</span> <span class="toc-text">制作</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        车联网安全基础知识之USB SPH2.0线束制作
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2022-10-19T06:12:34.000Z" itemprop="datePublished">2022-10-19</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Automotive/" rel="tag">Automotive</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="车联网安全基础知识之USB-SPH2-0线束制作"><a href="#车联网安全基础知识之USB-SPH2-0线束制作" class="headerlink" title="车联网安全基础知识之USB SPH2.0线束制作"></a>车联网安全基础知识之USB SPH2.0线束制作</h2><p>车机/TBOX使用的USB接口有好几个类型，不同车型的线序也可能存在差异。USB TYPE-A 双工头线相比搞车的必定人手一条。在对单个模块的测试中，此时只有双公头TYPE-A 是不行的，设备上的USB口是插针式的公头，此时我们就需要一些不太常见的USB公头转TYPE-A转接线。TBOX和车机上常见的USB接头有 SPH2.0、HSD等。这些异形的插头，在淘宝上买很难满足我们的需要(线序非标)，这时需要自己来做线束。</p>
+<p>今天就和大家分享以下 USB 之 SPH2.0 接头的制作。HSD 的下次在分享。</p>
+<p><img src="image-20221018093807275.png" alt="image-20221018093807275" style="zoom: 67%;" /><img src="image-20221018094629425.png" alt="image-20221018094629425" style="zoom: 113%;" /><img src="image-20221018142545857.png" alt="image-20221018142545857" style="zoom:130%;" /></p>
+<p>虽然都是4个针脚但是他们的防呆设计有所不同，所以需要一个小的接插件适配不同防呆方案。接下来就是需要去找个这样一个接插件。</p>
+<h3 id="购买材料"><a href="#购买材料" class="headerlink" title="购买材料"></a>购买材料</h3><p>看出了接口是方形的USB接口，但不知道这种接口叫做什么，于是在淘宝上找呀找，找了很久终于发现这种接口叫做 SPH2.0,其中2.0表示两个针脚的间距为 2.0mm。知道接口名称后，就方便了，买一些线束材料就可以自己按需制作了。需要用到的材料和工具如下。</p>
+<ul>
+<li><p><strong>4芯 USB 公头开口线</strong>，由于我们的目的是连接到电脑上，所以我们需要的是USB TYPE-A 开口线。使用TYPE-A 母头开口线也可以的，只是连接电脑的时候需要再连接一个USB TYPE-A 双公头开口线。</p>
+<p><img src="image-20221018100836355.png" alt="image-20221018100836355"></p>
+</li>
+<li><p><strong>SPH2.0 2*2 双排带扣插件</strong>，USB接口为4针(2*2),带不带扣无所谓，买到的大部分都有，不影响使用，如果插不进去，可以直接用刀片去掉。 </p>
+<p><img src="image-20221018101106499.png" alt="image-20221018101106499" style="zoom:40%;" /></p>
+</li>
+<li><p><strong>SPH2.0 端子</strong>，端子可以多买点比较便宜，刚开始做可以拿几个连接杜邦线试试手。</p>
+<p><img src="image-20221018095832468.png" alt="image-20221018095832468"></p>
+</li>
+</ul>
+<ul>
+<li><p><strong>压线钳</strong>，用于SPH2.0 端子与USB公头开口线连接。</p>
+<p><img src="image-20221018100617596.png" alt="image-20221018100617596"></p>
+</li>
+<li><p><strong>万用表</strong>，用来确定线序，还可以验证制作的转接线连接状态是否完好。</p>
+</li>
+</ul>
+<h3 id="分析针脚定义"><a href="#分析针脚定义" class="headerlink" title="分析针脚定义"></a>分析针脚定义</h3><p>不同厂商的针脚定义可能不同，需要我们自己分析。首先最容易的找到的就是GND，使用万用表测试四个针脚与USB金属外壳的连通性，发出蜂鸣音量的就是GND。他的对角就是VCC(自己经验总结出来的)。剩下的就是D+ 和 D-，这两个可以看板子上的连接的芯片的引脚，很多的使用的BGA封装的不好测。还有一个简单粗暴的方法，就是D+和D-随便插，然后看电脑上的反应，看能不能识别出USB设备，如果不行就交换线序。如下是这次我需要做的线束定义，如果插错了也没关系，可以使用镊子或一字螺丝刀轻轻翘起卡扣，从SPH2.0双排带扣插件中拔出错误的SPH2.0端子，重新插入对应位置即可。</p>
+<p><img src="image-20221018001231089.png" alt="image-20221018001231089"></p>
+<h3 id="制作"><a href="#制作" class="headerlink" title="制作"></a>制作</h3><ol>
+<li>取一个 SPH2.0 端子</li>
+<li>压线钳凹面向下，左手拿端子，将端子开口朝向压线钳压线口凹面，端子与压线口右侧齐平</li>
+<li>轻轻下压，端子微微变形</li>
+<li>然后从右侧插入USB开口线，由于压线钳两侧一高一低，插入进去绝缘皮刚好顶到左边的一侧</li>
+<li>继续下压，压好之后，压线钳自动弹起，取出即可</li>
+<li>重复1-4将剩下的3个端子与USB开口线连接好</li>
+<li>按照针脚定义将端子插入到SPH2.0 2*2 双排带扣插件中，需要注意的是端子凸起的地方需要朝外刚好与端子外侧卡住。</li>
+<li>最后使用杜邦线公头顶一下端子，使端子与插件连接好。</li>
+</ol>
+<p>做线束之前去网上搜了一圈教学视频，但没有找到。既然没有那就自己拍一个，以下是制作的讲解视频，第一次做视频还很生疏，有疑问的私信联系。</p>
+<iframe src="//player.bilibili.com/player.html?aid=986715861&bvid=BV1mt4y1M7qh&cid=865302871&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+
+
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/2018/04/11/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B9%8BUSB-SPH2-0%E7%BA%BF%E6%9D%9F%E5%88%B6%E4%BD%9C"><span class="toc-number">1.</span> <span class="toc-text">车联网安全基础知识之USB SPH2.0线束制作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%AD%E4%B9%B0%E6%9D%90%E6%96%99"><span class="toc-number">1.1.</span> <span class="toc-text">购买材料</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E9%92%88%E8%84%9A%E5%AE%9A%E4%B9%89"><span class="toc-number">1.2.</span> <span class="toc-text">分析针脚定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%B6%E4%BD%9C"><span class="toc-number">1.3.</span> <span class="toc-text">制作</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/&text=车联网安全基础知识之USB SPH2.0线束制作"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/&title=车联网安全基础知识之USB SPH2.0线束制作"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/&is_video=false&description=车联网安全基础知识之USB SPH2.0线束制作"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=车联网安全基础知识之USB SPH2.0线束制作&body=Check out this article: http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/&title=车联网安全基础知识之USB SPH2.0线束制作"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/&title=车联网安全基础知识之USB SPH2.0线束制作"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/&title=车联网安全基础知识之USB SPH2.0线束制作"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/&title=车联网安全基础知识之USB SPH2.0线束制作"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/&name=车联网安全基础知识之USB SPH2.0线束制作&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2022 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/2018/04/11/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
