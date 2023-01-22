@@ -14,7 +14,7 @@
 <meta property="og:description" content="有趣的漏洞 Retrieving your browsing history through a CAPTCHA CVE-2021-45919: From Stored XSS to Code Execution using SocEng, BeEF and elFinder Exploiting URL Parsing Confusion Vulnerabilities uBlock, I ex">
 <meta property="og:locale">
 <meta property="article:published_time" content="2099-01-01T08:00:00.000Z">
-<meta property="article:modified_time" content="2022-12-30T05:28:47.196Z">
+<meta property="article:modified_time" content="2023-01-22T15:53:35.440Z">
 <meta property="article:author" content="Delikely">
 <meta property="article:tag" content="Security">
 <meta name="twitter:card" content="summary">
@@ -101,7 +101,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E8%B6%A3%E7%9A%84%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text">有趣的漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AF%E9%93%BE%E6%8E%A5%E7%9A%84%E5%A6%99%E7%94%A8"><span class="toc-number">1.1.</span> <span class="toc-text">软链接的妙用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E7%9A%84%E5%A6%99%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">目录穿越的妙用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BD%B1%E5%93%8D%E9%87%8D%E5%A4%A7%E7%9A%84%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.</span> <span class="toc-text">影响重大的漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bypass"><span class="toc-number">3.</span> <span class="toc-text">Bypass</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E6%9D%83"><span class="toc-number">4.</span> <span class="toc-text">提权</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%90%AF%E5%8A%A8"><span class="toc-number">5.</span> <span class="toc-text">安全启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TEE"><span class="toc-number">6.</span> <span class="toc-text">TEE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Browser"><span class="toc-number">7.</span> <span class="toc-text">Browser</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">8.</span> <span class="toc-text">其他</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E8%B6%A3%E7%9A%84%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text">有趣的漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AF%E9%93%BE%E6%8E%A5%E7%9A%84%E5%A6%99%E7%94%A8"><span class="toc-number">1.1.</span> <span class="toc-text">软链接的妙用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E7%9A%84%E5%A6%99%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">目录穿越的妙用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BD%B1%E5%93%8D%E9%87%8D%E5%A4%A7%E7%9A%84%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.</span> <span class="toc-text">影响重大的漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bypass"><span class="toc-number">3.</span> <span class="toc-text">Bypass</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Browser"><span class="toc-number">4.</span> <span class="toc-text">Browser</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">5.</span> <span class="toc-text">其他</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -162,31 +162,11 @@
 <li><a target="_blank" rel="noopener" href="https://baijiahao.baidu.com/s?id=1637627363255074344&amp;wfr=spider&amp;for=pc">致远A8 OA系统任意文件上传getshell漏洞分析报告</a> <a target="_blank" rel="noopener" href="https://paper.seebug.org/964/">致远 OA 变种 BASE64 算法的加解密方法</a></li>
 </ul>
 <h2 id="Bypass"><a href="#Bypass" class="headerlink" title="Bypass"></a>Bypass</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://research.nccgroup.com/2022/11/17/cve-2022-45163/">NXP i.MX SDP_READ_DISABLE Fuse Bypass (CVE-2022-45163) </a></li>
 <li><a target="_blank" rel="noopener" href="https://bugs.xdavidhu.me/google/2022/11/10/accidental-70k-google-pixel-lock-screen-bypass/">Accidental $70k Google Pixel Lock Screen Bypass</a></li>
 <li><a target="_blank" rel="noopener" href="https://halove23.blogspot.com/2021/09/zdi-21-1053-bypassing-windows-lock.html">Bypassing Windows Lock Screen</a></li>
 <li><a target="_blank" rel="noopener" href="https://blog.zapb.de/stm32f1-exceptional-failure/">Exception(al) Failure - Breaking the STM32F1 Read-Out Protection</a></li>
 <li><a target="_blank" rel="noopener" href="https://twitter.com/samwcyo/status/1597695281881296897">A vulnerability affecting Hyundai and Genesis vehicles where we could remotely control car</a></li>
 <li><a target="_blank" rel="noopener" href="https://infosecwriteups.com/how-i-got-10-000-from-github-for-bypassing-filtration-of-html-tags-db31173c8b37">How I Got $10,000 From GitHub For Bypassing Filtration oF HTML tags</a></li>
-</ul>
-<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://www.graplsecurity.com/post/kernel-pwning-with-ebpf-a-love-story">Kernel Pwning with eBPF: a Love Story</a></li>
-<li><a target="_blank" rel="noopener" href="https://flatt.tech/assets/reports/210401_pwn2own/whitepaper.pdf">PWN2OWN Local Escalation of Privilege Category Ubuntu Desktop Exploit</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/tr3ee/CVE-2021-4204">CVE-2021-4204: Linux Kernel eBPF Local Privilege Escalation</a></li>
-<li><a target="_blank" rel="noopener" href="https://accessvector.net/2022/linux-itimers-uaf?s=09">Racing Cats to the Exit: A Boring Linux Kernel Use-After-Free</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.dbouman.nl/2022/04/02/How-The-Tables-Have-Turned-CVE-2022-1015-1016/">How The Tables Have Turned: An analysis of two new Linux vulnerabilities in nf_tables</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.exodusintel.com/2022/12/19/linux-kernel-exploiting-a-netfilter-use-after-free-in-kmalloc-cg/">Linux Kernel: Exploiting a Netfilter Use-after-Free in kmalloc-cg</a></li>
-</ul>
-<h2 id="安全启动"><a href="#安全启动" class="headerlink" title="安全启动"></a>安全启动</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://research.nccgroup.com/2022/10/03/shining-new-light-on-an-old-rom-vulnerability/">Shining New Light on an Old ROM Vulnerability: Secure Boot Bypass via DCD and CSF Tampering on NXP i.MX Devices</a></li>
-<li><a target="_blank" rel="noopener" href="https://fredericb.info/2022/06/breaking-secure-boot-on-google-nest-hub-2nd-gen-to-run-ubuntu.html">Breaking Secure Boot on Google Nest Hub (2nd Gen) to run Ubuntu</a></li>
-<li><a target="_blank" rel="noopener" href="https://cyberintel.es/publications/2022-12-07_BlackHat_Europe_pub/">Vlind Glitch: A Blind VCC Glitching Technique to Bypass the Secure Boot of the Qualcomm MSM8916 Mobile SoC</a></li>
-<li><a target="_blank" rel="noopener" href="https://fredericb.info/2021/02/amlogic-usbdl-unsigned-code-loader-for-amlogic-bootrom.html">amlogic-usbdl : unsigned code loader for Amlogic BootROM</a></li>
-</ul>
-<h2 id="TEE"><a href="#TEE" class="headerlink" title="TEE"></a>TEE</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://www.synacktiv.com/en/publications/kinibi-tee-trusted-application-exploitation.html">Kinibi TEE: Trusted Application exploitation</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.synopsys.com/blogs/software-security/cve-2020-7958-trustlet-tee-attack/">CyRC analysis: CVE-2020-7958 biometric data extraction in Android devices</a></li>
-<li><a target="_blank" rel="noopener" href="https://cyberintel.es/publications/2022-11-17_DeepSec_pub/">Auditing Closed Source Trusted Applications for Qualcomm Secure Execution Environment (QSEE) | Cyber Intelligence</a></li>
 </ul>
 <h2 id="Browser"><a href="#Browser" class="headerlink" title="Browser"></a>Browser</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://jhalon.github.io/chrome-browser-exploitation-1/">Chrome Browser Exploitation, Part 1: Introduction to V8 and JavaScript Internals</a></li>
@@ -221,7 +201,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E8%B6%A3%E7%9A%84%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text">有趣的漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AF%E9%93%BE%E6%8E%A5%E7%9A%84%E5%A6%99%E7%94%A8"><span class="toc-number">1.1.</span> <span class="toc-text">软链接的妙用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E7%9A%84%E5%A6%99%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">目录穿越的妙用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BD%B1%E5%93%8D%E9%87%8D%E5%A4%A7%E7%9A%84%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.</span> <span class="toc-text">影响重大的漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bypass"><span class="toc-number">3.</span> <span class="toc-text">Bypass</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E6%9D%83"><span class="toc-number">4.</span> <span class="toc-text">提权</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%90%AF%E5%8A%A8"><span class="toc-number">5.</span> <span class="toc-text">安全启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TEE"><span class="toc-number">6.</span> <span class="toc-text">TEE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Browser"><span class="toc-number">7.</span> <span class="toc-text">Browser</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">8.</span> <span class="toc-text">其他</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E8%B6%A3%E7%9A%84%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text">有趣的漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AF%E9%93%BE%E6%8E%A5%E7%9A%84%E5%A6%99%E7%94%A8"><span class="toc-number">1.1.</span> <span class="toc-text">软链接的妙用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E7%9A%84%E5%A6%99%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">目录穿越的妙用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BD%B1%E5%93%8D%E9%87%8D%E5%A4%A7%E7%9A%84%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.</span> <span class="toc-text">影响重大的漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bypass"><span class="toc-number">3.</span> <span class="toc-text">Bypass</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Browser"><span class="toc-number">4.</span> <span class="toc-text">Browser</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">5.</span> <span class="toc-text">其他</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
@@ -253,7 +233,7 @@
     
     <footer id="footer">
   <div class="footer-left">
-    Copyright &copy; 2022 Delikely
+    Copyright &copy; 2023 Delikely
   </div>
   <div class="footer-right">
     <nav>

@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="固件解密 加密固件之依据老固件进行解密 Linksys EA6100 固件解密分析 Unpacking HP Firmware Updates Breaking the D-Link DIR3060 Firmware Encryption - Recon - Part 1 Breaking the D-Link DIR3060 Firmware Encryption - Static analys">
+    <meta name="description" content="固件解密 Breaking the D-Link DIR3060 Firmware Encryption - Static analysis of the decryption routine - Part 2.1 Dumping firmware from a router 加密固件之依据老固件进行解密 Linksys EA6100 固件解密分析 Unpacking HP Firmware Up">
 <meta property="og:type" content="article">
 <meta property="og:title" content="固件分析">
 <meta property="og:url" content="http://delikey.github.io/2099/01/01/firmware/index.html">
 <meta property="og:site_name" content="Delikely&#39;s Blog">
-<meta property="og:description" content="固件解密 加密固件之依据老固件进行解密 Linksys EA6100 固件解密分析 Unpacking HP Firmware Updates Breaking the D-Link DIR3060 Firmware Encryption - Recon - Part 1 Breaking the D-Link DIR3060 Firmware Encryption - Static analys">
+<meta property="og:description" content="固件解密 Breaking the D-Link DIR3060 Firmware Encryption - Static analysis of the decryption routine - Part 2.1 Dumping firmware from a router 加密固件之依据老固件进行解密 Linksys EA6100 固件解密分析 Unpacking HP Firmware Up">
 <meta property="og:locale">
 <meta property="article:published_time" content="2099-01-01T11:30:00.000Z">
-<meta property="article:modified_time" content="2022-08-13T13:47:50.599Z">
+<meta property="article:modified_time" content="2023-01-22T15:57:23.752Z">
 <meta property="article:author" content="Delikely">
 <meta property="article:tag" content="IOT">
 <meta name="twitter:card" content="summary">
@@ -101,7 +101,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6%E8%A7%A3%E5%AF%86"><span class="toc-number">1.</span> <span class="toc-text">固件解密</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%90%AF%E5%8A%A8"><span class="toc-number">2.</span> <span class="toc-text">安全启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bypass"><span class="toc-number">3.</span> <span class="toc-text">Bypass</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TEE"><span class="toc-number">4.</span> <span class="toc-text">TEE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6%E5%88%86%E6%9E%90"><span class="toc-number">5.</span> <span class="toc-text">固件分析</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6%E8%A7%A3%E5%AF%86"><span class="toc-number">1.</span> <span class="toc-text">固件解密</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%90%AF%E5%8A%A8"><span class="toc-number">2.</span> <span class="toc-text">安全启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bypass"><span class="toc-number">3.</span> <span class="toc-text">Bypass</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TEE"><span class="toc-number">4.</span> <span class="toc-text">TEE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6%E5%88%86%E6%9E%90"><span class="toc-number">5.</span> <span class="toc-text">固件分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E6%BC%8F%E6%B4%9E"><span class="toc-number">6.</span> <span class="toc-text">内核漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPC"><span class="toc-number">7.</span> <span class="toc-text">IPC</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -141,6 +141,8 @@
 
   <div class="content" itemprop="articleBody">
     <h2 id="固件解密"><a href="#固件解密" class="headerlink" title="固件解密"></a>固件解密</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://0x434b.dev/breaking-the-d-link-dir3060-firmware-encryption-static-analysis-of-the-decryption-routine-part-2-1/">Breaking the D-Link DIR3060 Firmware Encryption - Static analysis of the decryption routine - Part 2.1</a></li>
+<li><a target="_blank" rel="noopener" href="https://fastcall.medium.com/dumping-firmware-from-a-router-5d7e819199fd">Dumping firmware from a router</a></li>
 <li><a target="_blank" rel="noopener" href="https://paper.seebug.org/1651/">加密固件之依据老固件进行解密</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/246659">Linksys EA6100 固件解密分析</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.jsof-tech.com/unpacking-hp-firmware-updates-part-1/">Unpacking HP Firmware Updates</a></li>
@@ -148,6 +150,10 @@
 <li><a target="_blank" rel="noopener" href="https://0x00sec.org/t/breaking-the-d-link-dir3060-firmware-encryption-static-analysis-of-the-decryption-routine-part-2-1/22099">Breaking the D-Link DIR3060 Firmware Encryption - Static analysis of the decryption routine - Part 2.1</a></li>
 </ul>
 <h2 id="安全启动"><a href="#安全启动" class="headerlink" title="安全启动"></a>安全启动</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://research.nccgroup.com/2022/10/03/shining-new-light-on-an-old-rom-vulnerability/">Shining New Light on an Old ROM Vulnerability: Secure Boot Bypass via DCD and CSF Tampering on NXP i.MX Devices</a></li>
+<li><a target="_blank" rel="noopener" href="https://fredericb.info/2022/06/breaking-secure-boot-on-google-nest-hub-2nd-gen-to-run-ubuntu.html">Breaking Secure Boot on Google Nest Hub (2nd Gen) to run Ubuntu</a></li>
+<li><a target="_blank" rel="noopener" href="https://cyberintel.es/publications/2022-12-07_BlackHat_Europe_pub/">Vlind Glitch: A Blind VCC Glitching Technique to Bypass the Secure Boot of the Qualcomm MSM8916 Mobile SoC</a></li>
+<li><a target="_blank" rel="noopener" href="https://fredericb.info/2021/02/amlogic-usbdl-unsigned-code-loader-for-amlogic-bootrom.html">amlogic-usbdl : unsigned code loader for Amlogic BootROM</a></li>
 <li><a target="_blank" rel="noopener" href="https://raelize.com/posts/espressif-esp32-bypassing-encrypted-secure-boot-cve-2020-13629/">Espressif ESP32: Bypassing Encrypted Secure Boot (CVE-2020-13629)</a></li>
 <li><a target="_blank" rel="noopener" href="https://limitedresults.com/2019/11/pwn-the-esp32-forever-flash-encryption-and-sec-boot-keys-extraction/">Pwn the ESP32 Forever: Flash Encryption and Sec. Boot Keys Extraction(CVE-2019-17391)</a></li>
 <li><a target="_blank" rel="noopener" href="https://limitedresults.com/2019/09/pwn-the-esp32-secure-boot/">Pwn the ESP32 Secure Boot</a></li>
@@ -156,10 +162,14 @@
 <li><a target="_blank" rel="noopener" href="https://eclypsium.com/2020/07/29/theres-a-hole-in-the-boot/">CVE-2020-10713 BootHole: THERE’S A HOLE IN THE BOOT</a></li>
 </ul>
 <h2 id="Bypass"><a href="#Bypass" class="headerlink" title="Bypass"></a>Bypass</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://research.nccgroup.com/2022/11/17/cve-2022-45163/">NXP i.MX SDP_READ_DISABLE Fuse Bypass (CVE-2022-45163) </a></li>
 <li><a target="_blank" rel="noopener" href="http://analogman.info/index.php/2019/01/20/bypass-secure-usb-debugging-prompt-on-phone-with-broken-screen/">Bypass secure USB debugging prompt on phone with broken screen</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.riverloopsecurity.com/blog/2020/10/hw-101-glitching/">Hardware Hacking 101: Glitching into Privileged Shells</a></li>
 </ul>
 <h2 id="TEE"><a href="#TEE" class="headerlink" title="TEE"></a>TEE</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.synacktiv.com/en/publications/kinibi-tee-trusted-application-exploitation.html">Kinibi TEE: Trusted Application exploitation</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.synopsys.com/blogs/software-security/cve-2020-7958-trustlet-tee-attack/">CyRC analysis: CVE-2020-7958 biometric data extraction in Android devices</a></li>
+<li><a target="_blank" rel="noopener" href="https://cyberintel.es/publications/2022-11-17_DeepSec_pub/">Auditing Closed Source Trusted Applications for Qualcomm Secure Execution Environment (QSEE) | Cyber Intelligence</a></li>
 <li><a target="_blank" rel="noopener" href="https://research.checkpoint.com/2022/researching-xiaomis-tee/">Researching Xiaomi’s TEE to get to Chinese money</a></li>
 <li><a target="_blank" rel="noopener" href="https://github.com/shakevsky/keybuster">keybuster: a research tool that allows to interact with the Keymaster TA (Trusted Application) on Samsung devices</a></li>
 <li><a target="_blank" rel="noopener" href="https://blog.zimperium.com/multiple-kernel-vulnerabilities-affecting-all-qualcomm-devices/">Kernel Vulnerabilities Affecting All Qualcomm Devices</a></li>
@@ -176,6 +186,18 @@
 <li><a target="_blank" rel="noopener" href="http://www.righto.com/2020/09/reverse-engineering-first-fpga-chip.html">Reverse-engineering the first FPGA chip, the XC2064</a></li>
 <li><a target="_blank" rel="noopener" href="https://boredpentester.com/reversing-esp8266-firmware-part-1/">Reversing ESP8266 Firmware</a></li>
 <li><a target="_blank" rel="noopener" href="https://scriptingxss.gitbook.io/firmware-security-testing-methodology/v/zhong-wen-fstm/">OWASP固件安全性测试指南</a></li>
+</ul>
+<h2 id="内核漏洞"><a href="#内核漏洞" class="headerlink" title="内核漏洞"></a>内核漏洞</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/TH3xACE/SUDO_KILLER">SUDO_KILLER: A tool to identify and exploit sudo rules’ misconfigurations and vulnerabilities within sudo for linux privilege escalation</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.graplsecurity.com/post/kernel-pwning-with-ebpf-a-love-story">Kernel Pwning with eBPF: a Love Story</a></li>
+<li><a target="_blank" rel="noopener" href="https://flatt.tech/assets/reports/210401_pwn2own/whitepaper.pdf">PWN2OWN Local Escalation of Privilege Category Ubuntu Desktop Exploit</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/tr3ee/CVE-2021-4204">CVE-2021-4204: Linux Kernel eBPF Local Privilege Escalation</a></li>
+<li><a target="_blank" rel="noopener" href="https://accessvector.net/2022/linux-itimers-uaf?s=09">Racing Cats to the Exit: A Boring Linux Kernel Use-After-Free</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.dbouman.nl/2022/04/02/How-The-Tables-Have-Turned-CVE-2022-1015-1016/">How The Tables Have Turned: An analysis of two new Linux vulnerabilities in nf_tables</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.exodusintel.com/2022/12/19/linux-kernel-exploiting-a-netfilter-use-after-free-in-kmalloc-cg/">Linux Kernel: Exploiting a Netfilter Use-after-Free in kmalloc-cg</a></li>
+</ul>
+<h2 id="IPC"><a href="#IPC" class="headerlink" title="IPC"></a>IPC</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://cutesmilee.github.io/kernel/linux/android/2022/02/17/cve-2019-2215_writeup.html">CVE-2019-2215 | Android Binder UAF allows an elevation of privilege from an application to the Linux Kernel</a></li>
 </ul>
 
   </div>
@@ -203,7 +225,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6%E8%A7%A3%E5%AF%86"><span class="toc-number">1.</span> <span class="toc-text">固件解密</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%90%AF%E5%8A%A8"><span class="toc-number">2.</span> <span class="toc-text">安全启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bypass"><span class="toc-number">3.</span> <span class="toc-text">Bypass</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TEE"><span class="toc-number">4.</span> <span class="toc-text">TEE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6%E5%88%86%E6%9E%90"><span class="toc-number">5.</span> <span class="toc-text">固件分析</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6%E8%A7%A3%E5%AF%86"><span class="toc-number">1.</span> <span class="toc-text">固件解密</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%90%AF%E5%8A%A8"><span class="toc-number">2.</span> <span class="toc-text">安全启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bypass"><span class="toc-number">3.</span> <span class="toc-text">Bypass</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TEE"><span class="toc-number">4.</span> <span class="toc-text">TEE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6%E5%88%86%E6%9E%90"><span class="toc-number">5.</span> <span class="toc-text">固件分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E6%BC%8F%E6%B4%9E"><span class="toc-number">6.</span> <span class="toc-text">内核漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPC"><span class="toc-number">7.</span> <span class="toc-text">IPC</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
@@ -235,7 +257,7 @@
     
     <footer id="footer">
   <div class="footer-left">
-    Copyright &copy; 2022 Delikely
+    Copyright &copy; 2023 Delikely
   </div>
   <div class="footer-right">
     <nav>
