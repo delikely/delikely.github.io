@@ -14,7 +14,7 @@
 <meta property="og:description" content="有趣的漏洞 Retrieving your browsing history through a CAPTCHA CVE-2021-45919: From Stored XSS to Code Execution using SocEng, BeEF and elFinder Exploiting URL Parsing Confusion Vulnerabilities uBlock, I ex">
 <meta property="og:locale">
 <meta property="article:published_time" content="2099-01-01T08:00:00.000Z">
-<meta property="article:modified_time" content="2023-01-22T15:53:35.440Z">
+<meta property="article:modified_time" content="2023-02-27T09:36:07.327Z">
 <meta property="article:author" content="Delikely">
 <meta property="article:tag" content="Security">
 <meta name="twitter:card" content="summary">
@@ -101,7 +101,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E8%B6%A3%E7%9A%84%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text">有趣的漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AF%E9%93%BE%E6%8E%A5%E7%9A%84%E5%A6%99%E7%94%A8"><span class="toc-number">1.1.</span> <span class="toc-text">软链接的妙用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E7%9A%84%E5%A6%99%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">目录穿越的妙用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BD%B1%E5%93%8D%E9%87%8D%E5%A4%A7%E7%9A%84%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.</span> <span class="toc-text">影响重大的漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bypass"><span class="toc-number">3.</span> <span class="toc-text">Bypass</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Browser"><span class="toc-number">4.</span> <span class="toc-text">Browser</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">5.</span> <span class="toc-text">其他</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E8%B6%A3%E7%9A%84%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text">有趣的漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AF%E9%93%BE%E6%8E%A5%E7%9A%84%E5%A6%99%E7%94%A8"><span class="toc-number">1.1.</span> <span class="toc-text">软链接的妙用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E7%9A%84%E5%A6%99%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">目录穿越的妙用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BD%B1%E5%93%8D%E9%87%8D%E5%A4%A7%E7%9A%84%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.</span> <span class="toc-text">影响重大的漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bypass"><span class="toc-number">3.</span> <span class="toc-text">Bypass</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Escape"><span class="toc-number">4.</span> <span class="toc-text">Escape</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Browser"><span class="toc-number">5.</span> <span class="toc-text">Browser</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">6.</span> <span class="toc-text">其他</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -166,9 +166,16 @@
 <li><a target="_blank" rel="noopener" href="https://halove23.blogspot.com/2021/09/zdi-21-1053-bypassing-windows-lock.html">Bypassing Windows Lock Screen</a></li>
 <li><a target="_blank" rel="noopener" href="https://blog.zapb.de/stm32f1-exceptional-failure/">Exception(al) Failure - Breaking the STM32F1 Read-Out Protection</a></li>
 <li><a target="_blank" rel="noopener" href="https://twitter.com/samwcyo/status/1597695281881296897">A vulnerability affecting Hyundai and Genesis vehicles where we could remotely control car</a></li>
+<li><a target="_blank" rel="noopener" href="https://raelize.com/blog/espressif-systems-esp32-bypassing-flash-encryption/">CVE-2020-15048 | Espressif ESP32: Bypassing Flash Encryption</a></li>
+<li><a target="_blank" rel="noopener" href="https://raelize.com/blog/espressif-esp32-bypassing-encrypted-secure-boot-cve-2020-13629/">CVE-2020-13629 | Espressif ESP32: Bypassing Encrypted Secure Boot</a></li>
 <li><a target="_blank" rel="noopener" href="https://infosecwriteups.com/how-i-got-10-000-from-github-for-bypassing-filtration-of-html-tags-db31173c8b37">How I Got $10,000 From GitHub For Bypassing Filtration oF HTML tags</a></li>
 </ul>
+<h2 id="Escape"><a href="#Escape" class="headerlink" title="Escape"></a>Escape</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://unit42.paloaltonetworks.com/breaking-docker-via-runc-explaining-cve-2019-5736/">Breaking out of Docker via runC – Explaining CVE-2019-5736</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.synacktiv.com/publications/escaping-from-bhyve.html">Escaping from bhyve</a></li>
+</ul>
 <h2 id="Browser"><a href="#Browser" class="headerlink" title="Browser"></a>Browser</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://starlabs.sg/blog/2022/12-the-hole-new-world-how-a-small-leak-will-sink-a-great-browser-cve-2021-38003/">TheHole New World - how a small leak will sink a great browser (CVE-2021-38003)</a></li>
 <li><a target="_blank" rel="noopener" href="https://jhalon.github.io/chrome-browser-exploitation-1/">Chrome Browser Exploitation, Part 1: Introduction to V8 and JavaScript Internals</a></li>
 </ul>
 <h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ul>
@@ -201,7 +208,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E8%B6%A3%E7%9A%84%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text">有趣的漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AF%E9%93%BE%E6%8E%A5%E7%9A%84%E5%A6%99%E7%94%A8"><span class="toc-number">1.1.</span> <span class="toc-text">软链接的妙用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E7%9A%84%E5%A6%99%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">目录穿越的妙用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BD%B1%E5%93%8D%E9%87%8D%E5%A4%A7%E7%9A%84%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.</span> <span class="toc-text">影响重大的漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bypass"><span class="toc-number">3.</span> <span class="toc-text">Bypass</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Browser"><span class="toc-number">4.</span> <span class="toc-text">Browser</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">5.</span> <span class="toc-text">其他</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E8%B6%A3%E7%9A%84%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text">有趣的漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AF%E9%93%BE%E6%8E%A5%E7%9A%84%E5%A6%99%E7%94%A8"><span class="toc-number">1.1.</span> <span class="toc-text">软链接的妙用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E7%9A%84%E5%A6%99%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">目录穿越的妙用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BD%B1%E5%93%8D%E9%87%8D%E5%A4%A7%E7%9A%84%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.</span> <span class="toc-text">影响重大的漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bypass"><span class="toc-number">3.</span> <span class="toc-text">Bypass</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Escape"><span class="toc-number">4.</span> <span class="toc-text">Escape</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Browser"><span class="toc-number">5.</span> <span class="toc-text">Browser</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">6.</span> <span class="toc-text">其他</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
