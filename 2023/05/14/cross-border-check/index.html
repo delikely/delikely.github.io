@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="车联网安全进阶之跨境传输检测在车联网安全基础知识系列外，新开了一个系列 车联网安全进阶，主要分享一些车联网安全的进阶的知识，包括但不限于检测脚本编写，其他的等想好了再说🙈。 5月5日发布的《汽车整车信息安全技术要求》（征求意见稿） 在10节 车辆数据代码安全要求 中对数据跨境传输提出了要求——车辆不得直接向境外传输数据。  10.7　车辆不得直接向境外传输数据。 注： 用户使用浏览器访问境外网站">
+<meta property="og:type" content="article">
+<meta property="og:title" content="车联网安全进阶之跨境传输检测">
+<meta property="og:url" content="http://delikey.github.io/2023/05/14/cross-border-check/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="车联网安全进阶之跨境传输检测在车联网安全基础知识系列外，新开了一个系列 车联网安全进阶，主要分享一些车联网安全的进阶的知识，包括但不限于检测脚本编写，其他的等想好了再说🙈。 5月5日发布的《汽车整车信息安全技术要求》（征求意见稿） 在10节 车辆数据代码安全要求 中对数据跨境传输提出了要求——车辆不得直接向境外传输数据。  10.7　车辆不得直接向境外传输数据。 注： 用户使用浏览器访问境外网站">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikey.github.io/2023/05/14/cross-border-check/image-20230513214955112.png">
+<meta property="og:image" content="http://delikey.github.io/2023/05/14/cross-border-check/image-20230513204937877.png">
+<meta property="article:published_time" content="2023-05-14T11:27:28.000Z">
+<meta property="article:modified_time" content="2023-05-14T13:29:34.000Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="Automotive">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikey.github.io/2023/05/14/cross-border-check/image-20230513214955112.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>车联网安全进阶之跨境传输检测</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/2018/04/11/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2099/01/01/genius-vulns/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2023/05/01/UDS-flash/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2023/05/14/cross-border-check/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2023/05/14/cross-border-check/&text=车联网安全进阶之跨境传输检测"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2023/05/14/cross-border-check/&title=车联网安全进阶之跨境传输检测"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2023/05/14/cross-border-check/&is_video=false&description=车联网安全进阶之跨境传输检测"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=车联网安全进阶之跨境传输检测&body=Check out this article: http://delikey.github.io/2023/05/14/cross-border-check/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2023/05/14/cross-border-check/&title=车联网安全进阶之跨境传输检测"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2023/05/14/cross-border-check/&title=车联网安全进阶之跨境传输检测"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2023/05/14/cross-border-check/&title=车联网安全进阶之跨境传输检测"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2023/05/14/cross-border-check/&title=车联网安全进阶之跨境传输检测"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2023/05/14/cross-border-check/&name=车联网安全进阶之跨境传输检测&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E8%BF%9B%E9%98%B6%E4%B9%8B%E8%B7%A8%E5%A2%83%E4%BC%A0%E8%BE%93%E6%A3%80%E6%B5%8B"><span class="toc-number">1.</span> <span class="toc-text">车联网安全进阶之跨境传输检测</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8C%85%E6%8A%93%E5%8F%96"><span class="toc-number">1.1.</span> <span class="toc-text">数据包抓取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%A8%E5%A2%83%E6%A3%80%E6%B5%8B%E8%84%9A%E6%9C%AC%E7%BC%96%E5%86%99"><span class="toc-number">1.2.</span> <span class="toc-text">跨境检测脚本编写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%B5%8B%E8%84%9A%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-number">1.3.</span> <span class="toc-text">检测脚本使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">1.4.</span> <span class="toc-text">注意事项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.5.</span> <span class="toc-text">参考</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0"><span class="toc-number">1.6.</span> <span class="toc-text">系列文章</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        车联网安全进阶之跨境传输检测
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2023-05-14T11:27:28.000Z" itemprop="datePublished">2023-05-14</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Automotive/" rel="tag">Automotive</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="车联网安全进阶之跨境传输检测"><a href="#车联网安全进阶之跨境传输检测" class="headerlink" title="车联网安全进阶之跨境传输检测"></a>车联网安全进阶之跨境传输检测</h2><p>在<strong>车联网安全基础知识</strong>系列外，新开了一个系列 <strong>车联网安全进阶</strong>，主要分享一些车联网安全的进阶的知识，包括但不限于检测脚本编写，其他的等想好了再说🙈。</p>
+<p>5月5日发布的<a target="_blank" rel="noopener" href="https://www.miit.gov.cn/api-gateway/jpaas-web-server/front/document/file-download?fileUrl=/cms_files/filemanager/1226211233/attach/20233/813c94607c204368aef325ffdd37f975.docx&amp;fileName=1.《汽车整车信息安全技术要求》（征求意见稿）.docx">《汽车整车信息安全技术要求》（征求意见稿）</a> 在10节 <code>车辆数据代码安全要求</code> 中对数据跨境传输提出了要求——车辆不得直接向境外传输数据。</p>
+<blockquote>
+<p>10.7　车辆不得直接向境外传输数据。</p>
+<p>注： 用户使用浏览器访问境外网站、使用通信软件向境外传递消息、自主安装可能导致数据出境的第三方应用等不受本条款限制。</p>
+</blockquote>
+<p>并在<code>A.7.7 防数据直接出境测试方法</code>给出了测试方法，使用抓包工具开始抓包，然后模拟测试车辆各项预装的数据传输功能，最后分析数据包中是否包含境外IP地址。</p>
+<blockquote>
+<p>测试人员应按照如下测试方法，检验测试车辆是否满足正文10.7的要求：</p>
+<p>a） 开启车辆全部移动蜂窝通信网络、WLAN通信网络，依次模拟测试车辆各项预装的数据传输功能</p>
+<p>b） 使用网络数据抓包工具进行不少于3600秒的数据抓包，解析通信报文数据，分析目的IP地址中是否包含境外IP地址，并记录测试结果，应不包含境外IP地址。</p>
+</blockquote>
+<p>标准中只说了<code>应不包含境外IP地址</code>，没有给出数据包的分析方法，今天和大家分享一下我采用的检测方法和脚本。</p>
+<h3 id="数据包抓取"><a href="#数据包抓取" class="headerlink" title="数据包抓取"></a>数据包抓取</h3><p>不同场景下使用适合的抓包工具，如使用 <code>tcpdump</code> 在TBOX中抓取移动蜂窝通信网络通信数据。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tcpdump -i any -w tbox.pcap</span><br></pre></td></tr></table></figure>
+<h3 id="跨境检测脚本编写"><a href="#跨境检测脚本编写" class="headerlink" title="跨境检测脚本编写"></a>跨境检测脚本编写</h3><p>使用 Python 脚本提取出数据包中的 IP，从中过滤出公网IP，然后使用公开的接口查询 IP 地址的所在地，提取出境外的IP。</p>
+<ol>
+<li><p>使用 scapy 提取出数据包中的公网 IP</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">packets = rdpcap(pcap)</span><br><span class="line">ip_list = []</span><br><span class="line"><span class="keyword">for</span> pkt <span class="keyword">in</span> packets:</span><br><span class="line">    <span class="keyword">if</span> IP <span class="keyword">in</span> pkt:</span><br><span class="line">    src_ip = pkt[IP].src</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用 ipaddress 过滤检测是否是公网IP地址</p>
+<p>判断IP是否为公网IP地址，过滤掉内网地址、本地换回地址、广播地址、保留地址。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 检查是否公网IP，是则返回真</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_public_ip</span>(<span class="params">ip</span>):</span></span><br><span class="line">    ip = ipaddress.ip_address(ip)</span><br><span class="line">    <span class="keyword">if</span> ip.is_private <span class="keyword">or</span> ip.is_loopback <span class="keyword">or</span> ip.is_multicast <span class="keyword">or</span> ip.is_reserved:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>公开的接口查询 IP 地址的所在地</p>
+<p>有很多公开的IP地址接口可以使用，这里我采用 <code>百度数据开放平台</code>提供的 API 查询 IP 的所在地。百度数据开放平台查询国内IP返回地址以省名/直辖市开头，国外的IP只显示国家。</p>
+<p><img src="image-20230513214955112.png" alt="image-20230513214955112" style="zoom:60%;" /></p>
+<p>根据返回地址特性，筛选出不是以省名/直辖市打头的地址，过滤出境外IP。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 检查IP，如果是境外IP则返回所在地址</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cross_border_addr</span>(<span class="params">ip</span>):</span></span><br><span class="line">    <span class="comment"># 百度IP信息查询API</span></span><br><span class="line">    query_api = <span class="string">&quot;https://opendata.baidu.com/api.php?co=&amp;resource_id=6006&amp;oe=utf8&amp;query=&quot;</span></span><br><span class="line">    homeland = [<span class="string">&quot;中国&quot;</span>,<span class="string">&quot;北京&quot;</span>,<span class="string">&quot;天津&quot;</span>,<span class="string">&quot;河北&quot;</span>,<span class="string">&quot;山西&quot;</span>,<span class="string">&quot;内蒙古&quot;</span>,<span class="string">&quot;辽宁&quot;</span>,<span class="string">&quot;吉林&quot;</span>,<span class="string">&quot;黑龙江&quot;</span>,<span class="string">&quot;上海&quot;</span>,<span class="string">&quot;江苏&quot;</span>,<span class="string">&quot;浙江&quot;</span>,<span class="string">&quot;安徽&quot;</span>,<span class="string">&quot;福建&quot;</span>,<span class="string">&quot;江西&quot;</span>,<span class="string">&quot;山东&quot;</span>,<span class="string">&quot;河南&quot;</span>,<span class="string">&quot;湖北&quot;</span>,<span class="string">&quot;湖南&quot;</span>,<span class="string">&quot;广东&quot;</span>,<span class="string">&quot;广西&quot;</span>,<span class="string">&quot;海南&quot;</span>,<span class="string">&quot;重庆&quot;</span>,<span class="string">&quot;四川&quot;</span>,<span class="string">&quot;贵州&quot;</span>,<span class="string">&quot;云南&quot;</span>,<span class="string">&quot;西藏&quot;</span>,<span class="string">&quot;陕西&quot;</span>,<span class="string">&quot;甘肃&quot;</span>,<span class="string">&quot;青海&quot;</span>,<span class="string">&quot;宁夏&quot;</span>,<span class="string">&quot;新疆&quot;</span>] </span><br><span class="line">    response = requests.get(query_api+ip)</span><br><span class="line">    location = json.loads(response.content.decode())[<span class="string">&quot;data&quot;</span>][<span class="number">0</span>][<span class="string">&quot;location&quot;</span>]</span><br><span class="line">    <span class="keyword">if</span> location[<span class="number">0</span>:<span class="number">2</span>] <span class="keyword">not</span> <span class="keyword">in</span> homeland:</span><br><span class="line">        <span class="keyword">return</span> location</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将前面的代码组合起来，就是一个跨境检测的脚本</p>
+<p>完整脚本见 <a target="_blank" rel="noopener" href="https://github.com/delikely/Automotive-Security-Tookit">https://github.com/delikely/Automotive-Security-Tookit</a></p>
+</li>
+</ol>
+<h3 id="检测脚本使用"><a href="#检测脚本使用" class="headerlink" title="检测脚本使用"></a>检测脚本使用</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">E:\Code\Automotive&gt; python <span class="string">&#x27;cross-border checker.py&#x27;</span> -h</span><br><span class="line">usage: PROG [options]</span><br><span class="line"></span><br><span class="line">流量包跨境传输检查</span><br><span class="line"></span><br><span class="line">optional arguments:</span><br><span class="line">  -h, --<span class="built_in">help</span>            show this <span class="built_in">help</span> message and <span class="built_in">exit</span></span><br><span class="line">  -f FILE, --file FILE  pcap file</span><br></pre></td></tr></table></figure>
+<p>使用 -f 选项指定需要分析的流量包。使用实例如下图，在tbox.pcap 中检测出了 4 个跨境的 IP地址。</p>
+<p><img src="image-20230513204937877.png" alt="image-20230513204937877" style="zoom:80%;" /></p>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ul>
+<li><p>测试机接入到车辆网络中，对外通信通过TBOX传输，测试机的流量可能会污染抓取的流量，影响检测的准确性。</p>
+</li>
+<li><p>在查询 IP 地址的所在地中，如对数据较为敏感，则可采用私有化部署(如 rapiddns 私有化部署)的数据进行查询。</p>
+</li>
+</ul>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://www.miit.gov.cn/api-gateway/jpaas-web-server/front/document/file-download?fileUrl=/cms_files/filemanager/1226211233/attach/20233/813c94607c204368aef325ffdd37f975.docx&amp;fileName=1.《汽车整车信息安全技术要求》（征求意见稿）.docx">《汽车整车信息安全技术要求》（征求意见稿）</a></li>
+</ul>
+<h3 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/FzF7ERiWZ_GGKLW4kqrH9Q">车联网安全基础知识之汽车模块化平台</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/YyHRexeKgGd4RAgQ4o-jKw">车联网安全基础知识之大众集团汽车电子电气架构</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/WmNT6Kbw74EluaKLZUH64g">车联网安全基础知识之TBOX主要功能</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/RKU0YevKmSOJtb3NMOEy9w">车联网安全基础知识之大众J949(OCU/T-BOX)</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/l1-RZ9rI09p__2hwPKSRVw">车联网安全基础知识之充电基础设施</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/9KVNgiToeDsDIlR1FBMohw">车联网安全基础知识之从插线端子分析车内通信网络结构</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/bVt5-d_XQsEhoODffQheOA">车联网安全基础知识之QNX命令</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/pFf7hvan2Z9VOxGyuwIvmg">车联网安全基础知识之测试台架购买</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/01tV6GfK8L4hNEyn0suwdw">车联网安全基础知识之USB SPH2.0线束制作</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/X6mVWpj796ZZt9MFzi7U0A">车联网安全基础知识之UDS刷写前置基础知识</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/hOmN2xzSidCAQ_KrTJ-3VA">车联网安全基础知识之 UDS 刷写安全</a></li>
+</ol>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/2018/04/11/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E8%BF%9B%E9%98%B6%E4%B9%8B%E8%B7%A8%E5%A2%83%E4%BC%A0%E8%BE%93%E6%A3%80%E6%B5%8B"><span class="toc-number">1.</span> <span class="toc-text">车联网安全进阶之跨境传输检测</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8C%85%E6%8A%93%E5%8F%96"><span class="toc-number">1.1.</span> <span class="toc-text">数据包抓取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%A8%E5%A2%83%E6%A3%80%E6%B5%8B%E8%84%9A%E6%9C%AC%E7%BC%96%E5%86%99"><span class="toc-number">1.2.</span> <span class="toc-text">跨境检测脚本编写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%B5%8B%E8%84%9A%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-number">1.3.</span> <span class="toc-text">检测脚本使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">1.4.</span> <span class="toc-text">注意事项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.5.</span> <span class="toc-text">参考</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0"><span class="toc-number">1.6.</span> <span class="toc-text">系列文章</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2023/05/14/cross-border-check/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2023/05/14/cross-border-check/&text=车联网安全进阶之跨境传输检测"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2023/05/14/cross-border-check/&title=车联网安全进阶之跨境传输检测"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2023/05/14/cross-border-check/&is_video=false&description=车联网安全进阶之跨境传输检测"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=车联网安全进阶之跨境传输检测&body=Check out this article: http://delikey.github.io/2023/05/14/cross-border-check/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2023/05/14/cross-border-check/&title=车联网安全进阶之跨境传输检测"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2023/05/14/cross-border-check/&title=车联网安全进阶之跨境传输检测"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2023/05/14/cross-border-check/&title=车联网安全进阶之跨境传输检测"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2023/05/14/cross-border-check/&title=车联网安全进阶之跨境传输检测"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2023/05/14/cross-border-check/&name=车联网安全进阶之跨境传输检测&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2023 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/2018/04/11/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
