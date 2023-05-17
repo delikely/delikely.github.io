@@ -30,7 +30,7 @@
 <meta property="og:image" content="http://delikey.github.io/2023/05/01/UDS-flash/image-20230426165344244.png">
 <meta property="og:image" content="http://delikey.github.io/2023/05/01/UDS-flash/image-20230426161424710.png">
 <meta property="article:published_time" content="2023-05-01T11:04:33.000Z">
-<meta property="article:modified_time" content="2023-05-17T17:38:30.831Z">
+<meta property="article:modified_time" content="2023-05-17T17:57:54.824Z">
 <meta property="article:author" content="Delikely">
 <meta property="article:tag" content="Automotive">
 <meta name="twitter:card" content="summary">
@@ -281,7 +281,7 @@
 <ol>
 <li>Request Seed：Tester 使用27服务，并携带需要解锁的安全等级 0X 发送给特定的 ECU。</li>
 <li>Request Seed Reply : 对应的ECU收到之后，生成4个字节的随机数 Seed，返回给 Teseter。</li>
-<li>Send Key: Tester 拿到Seed后，使用自定义实现的 Seed2Key 算法计算出Key，发送给ECU。Send Key 中的安全访问级别 0Y 是Request Seed的0X+1。例如当请求种子为 27 01 时，发送秘钥则为 27 02(01+1)。</li>
+<li>Send Key: Tester 拿到Seed后，使用自定义实现的 Seed2Key 算法计算出Key，发送给ECU。Send Key 中的安全访问级别 0Y 为Request Seed的安全访问级别的值 +1。例如当请求种子为 27 01 时，发送秘钥则为 27 02(01+1)。</li>
 <li>Send Key Reply : ECU 将收到的 Key 和 自己拿 Seed 作为输入的 Seed2Key 计算出结果进行对比，然后返回验证的结果。</li>
 </ol>
 <h3 id="Seed2Key-算法"><a href="#Seed2Key-算法" class="headerlink" title="Seed2Key 算法"></a>Seed2Key 算法</h3><p>安全访问中最重要的就是Seed2Key算法，算法通常是一些比较简单的移位算法，例如下列的算法。</p>
