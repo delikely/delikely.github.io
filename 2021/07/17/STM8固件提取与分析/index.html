@@ -9,43 +9,43 @@
     <meta name="description" content="STM8 固件提取与分析最近看了一篇关于智能手环的逆向的文章 Reverse Engineering the M6 Smart Fitness Bracelet，文章中讲到 Single Wire (aka. SWire or SWS) 。恰巧之前也碰到单线调试的 STM8，网上讲 STM32（ARM M系列） 的不少，讲 STM8 寥寥无几，这里和大家分享一下通过 SWIM 调试接口提取固件，并">
 <meta property="og:type" content="article">
 <meta property="og:title" content="STM8 固件提取与分析">
-<meta property="og:url" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/index.html">
+<meta property="og:url" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/index.html">
 <meta property="og:site_name" content="Delikely&#39;s Blog">
 <meta property="og:description" content="STM8 固件提取与分析最近看了一篇关于智能手环的逆向的文章 Reverse Engineering the M6 Smart Fitness Bracelet，文章中讲到 Single Wire (aka. SWire or SWS) 。恰巧之前也碰到单线调试的 STM8，网上讲 STM32（ARM M系列） 的不少，讲 STM8 寥寥无几，这里和大家分享一下通过 SWIM 调试接口提取固件，并">
 <meta property="og:locale">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/en.STM8_SC1244.jpg">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210223225013360.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210223225421159.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210301122808616.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210708193246617.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210301132705315.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210301142832018.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210301152622850.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210303161955707.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305144745463.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305150602863.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305150911667.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305152150267.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305153410524.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305154036445.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305233137833.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305160242781.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305190205927.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305190320633.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210708195502037.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305190858841.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305203015348.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210311143123666.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210311151917027.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210311152340582.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210311155504013.png">
-<meta property="og:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210311151812138.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/en.STM8_SC1244.jpg">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210223225013360.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210223225421159.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210301122808616.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210708193246617.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210301132705315.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210301142832018.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210301152622850.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210303161955707.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305144745463.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305150602863.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305150911667.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305152150267.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305153410524.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305154036445.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305233137833.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305160242781.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305190205927.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305190320633.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210708195502037.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305190858841.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210305203015348.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210311143123666.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210311151917027.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210311152340582.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210311155504013.png">
+<meta property="og:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/image-20210311151812138.png">
 <meta property="article:published_time" content="2021-07-17T11:10:52.000Z">
 <meta property="article:modified_time" content="2021-07-25T11:54:28.000Z">
 <meta property="article:author" content="Delikely">
 <meta property="article:tag" content="IOT">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/en.STM8_SC1244.jpg">
+<meta name="twitter:image" content="http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/en.STM8_SC1244.jpg">
     
     
         
@@ -116,17 +116,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&text=STM8 固件提取与分析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&is_video=false&description=STM8 固件提取与分析"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=STM8 固件提取与分析&body=Check out this article: http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&name=STM8 固件提取与分析&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&text=STM8 固件提取与分析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&text=STM8 固件提取与分析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&is_video=false&description=STM8 固件提取与分析"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=STM8 固件提取与分析&body=Check out this article: http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&name=STM8 固件提取与分析&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&text=STM8 固件提取与分析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -325,17 +325,17 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&text=STM8 固件提取与分析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&is_video=false&description=STM8 固件提取与分析"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=STM8 固件提取与分析&body=Check out this article: http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&name=STM8 固件提取与分析&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&text=STM8 固件提取与分析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&text=STM8 固件提取与分析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&is_video=false&description=STM8 固件提取与分析"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=STM8 固件提取与分析&body=Check out this article: http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&title=STM8 固件提取与分析"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&name=STM8 固件提取与分析&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikely.github.io/2021/07/17/STM8%E5%9B%BA%E4%BB%B6%E6%8F%90%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90/&text=STM8 固件提取与分析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

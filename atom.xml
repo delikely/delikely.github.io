@@ -3,11 +3,11 @@
   <title>Delikely&#39;s Blog</title>
   
   <subtitle>Tell you a story.</subtitle>
-  <link href="http://delikey.github.io/atom.xml" rel="self"/>
+  <link href="http://delikely.github.io/atom.xml" rel="self"/>
   
-  <link href="http://delikey.github.io/"/>
+  <link href="http://delikely.github.io/"/>
   <updated>2023-07-29T13:53:50.194Z</updated>
-  <id>http://delikey.github.io/</id>
+  <id>http://delikely.github.io/</id>
   
   <author>
     <name>Delikely</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>备忘录</title>
-    <link href="http://delikey.github.io/2099/01/01/cheatSheet/"/>
-    <id>http://delikey.github.io/2099/01/01/cheatSheet/</id>
+    <link href="http://delikely.github.io/2099/01/01/cheatSheet/"/>
+    <id>http://delikely.github.io/2099/01/01/cheatSheet/</id>
     <published>2099-01-01T14:00:00.000Z</published>
     <updated>2023-07-29T13:53:50.194Z</updated>
     
@@ -39,8 +39,8 @@
   
   <entry>
     <title>前沿领域</title>
-    <link href="http://delikey.github.io/2099/01/01/advanced/"/>
-    <id>http://delikey.github.io/2099/01/01/advanced/</id>
+    <link href="http://delikely.github.io/2099/01/01/advanced/"/>
+    <id>http://delikely.github.io/2099/01/01/advanced/</id>
     <published>2099-01-01T13:00:00.000Z</published>
     <updated>2023-06-15T07:49:12.049Z</updated>
     
@@ -60,8 +60,8 @@
   
   <entry>
     <title>汽车安全</title>
-    <link href="http://delikey.github.io/2099/01/01/automotive-security/"/>
-    <id>http://delikey.github.io/2099/01/01/automotive-security/</id>
+    <link href="http://delikely.github.io/2099/01/01/automotive-security/"/>
+    <id>http://delikely.github.io/2099/01/01/automotive-security/</id>
     <published>2099-01-01T12:00:00.000Z</published>
     <updated>2023-07-29T13:55:58.886Z</updated>
     
@@ -76,14 +76,14 @@
     
     
     
-    <category term="Automotive" scheme="http://delikey.github.io/tags/Automotive/"/>
+    <category term="Automotive" scheme="http://delikely.github.io/tags/Automotive/"/>
     
   </entry>
   
   <entry>
     <title>固件分析</title>
-    <link href="http://delikey.github.io/2099/01/01/firmware/"/>
-    <id>http://delikey.github.io/2099/01/01/firmware/</id>
+    <link href="http://delikely.github.io/2099/01/01/firmware/"/>
+    <id>http://delikely.github.io/2099/01/01/firmware/</id>
     <published>2099-01-01T11:30:00.000Z</published>
     <updated>2023-07-29T13:57:42.582Z</updated>
     
@@ -99,14 +99,14 @@
     
     
     
-    <category term="IOT" scheme="http://delikey.github.io/tags/IOT/"/>
+    <category term="IOT" scheme="http://delikely.github.io/tags/IOT/"/>
     
   </entry>
   
   <entry>
     <title>IOT 漏洞收集</title>
-    <link href="http://delikey.github.io/2099/01/01/IOT-Vulns/"/>
-    <id>http://delikey.github.io/2099/01/01/IOT-Vulns/</id>
+    <link href="http://delikely.github.io/2099/01/01/IOT-Vulns/"/>
+    <id>http://delikely.github.io/2099/01/01/IOT-Vulns/</id>
     <published>2099-01-01T11:00:00.000Z</published>
     <updated>2023-07-29T14:03:05.393Z</updated>
     
@@ -122,14 +122,14 @@
     
     
     
-    <category term="IOT" scheme="http://delikey.github.io/tags/IOT/"/>
+    <category term="IOT" scheme="http://delikely.github.io/tags/IOT/"/>
     
   </entry>
   
   <entry>
     <title>工控安全 漏洞收集</title>
-    <link href="http://delikey.github.io/2099/01/01/ICS-Vulns/"/>
-    <id>http://delikey.github.io/2099/01/01/ICS-Vulns/</id>
+    <link href="http://delikely.github.io/2099/01/01/ICS-Vulns/"/>
+    <id>http://delikely.github.io/2099/01/01/ICS-Vulns/</id>
     <published>2099-01-01T10:00:00.000Z</published>
     <updated>2023-04-28T12:42:44.195Z</updated>
     
@@ -145,14 +145,14 @@
     
     
     
-    <category term="ICS" scheme="http://delikey.github.io/tags/ICS/"/>
+    <category term="ICS" scheme="http://delikely.github.io/tags/ICS/"/>
     
   </entry>
   
   <entry>
     <title>协议安全 漏洞收集</title>
-    <link href="http://delikey.github.io/2099/01/01/protocol-Vulns/"/>
-    <id>http://delikey.github.io/2099/01/01/protocol-Vulns/</id>
+    <link href="http://delikely.github.io/2099/01/01/protocol-Vulns/"/>
+    <id>http://delikely.github.io/2099/01/01/protocol-Vulns/</id>
     <published>2099-01-01T09:00:00.000Z</published>
     <updated>2023-04-07T03:42:45.002Z</updated>
     
@@ -172,8 +172,8 @@
   
   <entry>
     <title>值得一看 漏洞收集</title>
-    <link href="http://delikey.github.io/2099/01/01/genius-vulns/"/>
-    <id>http://delikey.github.io/2099/01/01/genius-vulns/</id>
+    <link href="http://delikely.github.io/2099/01/01/genius-vulns/"/>
+    <id>http://delikely.github.io/2099/01/01/genius-vulns/</id>
     <published>2099-01-01T08:00:00.000Z</published>
     <updated>2023-04-07T03:47:51.434Z</updated>
     
@@ -193,8 +193,8 @@
   
   <entry>
     <title>车联网安全进阶之跨境传输检测</title>
-    <link href="http://delikey.github.io/2023/05/14/cross-border-check/"/>
-    <id>http://delikey.github.io/2023/05/14/cross-border-check/</id>
+    <link href="http://delikely.github.io/2023/05/14/cross-border-check/"/>
+    <id>http://delikely.github.io/2023/05/14/cross-border-check/</id>
     <published>2023-05-14T11:27:28.000Z</published>
     <updated>2023-05-15T02:42:37.634Z</updated>
     
@@ -209,14 +209,14 @@
     
     
     
-    <category term="Automotive" scheme="http://delikey.github.io/tags/Automotive/"/>
+    <category term="Automotive" scheme="http://delikely.github.io/tags/Automotive/"/>
     
   </entry>
   
   <entry>
     <title>车联网安全基础知识之UDS刷写</title>
-    <link href="http://delikey.github.io/2023/05/01/UDS-flash/"/>
-    <id>http://delikey.github.io/2023/05/01/UDS-flash/</id>
+    <link href="http://delikely.github.io/2023/05/01/UDS-flash/"/>
+    <id>http://delikely.github.io/2023/05/01/UDS-flash/</id>
     <published>2023-05-01T11:04:33.000Z</published>
     <updated>2023-05-17T17:57:54.824Z</updated>
     
@@ -231,14 +231,14 @@
     
     
     
-    <category term="Automotive" scheme="http://delikey.github.io/tags/Automotive/"/>
+    <category term="Automotive" scheme="http://delikely.github.io/tags/Automotive/"/>
     
   </entry>
   
   <entry>
     <title>车联网安全基础知识之USB SPH2.0线束制作</title>
-    <link href="http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/"/>
-    <id>http://delikey.github.io/2022/10/19/DIY-USB-SPH2-0/</id>
+    <link href="http://delikely.github.io/2022/10/19/DIY-USB-SPH2-0/"/>
+    <id>http://delikely.github.io/2022/10/19/DIY-USB-SPH2-0/</id>
     <published>2022-10-19T06:12:34.000Z</published>
     <updated>2022-11-09T09:17:31.809Z</updated>
     
@@ -253,14 +253,14 @@
     
     
     
-    <category term="Automotive" scheme="http://delikey.github.io/tags/Automotive/"/>
+    <category term="Automotive" scheme="http://delikely.github.io/tags/Automotive/"/>
     
   </entry>
   
   <entry>
     <title>车联网安全基础知识之测试台架采购</title>
-    <link href="http://delikey.github.io/2022/05/19/trail-of-chentian/"/>
-    <id>http://delikey.github.io/2022/05/19/trail-of-chentian/</id>
+    <link href="http://delikely.github.io/2022/05/19/trail-of-chentian/"/>
+    <id>http://delikely.github.io/2022/05/19/trail-of-chentian/</id>
     <published>2022-05-19T07:54:03.000Z</published>
     <updated>2022-05-19T14:12:20.000Z</updated>
     
@@ -276,14 +276,14 @@
     
     
     
-    <category term="Automotive" scheme="http://delikey.github.io/tags/Automotive/"/>
+    <category term="Automotive" scheme="http://delikely.github.io/tags/Automotive/"/>
     
   </entry>
   
   <entry>
     <title>充电桩漏洞挖掘实践</title>
-    <link href="http://delikey.github.io/2022/04/29/chargebox-vuln-hunter-garo-and-bender/"/>
-    <id>http://delikey.github.io/2022/04/29/chargebox-vuln-hunter-garo-and-bender/</id>
+    <link href="http://delikely.github.io/2022/04/29/chargebox-vuln-hunter-garo-and-bender/"/>
+    <id>http://delikely.github.io/2022/04/29/chargebox-vuln-hunter-garo-and-bender/</id>
     <published>2022-04-29T11:47:40.000Z</published>
     <updated>2022-05-19T13:50:00.000Z</updated>
     
@@ -298,14 +298,14 @@
     
     
     
-    <category term="Automotive" scheme="http://delikey.github.io/tags/Automotive/"/>
+    <category term="Automotive" scheme="http://delikely.github.io/tags/Automotive/"/>
     
   </entry>
   
   <entry>
     <title>车联网安全基础知识之QNX Command Cheatsheet</title>
-    <link href="http://delikey.github.io/2022/02/28/QNX-Command-Cheatsheet/"/>
-    <id>http://delikey.github.io/2022/02/28/QNX-Command-Cheatsheet/</id>
+    <link href="http://delikely.github.io/2022/02/28/QNX-Command-Cheatsheet/"/>
+    <id>http://delikely.github.io/2022/02/28/QNX-Command-Cheatsheet/</id>
     <published>2022-02-28T15:15:00.000Z</published>
     <updated>2022-02-28T16:03:22.819Z</updated>
     
@@ -321,14 +321,14 @@
     
     
     
-    <category term="Automotive" scheme="http://delikey.github.io/tags/Automotive/"/>
+    <category term="Automotive" scheme="http://delikely.github.io/tags/Automotive/"/>
     
   </entry>
   
   <entry>
     <title>车联网安全基础知识之从插线端子分析车内通信网络结构</title>
-    <link href="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/"/>
-    <id>http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/</id>
+    <link href="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/"/>
+    <id>http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/</id>
     <published>2021-11-19T02:14:59.000Z</published>
     <updated>2021-11-20T04:33:24.475Z</updated>
     
@@ -343,14 +343,14 @@
     
     
     
-    <category term="Automotive" scheme="http://delikey.github.io/tags/Automotive/"/>
+    <category term="Automotive" scheme="http://delikely.github.io/tags/Automotive/"/>
     
   </entry>
   
   <entry>
     <title>车联网安全基础知识之充电基础设施</title>
-    <link href="http://delikey.github.io/2021/10/20/Charging-infrastructure/"/>
-    <id>http://delikey.github.io/2021/10/20/Charging-infrastructure/</id>
+    <link href="http://delikely.github.io/2021/10/20/Charging-infrastructure/"/>
+    <id>http://delikely.github.io/2021/10/20/Charging-infrastructure/</id>
     <published>2021-10-20T10:14:51.000Z</published>
     <updated>2021-11-14T16:33:58.043Z</updated>
     
@@ -365,14 +365,14 @@
     
     
     
-    <category term="Automotive" scheme="http://delikey.github.io/tags/Automotive/"/>
+    <category term="Automotive" scheme="http://delikely.github.io/tags/Automotive/"/>
     
   </entry>
   
   <entry>
     <title>车联网安全基础知识之大众J949(OCU/TBOX)</title>
-    <link href="http://delikey.github.io/2021/09/29/VW-OCU/"/>
-    <id>http://delikey.github.io/2021/09/29/VW-OCU/</id>
+    <link href="http://delikely.github.io/2021/09/29/VW-OCU/"/>
+    <id>http://delikely.github.io/2021/09/29/VW-OCU/</id>
     <published>2021-09-29T04:46:29.000Z</published>
     <updated>2021-10-29T16:08:58.000Z</updated>
     
@@ -387,14 +387,14 @@
     
     
     
-    <category term="Automotive" scheme="http://delikey.github.io/tags/Automotive/"/>
+    <category term="Automotive" scheme="http://delikely.github.io/tags/Automotive/"/>
     
   </entry>
   
   <entry>
     <title>车联网安全基础知识之TBOX主要功能</title>
-    <link href="http://delikey.github.io/2021/08/15/TBOX-Main-Function/"/>
-    <id>http://delikey.github.io/2021/08/15/TBOX-Main-Function/</id>
+    <link href="http://delikely.github.io/2021/08/15/TBOX-Main-Function/"/>
+    <id>http://delikely.github.io/2021/08/15/TBOX-Main-Function/</id>
     <published>2021-08-15T14:46:29.000Z</published>
     <updated>2021-10-29T16:08:58.000Z</updated>
     
@@ -409,14 +409,14 @@
     
     
     
-    <category term="Automotive" scheme="http://delikey.github.io/tags/Automotive/"/>
+    <category term="Automotive" scheme="http://delikely.github.io/tags/Automotive/"/>
     
   </entry>
   
   <entry>
     <title>PCB 打板之旅</title>
-    <link href="http://delikey.github.io/2021/07/31/PCB%E6%89%93%E6%9D%BF%E4%B9%8B%E6%97%85/"/>
-    <id>http://delikey.github.io/2021/07/31/PCB%E6%89%93%E6%9D%BF%E4%B9%8B%E6%97%85/</id>
+    <link href="http://delikely.github.io/2021/07/31/PCB%E6%89%93%E6%9D%BF%E4%B9%8B%E6%97%85/"/>
+    <id>http://delikely.github.io/2021/07/31/PCB%E6%89%93%E6%9D%BF%E4%B9%8B%E6%97%85/</id>
     <published>2021-08-01T03:52:32.000Z</published>
     <updated>2021-11-13T15:27:11.871Z</updated>
     
@@ -431,14 +431,14 @@
     
     
     
-    <category term="IOT" scheme="http://delikey.github.io/tags/IOT/"/>
+    <category term="IOT" scheme="http://delikely.github.io/tags/IOT/"/>
     
   </entry>
   
   <entry>
     <title>车联网安全基础知识之大众集团汽车电子电气架构</title>
-    <link href="http://delikey.github.io/2021/07/30/VW-Electronic/"/>
-    <id>http://delikey.github.io/2021/07/30/VW-Electronic/</id>
+    <link href="http://delikely.github.io/2021/07/30/VW-Electronic/"/>
+    <id>http://delikely.github.io/2021/07/30/VW-Electronic/</id>
     <published>2021-07-30T14:46:29.000Z</published>
     <updated>2021-08-04T16:26:49.000Z</updated>
     
@@ -453,7 +453,7 @@
     
     
     
-    <category term="Automotive" scheme="http://delikey.github.io/tags/Automotive/"/>
+    <category term="Automotive" scheme="http://delikely.github.io/tags/Automotive/"/>
     
   </entry>
   

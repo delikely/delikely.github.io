@@ -9,48 +9,48 @@
     <meta name="description" content="前言在不久之后实验室计划拆车，研究车辆的组成结构。拆车是很容易的，但拆完之后能原封不动的装回去且能正常运行还是需要功夫的。正好拿到了一辆车完整的电路图，于是准备研究一下，为后面拆车做准备，免得到时一头雾水。之前也有对插线端子进行过逆向分析，在一堆接口中寻找CAN 、UART 、USB 等接口。在没有手册的条件下，完整逆向出来还是有一定难度的。此外，在自己搭建测试台架中也需要熟悉各个 ECU 和各线">
 <meta property="og:type" content="article">
 <meta property="og:title" content="车联网安全基础知识之从插线端子分析车内通信网络结构">
-<meta property="og:url" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/index.html">
+<meta property="og:url" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/index.html">
 <meta property="og:site_name" content="Delikely&#39;s Blog">
 <meta property="og:description" content="前言在不久之后实验室计划拆车，研究车辆的组成结构。拆车是很容易的，但拆完之后能原封不动的装回去且能正常运行还是需要功夫的。正好拿到了一辆车完整的电路图，于是准备研究一下，为后面拆车做准备，免得到时一头雾水。之前也有对插线端子进行过逆向分析，在一堆接口中寻找CAN 、UART 、USB 等接口。在没有手册的条件下，完整逆向出来还是有一定难度的。此外，在自己搭建测试台架中也需要熟悉各个 ECU 和各线">
 <meta property="og:locale">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111230110482.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111225448841.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112110531547-16367183183121.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112104532040.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112115057877.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112113135506.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112113631841.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112114605397.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112111732143.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112112301791.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112122759622.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112123726218.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112124106173.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112120425461.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112121243656.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112121443053.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112122140688.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112000231431.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112000835375.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111233345398.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111232400288.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211113234220158.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111233735818.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111234419237.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111230713168.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111234950790.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111232117359.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111235251029.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112131248725.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112131454826.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/网络拓扑-北汽EU5%20网络结构.png">
-<meta property="og:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111150913360.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111230110482.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111225448841.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112110531547-16367183183121.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112104532040.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112115057877.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112113135506.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112113631841.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112114605397.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112111732143.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112112301791.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112122759622.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112123726218.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112124106173.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112120425461.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112121243656.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112121443053.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112122140688.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112000231431.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112000835375.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111233345398.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111232400288.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211113234220158.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111233735818.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111234419237.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111230713168.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111234950790.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111232117359.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111235251029.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112131248725.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211112131454826.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/网络拓扑-北汽EU5%20网络结构.png">
+<meta property="og:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111150913360.png">
 <meta property="article:published_time" content="2021-11-19T02:14:59.000Z">
 <meta property="article:modified_time" content="2021-11-20T04:33:24.475Z">
 <meta property="article:author" content="Delikely">
 <meta property="article:tag" content="Automotive">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111230110482.png">
+<meta name="twitter:image" content="http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/image-20211111230110482.png">
     
     
         
@@ -121,17 +121,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&text=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&is_video=false&description=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=车联网安全基础知识之从插线端子分析车内通信网络结构&body=Check out this article: http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&name=车联网安全基础知识之从插线端子分析车内通信网络结构&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&text=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&text=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&is_video=false&description=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=车联网安全基础知识之从插线端子分析车内通信网络结构&body=Check out this article: http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&name=车联网安全基础知识之从插线端子分析车内通信网络结构&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&text=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -180,7 +180,7 @@
 <p>下面以不同网络为分类，解读各 ECU 的插线端子的用途，最后以 CAN 网络为主线梳理出整车网络拓扑。</p>
 <h4 id="网关"><a href="#网关" class="headerlink" title="网关"></a>网关</h4><p>网关是整个网络中的核心，控制多路CAN、以太网网络的各类消息的处理和转发。网关最重要的功能是将不同的网络域进行隔离。从网关的插线端子来看，内部CAN网络被划分了为 6 个网络。分别是 DiagBUS(诊断)CAN、TBUS(远程监控)CAN、CBUS(底盘)CAN、EBUS(车身)CAN、IBUS(信息娱乐)CAN、EVBUS(能量)CAN。下面按照这 6 个网络分析车内网络结构。</p>
 <p><img src="image-20211111230110482.png" alt="image-20211111230110482"></p>
-<h4 id="TBUS-远程诊断网络"><a href="#TBUS-远程诊断网络" class="headerlink" title="TBUS 远程诊断网络"></a>TBUS 远程诊断网络</h4><p>TBUS 中只有 T-BOX 一个ECU。T-BOX 是车端智能网联中最核心的部件之一，集成 GPS、外部通信接口、电子处理单元、微控制器、移动通信单元和存储器等功能模块。提供的功能有网络接入、OTA、远程控制、位置查询/车辆追踪、电池管理、位置提醒、eCall、远程诊断、平台监控/国家监管等。下图中插线端子上 CAN、SPK、MIC、唤醒信号灯等接口。T-BOX 通过 TBUS CAN 与网关相连；T-BOX 上的 SPK(扬声器) 与 MIC(麦克风) 用于<a target="_blank" rel="noopener" href="https://delikely.github.io/2021/08/15/TBOX-Main-Function/#eCall">紧急呼叫</a> 等服务。除了下图的接口外，其他车的 T-BOX 可能还有用于模拟以太网的 USB 端子、用于调试的 UART 串口等。</p>
+<h4 id="TBUS-远程诊断网络"><a href="#TBUS-远程诊断网络" class="headerlink" title="TBUS 远程诊断网络"></a>TBUS 远程诊断网络</h4><p>TBUS 中只有 T-BOX 一个ECU。T-BOX 是车端智能网联中最核心的部件之一，集成 GPS、外部通信接口、电子处理单元、微控制器、移动通信单元和存储器等功能模块。提供的功能有网络接入、OTA、远程控制、位置查询/车辆追踪、电池管理、位置提醒、eCall、远程诊断、平台监控/国家监管等。下图中插线端子上 CAN、SPK、MIC、唤醒信号灯等接口。T-BOX 通过 TBUS CAN 与网关相连；T-BOX 上的 SPK(扬声器) 与 MIC(麦克风) 用于<a href="https://delikely.github.io/2021/08/15/TBOX-Main-Function/#eCall">紧急呼叫</a> 等服务。除了下图的接口外，其他车的 T-BOX 可能还有用于模拟以太网的 USB 端子、用于调试的 UART 串口等。</p>
 <p><img src="image-20211111225448841.png" alt="image-20211111225448841"></p>
 <h4 id="EVBUS-能量域-动力域"><a href="#EVBUS-能量域-动力域" class="headerlink" title="EVBUS 能量域/动力域"></a>EVBUS 能量域/动力域</h4><p>EVBUS 能量域是电动汽车新能源的叫法，对应传统网络中的动力域。能量域主要的功能是给车载电池充电以及控制驱动电机为车辆供能。能量域中有 BMS 电池管理系统、MCU 驱动电机控制器、OBC 车载充电控制器、CMU 交流充电控制单元、电子水泵控制器等。</p>
 <h5 id="BMS-电池管理、快充、慢充系统"><a href="#BMS-电池管理、快充、慢充系统" class="headerlink" title="BMS 电池管理、快充、慢充系统"></a>BMS 电池管理、快充、慢充系统</h5><p>电动汽车的动力输出依靠电池，而电池管理系统BMS(Battery Management System)则是其中的核心，负责控制电池的充电和放电以及实现电池状态估算等功能。电池管理系统与电动汽车的动力电池紧密结合在一起，通过温度传感器进行实时检测，还进行热管理；通过 EVBUS 与车载总控制器、电机控制器、能量控制系统、车载显示系统等进行实时通信。充电方式有快充（直流)和慢充（直流)两种。在快充网络中，BMS 充当 EVBUS 与 FCBUS 之间的网关；在慢充网络中，BMS 通过控制 CMU 控制对电池的慢充。</p>
@@ -280,7 +280,7 @@
 <p>此外，在插线端子上也可以找到一些脆弱的攻击点。例如，DVR 行车记录仪，从插线端子来看 DVR 接入到了车身域 CAN 网络中。那么就可以从行车记录仪入手，拿下 DVR 控制权后，进入到车身域中，而 BCM 也正好处于同一网络之中，BCM 又控制着车门、车灯。这一条控车的逻辑链路，当下没有被大家广泛关注，重点人在云端、TBOX 或 IVI上。从行车记录仪控车的这条路，星舆实验室正在积极探索之中，我们通过无接触的方式利用未知漏洞已经拿到某车行车记录仪的系统权限。 </p>
 <p>在研究插线端子中，我们还有其他的一些想法。欢迎大家和我们一起研究、探讨车联网安全，共同守护出行安全。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </p>
 <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://delikely.github.io/2021/08/15/TBOX-Main-Function/">车联网安全基础知识之TBOX主要功能</a></li>
+<li><a href="https://delikely.github.io/2021/08/15/TBOX-Main-Function/">车联网安全基础知识之TBOX主要功能</a></li>
 <li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/d-GcMiI51ugrnvSfQScL-A">北汽EV200/比亚迪唐/比亚迪e6 车载网络结构剖析</a></li>
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/149932069">BMS电池管理系统由浅入深全方位解析</a></li>
 <li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/6bZ2KGoMF307etKGGMnGjA">上汽乘用车：车身域控制系统开发实践</a></li>
@@ -320,17 +320,17 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&text=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&is_video=false&description=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=车联网安全基础知识之从插线端子分析车内通信网络结构&body=Check out this article: http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&name=车联网安全基础知识之从插线端子分析车内通信网络结构&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikey.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&text=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&text=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&is_video=false&description=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=车联网安全基础知识之从插线端子分析车内通信网络结构&body=Check out this article: http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&title=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&name=车联网安全基础知识之从插线端子分析车内通信网络结构&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikely.github.io/2021/11/18/Vehicle-Cable-Connection-Terminal/&text=车联网安全基础知识之从插线端子分析车内通信网络结构"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
