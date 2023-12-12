@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="Cheat Sheet Devhints — cheatsheets OWASP Cheat Sheet Series Reverse Shell Cheat Sheet Cross-site scripting (XSS) cheat sheet GDB cheatsheet  测试指南 APP合规开发指南 OWASP固件安全性测试指南  白皮书 研发运营安全白皮书（2020年） 中国网络安全产">
+    <meta name="description" content="Cheat Sheet Devhints — cheatsheets OWASP Cheat Sheet Series Reverse Shell Cheat Sheet Cross-site scripting (XSS) cheat sheet GDB cheatsheet IDA Pro Shortcuts  测试指南 APP合规开发指南 OWASP固件安全性测试指南  白皮书 研发运营安全">
 <meta property="og:type" content="article">
 <meta property="og:title" content="备忘录">
 <meta property="og:url" content="http://delikely.github.io/2099/01/01/cheatSheet/index.html">
 <meta property="og:site_name" content="Delikely&#39;s Blog">
-<meta property="og:description" content="Cheat Sheet Devhints — cheatsheets OWASP Cheat Sheet Series Reverse Shell Cheat Sheet Cross-site scripting (XSS) cheat sheet GDB cheatsheet  测试指南 APP合规开发指南 OWASP固件安全性测试指南  白皮书 研发运营安全白皮书（2020年） 中国网络安全产">
+<meta property="og:description" content="Cheat Sheet Devhints — cheatsheets OWASP Cheat Sheet Series Reverse Shell Cheat Sheet Cross-site scripting (XSS) cheat sheet GDB cheatsheet IDA Pro Shortcuts  测试指南 APP合规开发指南 OWASP固件安全性测试指南  白皮书 研发运营安全">
 <meta property="og:locale">
 <meta property="article:published_time" content="2099-01-01T14:00:00.000Z">
-<meta property="article:modified_time" content="2023-07-29T13:53:50.194Z">
+<meta property="article:modified_time" content="2023-12-12T16:42:38.686Z">
 <meta property="article:author" content="Delikely">
 <meta property="article:tag" content="Security">
 <meta name="twitter:card" content="summary">
@@ -101,7 +101,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Cheat-Sheet"><span class="toc-number">1.</span> <span class="toc-text">Cheat Sheet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E6%8C%87%E5%8D%97"><span class="toc-number">2.</span> <span class="toc-text">测试指南</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BD%E7%9A%AE%E4%B9%A6"><span class="toc-number">3.</span> <span class="toc-text">白皮书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%95%E8%A7%84"><span class="toc-number">4.</span> <span class="toc-text">法规</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86"><span class="toc-number">5.</span> <span class="toc-text">标准</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BA%E6%96%87"><span class="toc-number">6.</span> <span class="toc-text">论文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SOMETHING"><span class="toc-number">7.</span> <span class="toc-text">SOMETHING</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE"><span class="toc-number">8.</span> <span class="toc-text">开源项目</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Cheat-Sheet"><span class="toc-number">1.</span> <span class="toc-text">Cheat Sheet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E6%8C%87%E5%8D%97"><span class="toc-number">2.</span> <span class="toc-text">测试指南</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BD%E7%9A%AE%E4%B9%A6"><span class="toc-number">3.</span> <span class="toc-text">白皮书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%95%E8%A7%84"><span class="toc-number">4.</span> <span class="toc-text">法规</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86"><span class="toc-number">5.</span> <span class="toc-text">标准</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BA%E6%96%87"><span class="toc-number">6.</span> <span class="toc-text">论文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SOMETHING"><span class="toc-number">7.</span> <span class="toc-text">SOMETHING</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE"><span class="toc-number">8.</span> <span class="toc-text">开源项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">9.</span> <span class="toc-text">其他</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -141,6 +141,7 @@
 <li><a target="_blank" rel="noopener" href="https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md">Reverse Shell Cheat Sheet</a></li>
 <li><a target="_blank" rel="noopener" href="https://portswigger.net/web-security/cross-site-scripting/cheat-sheet#restricted-characters">Cross-site scripting (XSS) cheat sheet</a></li>
 <li><a target="_blank" rel="noopener" href="https://darkdust.net/files/GDB%20Cheat%20Sheet.pdf">GDB cheatsheet</a></li>
+<li><a target="_blank" rel="noopener" href="https://hex-rays.com/products/ida/support/freefiles/IDA_Pro_Shortcuts.pdf">IDA Pro Shortcuts</a></li>
 </ul>
 <h2 id="测试指南"><a href="#测试指南" class="headerlink" title="测试指南"></a>测试指南</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/KyVHDyfJedhW3_dXAUBETw">APP合规开发指南</a></li>
@@ -180,6 +181,9 @@
 <h2 id="开源项目"><a href="#开源项目" class="headerlink" title="开源项目"></a>开源项目</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://github.com/xairy/linux-kernel-exploitation">linux-kernel-exploitation: A collection of links related to Linux kernel security and exploitation)</a></li>
 </ul>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/vKqjc1uTajClu7bsn9yfLA">公安部公布打击黑客犯罪10起典型案例</a></li>
+</ul>
 
   </div>
 </article>
@@ -206,7 +210,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Cheat-Sheet"><span class="toc-number">1.</span> <span class="toc-text">Cheat Sheet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E6%8C%87%E5%8D%97"><span class="toc-number">2.</span> <span class="toc-text">测试指南</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BD%E7%9A%AE%E4%B9%A6"><span class="toc-number">3.</span> <span class="toc-text">白皮书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%95%E8%A7%84"><span class="toc-number">4.</span> <span class="toc-text">法规</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86"><span class="toc-number">5.</span> <span class="toc-text">标准</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BA%E6%96%87"><span class="toc-number">6.</span> <span class="toc-text">论文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SOMETHING"><span class="toc-number">7.</span> <span class="toc-text">SOMETHING</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE"><span class="toc-number">8.</span> <span class="toc-text">开源项目</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Cheat-Sheet"><span class="toc-number">1.</span> <span class="toc-text">Cheat Sheet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E6%8C%87%E5%8D%97"><span class="toc-number">2.</span> <span class="toc-text">测试指南</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BD%E7%9A%AE%E4%B9%A6"><span class="toc-number">3.</span> <span class="toc-text">白皮书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%95%E8%A7%84"><span class="toc-number">4.</span> <span class="toc-text">法规</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86"><span class="toc-number">5.</span> <span class="toc-text">标准</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BA%E6%96%87"><span class="toc-number">6.</span> <span class="toc-text">论文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SOMETHING"><span class="toc-number">7.</span> <span class="toc-text">SOMETHING</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE"><span class="toc-number">8.</span> <span class="toc-text">开源项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">9.</span> <span class="toc-text">其他</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
