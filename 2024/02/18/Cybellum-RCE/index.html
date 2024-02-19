@@ -39,7 +39,7 @@
 <meta property="og:image" content="http://delikely.github.io/2024/02/18/Cybellum-RCE/image-20240108125724597.png">
 <meta property="og:image" content="http://delikely.github.io/2024/02/18/Cybellum-RCE/cybellum_backdoor_exp.gif">
 <meta property="article:published_time" content="2024-02-18T07:00:00.000Z">
-<meta property="article:modified_time" content="2024-02-19T03:32:55.604Z">
+<meta property="article:modified_time" content="2024-02-19T14:47:28.578Z">
 <meta property="article:author" content="Delikely">
 <meta property="article:tag" content="Automotive">
 <meta name="twitter:card" content="summary">
@@ -84,13 +84,13 @@
     <span id="nav">
       <ul>
          
-          <li><a href="/">Inicio</a></li>
+          <li><a href="/">Home</a></li>
          
-          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+          <li><a href="/2018/04/11/about/">About</a></li>
          
-          <li><a href="/archives/">Articulos</a></li>
+          <li><a href="/archives/">Writing</a></li>
          
-          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
         
       </ul>
     </span>
@@ -106,10 +106,10 @@
         <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
       </ul>
-      <span id="i-prev" class="info" style="display:none;">Post Anterior</span>
-      <span id="i-next" class="info" style="display:none;">Post Siguiente</span>
-      <span id="i-top" class="info" style="display:none;">Arriba</span>
-      <span id="i-share" class="info" style="display:none;">Compartir Post</span>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
     </span>
     <br/>
     <div id="share" style="display: none">
@@ -129,7 +129,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Take-a-glance-of-browser-I-find-Cybellum-RCE"><span class="toc-number">1.</span> <span class="toc-text">Take a glance of  browser, I find Cybellum RCE</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#About-Vendor"><span class="toc-number">1.1.</span> <span class="toc-text">About Vendor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Interesting-status"><span class="toc-number">1.2.</span> <span class="toc-text">Interesting status</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Regcongize-service"><span class="toc-number">1.3.</span> <span class="toc-text">Regcongize service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deployment-method"><span class="toc-number">1.4.</span> <span class="toc-text">Deployment method</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mount-qcow2-disk-image"><span class="toc-number">1.5.</span> <span class="toc-text">Mount qcow2 disk image</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Another-easy-way-to-get-in"><span class="toc-number">1.6.</span> <span class="toc-text">Another easy way to get in</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Analysis-backdoor"><span class="toc-number">1.7.</span> <span class="toc-text">Analysis backdoor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Proof-of-concept"><span class="toc-number">1.8.</span> <span class="toc-text">Proof of concept</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#About-me"><span class="toc-number">1.9.</span> <span class="toc-text">About me</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Timeline"><span class="toc-number">1.10.</span> <span class="toc-text">Timeline</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#More"><span class="toc-number">1.11.</span> <span class="toc-text">More</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Take-a-glance-of-browser-I-find-Cybellum-RCE"><span class="toc-number">1.</span> <span class="toc-text">Take a glance of  browser, I find Cybellum RCE</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#About-Vendor"><span class="toc-number">1.1.</span> <span class="toc-text">About Vendor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Interesting-status"><span class="toc-number">1.2.</span> <span class="toc-text">Interesting status</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Regcongize-service"><span class="toc-number">1.3.</span> <span class="toc-text">Regcongize service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deployment-method"><span class="toc-number">1.4.</span> <span class="toc-text">Deployment method</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mount-qcow2-disk-image"><span class="toc-number">1.5.</span> <span class="toc-text">Mount qcow2 disk image</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Another-easy-way-to-get-in"><span class="toc-number">1.6.</span> <span class="toc-text">Another easy way to get in</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Analysis-backdoor"><span class="toc-number">1.7.</span> <span class="toc-text">Analysis backdoor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Proof-of-concept"><span class="toc-number">1.8.</span> <span class="toc-text">Proof of concept</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#About-Us"><span class="toc-number">1.9.</span> <span class="toc-text">About Us</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Timeline"><span class="toc-number">1.10.</span> <span class="toc-text">Timeline</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#More"><span class="toc-number">1.11.</span> <span class="toc-text">More</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -312,7 +312,8 @@
 <p><img src="cybellum_backdoor_exp.gif" alt=""></p>
 </li>
 </ol>
-<h3 id="About-me"><a href="#About-me" class="headerlink" title="About me"></a>About me</h3><p>Security researcher @<a target="_blank" rel="noopener" href="http://starvlab.qianxin.com">QAX StarV Security Lab</a>.</p>
+<h3 id="About-Us"><a href="#About-Us" class="headerlink" title="About Us"></a>About Us</h3><p><a target="_blank" rel="noopener" href="https://twitter.com/delikely">@delikley</a> Security researcher @<a target="_blank" rel="noopener" href="http://starvlab.qianxin.com">QAX StarV Security Lab</a>.</p>
+<p>@Imweekend Security researcher @<a href="">XXXX Inspection Institution</a>.</p>
 <h3 id="Timeline"><a href="#Timeline" class="headerlink" title="Timeline"></a>Timeline</h3><ul>
 <li>2023-06-21 Contacting vendor through Email.</li>
 <li>2023-06-26 Cybellum confirmed this issue.</li>
@@ -338,19 +339,19 @@
     <div id="nav-footer" style="display: none">
       <ul>
          
-          <li><a href="/">Inicio</a></li>
+          <li><a href="/">Home</a></li>
          
-          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+          <li><a href="/2018/04/11/about/">About</a></li>
          
-          <li><a href="/archives/">Articulos</a></li>
+          <li><a href="/archives/">Writing</a></li>
          
-          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
         
       </ul>
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Take-a-glance-of-browser-I-find-Cybellum-RCE"><span class="toc-number">1.</span> <span class="toc-text">Take a glance of  browser, I find Cybellum RCE</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#About-Vendor"><span class="toc-number">1.1.</span> <span class="toc-text">About Vendor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Interesting-status"><span class="toc-number">1.2.</span> <span class="toc-text">Interesting status</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Regcongize-service"><span class="toc-number">1.3.</span> <span class="toc-text">Regcongize service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deployment-method"><span class="toc-number">1.4.</span> <span class="toc-text">Deployment method</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mount-qcow2-disk-image"><span class="toc-number">1.5.</span> <span class="toc-text">Mount qcow2 disk image</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Another-easy-way-to-get-in"><span class="toc-number">1.6.</span> <span class="toc-text">Another easy way to get in</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Analysis-backdoor"><span class="toc-number">1.7.</span> <span class="toc-text">Analysis backdoor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Proof-of-concept"><span class="toc-number">1.8.</span> <span class="toc-text">Proof of concept</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#About-me"><span class="toc-number">1.9.</span> <span class="toc-text">About me</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Timeline"><span class="toc-number">1.10.</span> <span class="toc-text">Timeline</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#More"><span class="toc-number">1.11.</span> <span class="toc-text">More</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Take-a-glance-of-browser-I-find-Cybellum-RCE"><span class="toc-number">1.</span> <span class="toc-text">Take a glance of  browser, I find Cybellum RCE</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#About-Vendor"><span class="toc-number">1.1.</span> <span class="toc-text">About Vendor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Interesting-status"><span class="toc-number">1.2.</span> <span class="toc-text">Interesting status</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Regcongize-service"><span class="toc-number">1.3.</span> <span class="toc-text">Regcongize service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deployment-method"><span class="toc-number">1.4.</span> <span class="toc-text">Deployment method</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mount-qcow2-disk-image"><span class="toc-number">1.5.</span> <span class="toc-text">Mount qcow2 disk image</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Another-easy-way-to-get-in"><span class="toc-number">1.6.</span> <span class="toc-text">Another easy way to get in</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Analysis-backdoor"><span class="toc-number">1.7.</span> <span class="toc-text">Analysis backdoor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Proof-of-concept"><span class="toc-number">1.8.</span> <span class="toc-text">Proof of concept</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#About-Us"><span class="toc-number">1.9.</span> <span class="toc-text">About Us</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Timeline"><span class="toc-number">1.10.</span> <span class="toc-text">Timeline</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#More"><span class="toc-number">1.11.</span> <span class="toc-text">More</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
@@ -373,7 +374,7 @@
     <div id="actions-footer">
         <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
         <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
-        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Compartir</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
         <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
     </div>
 
@@ -389,13 +390,13 @@
     <nav>
       <ul>
          
-          <li><a href="/">Inicio</a></li>
+          <li><a href="/">Home</a></li>
          
-          <li><a href="/2018/04/11/about/">Acerca de</a></li>
+          <li><a href="/2018/04/11/about/">About</a></li>
          
-          <li><a href="/archives/">Articulos</a></li>
+          <li><a href="/archives/">Writing</a></li>
          
-          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Proyectos</a></li>
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
         
       </ul>
     </nav>
