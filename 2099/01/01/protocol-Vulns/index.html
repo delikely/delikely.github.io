@@ -14,7 +14,7 @@
 <meta property="og:description" content="TCP&#x2F;IP Exploiting a remote heap overflow with a custom TCP stack NUCLEUS:13 - New Critical Vulnerabilities Found on Nucleus TCP&#x2F;IP Stack NUMBER:JACK - Forescout Research Labs Finds Nine ISN Generation">
 <meta property="og:locale">
 <meta property="article:published_time" content="2099-01-01T09:00:00.000Z">
-<meta property="article:modified_time" content="2023-12-12T16:46:57.781Z">
+<meta property="article:modified_time" content="2024-05-05T08:59:56.597Z">
 <meta property="article:author" content="Delikely">
 <meta property="article:tag" content="Security">
 <meta name="twitter:card" content="summary">
@@ -103,7 +103,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-IP"><span class="toc-number">1.</span> <span class="toc-text">TCP&#x2F;IP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Blutooth"><span class="toc-number">2.</span> <span class="toc-text">Blutooth</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WiFi"><span class="toc-number">3.</span> <span class="toc-text">WiFi</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UWB"><span class="toc-number">4.</span> <span class="toc-text">UWB</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ICS"><span class="toc-number">5.</span> <span class="toc-text">ICS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CHIPS"><span class="toc-number">6.</span> <span class="toc-text">CHIPS</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-IP"><span class="toc-number">1.</span> <span class="toc-text">TCP&#x2F;IP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Blutooth"><span class="toc-number">2.</span> <span class="toc-text">Blutooth</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WiFi"><span class="toc-number">3.</span> <span class="toc-text">WiFi</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UWB"><span class="toc-number">4.</span> <span class="toc-text">UWB</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NFC"><span class="toc-number">5.</span> <span class="toc-text">NFC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ICS"><span class="toc-number">6.</span> <span class="toc-text">ICS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CHIPS"><span class="toc-number">7.</span> <span class="toc-text">CHIPS</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -154,6 +154,7 @@
 </ul>
 <h2 id="Blutooth"><a href="#Blutooth" class="headerlink" title="Blutooth"></a>Blutooth</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=bluetooth">CVE Lists: bluetooth</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/marcnewlin/hi_my_name_is_keyboard/tree/main">Keystroke Injection</a></li>
 <li><a target="_blank" rel="noopener" href="https://francozappa.github.io/post/2023/bluffs-ccs23/">BLUFFS: Bluetooth Forward and Future Secrecy Attacks and Defenses</a></li>
 <li><a target="_blank" rel="noopener" href="https://dl.acm.org/doi/10.1145/3548606.3560668">Blacktooth: Blacktooth: Breaking through the Defense of Bluetooth in Silence</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.ndss-symposium.org/ndss-paper/badbluetooth-breaking-android-security-mechanisms-via-malicious-bluetooth-peripherals/">BadBluetooth: Breaking Android Security Mechanisms via Malicious Bluetooth Peripherals</a> <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1EV411y7Cp">Video</a></li>
@@ -178,6 +179,10 @@
 </ul>
 <h2 id="UWB"><a href="#UWB" class="headerlink" title="UWB"></a>UWB</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2111.05313">Ghost Peak: Practical Distance Reduction Attacks Against HRP UWB Ranging</a></li>
+</ul>
+<h2 id="NFC"><a href="#NFC" class="headerlink" title="NFC"></a>NFC</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/Iskuri/PN553-Signature-Bypass">A tool that bypasses PN553 signature protection</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.pentestpartners.com/security-blog/breaking-the-nfc-chips-in-tens-of-millions-of-smart-phones-and-a-few-pos-systems/">Breaking the NFC chips in tens of millions of smart phones, and a few PoS systems</a></li>
 </ul>
 <h2 id="ICS"><a href="#ICS" class="headerlink" title="ICS"></a>ICS</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://claroty.com/2021/04/15/blog-research-fuzzing-and-pring/">The OpENer EtherNet/IP stack Multiple Vulnerabilities</a></li>
@@ -211,7 +216,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-IP"><span class="toc-number">1.</span> <span class="toc-text">TCP&#x2F;IP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Blutooth"><span class="toc-number">2.</span> <span class="toc-text">Blutooth</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WiFi"><span class="toc-number">3.</span> <span class="toc-text">WiFi</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UWB"><span class="toc-number">4.</span> <span class="toc-text">UWB</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ICS"><span class="toc-number">5.</span> <span class="toc-text">ICS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CHIPS"><span class="toc-number">6.</span> <span class="toc-text">CHIPS</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-IP"><span class="toc-number">1.</span> <span class="toc-text">TCP&#x2F;IP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Blutooth"><span class="toc-number">2.</span> <span class="toc-text">Blutooth</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WiFi"><span class="toc-number">3.</span> <span class="toc-text">WiFi</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UWB"><span class="toc-number">4.</span> <span class="toc-text">UWB</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NFC"><span class="toc-number">5.</span> <span class="toc-text">NFC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ICS"><span class="toc-number">6.</span> <span class="toc-text">ICS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CHIPS"><span class="toc-number">7.</span> <span class="toc-text">CHIPS</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
