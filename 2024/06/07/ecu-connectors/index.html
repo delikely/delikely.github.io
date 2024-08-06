@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="车联网安全基础知识之ECU常见接插件(连接器)最近有朋友正在试图去了解ECU中的各类接插件&#x2F;连接器，但不知道如何去查找相相关信息，甚至不知道接口的名称是什么，貌似不少人也有同样的困惑。正好我笔记里面有，整理出现供大家参考。以下是我个人的经验总结，难免有所不足。若有遗漏或错误的，请不吝赐教。 在测试零部件，搭建台架的时候，很多情况下没有完整的接插件线束。此时需要自己识别并连接所需的接口线束。当手头没">
+<meta property="og:type" content="article">
+<meta property="og:title" content="车联网安全基础知识之ECU常见接插件(连接器)">
+<meta property="og:url" content="http://delikely.github.io/2024/06/07/ecu-connectors/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="车联网安全基础知识之ECU常见接插件(连接器)最近有朋友正在试图去了解ECU中的各类接插件&#x2F;连接器，但不知道如何去查找相相关信息，甚至不知道接口的名称是什么，貌似不少人也有同样的困惑。正好我笔记里面有，整理出现供大家参考。以下是我个人的经验总结，难免有所不足。若有遗漏或错误的，请不吝赐教。 在测试零部件，搭建台架的时候，很多情况下没有完整的接插件线束。此时需要自己识别并连接所需的接口线束。当手头没">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/image-20240607210543216.png">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/I24709664.jpeg">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/33511062_SPL.jpg">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/image-20240608014413515.png">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/image-20240607210703663.png">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/csm_hsd_selection_kit_2020_Text_2ee9efac4b.jpg">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/image-20240608124204669.png">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/image-20240607210725142.png">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/image-20240607210808782.png">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/车联网安全基础知识之ECU常见接插件汇总.assets/1280_wt7tduu03qh84UcT.jpg">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/车联网安全基础知识之ECU常见接插件汇总.assets/1280_wpebJpKQsEU952dD.jpg">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/车联网安全基础知识之ECU常见接插件汇总.assets/1280_cKVClrsCe162YpIP.jpg">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/csm_HFM_2021_group_2_cf132a30be.jpg">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/image-20240607211133664.png">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/image-20240607211229755.png">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/image-20240607213515935.png">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/image-20240607211447176.png">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/image-20240607211621735.png">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/93627-3601_01_0922.jpg">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/hsautolink-connectors.jpg">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/202303031029055.png">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/O1CN016dfZ061FXDGdetNNT_!!1942800496.jpg">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/O1CN01bQ9siH1DhcozmAIFh_!!2087020248.jpg">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/O1CN0156SCUt1TC3hRlVr6S_!!61672345.jpg">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/image-20240608121138701.png">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/image-20240608122558683.png">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/image-20240608121249456.png">
+<meta property="og:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/image-20240608115214424.png">
+<meta property="article:published_time" content="2024-06-08T02:02:28.000Z">
+<meta property="article:modified_time" content="2024-08-06T14:09:42.000Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="Automotive">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikely.github.io/2024/06/07/ecu-connectors/image-20240607210543216.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>车联网安全基础知识之ECU常见接插件(连接器)</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Delikely's Blog" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/2018/04/11/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2024/07/05/autosec-corp-panorama/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2024/02/18/Cybellum-RCE/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikely.github.io/2024/06/07/ecu-connectors/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikely.github.io/2024/06/07/ecu-connectors/&text=车联网安全基础知识之ECU常见接插件(连接器)"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikely.github.io/2024/06/07/ecu-connectors/&title=车联网安全基础知识之ECU常见接插件(连接器)"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikely.github.io/2024/06/07/ecu-connectors/&is_video=false&description=车联网安全基础知识之ECU常见接插件(连接器)"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=车联网安全基础知识之ECU常见接插件(连接器)&body=Check out this article: http://delikely.github.io/2024/06/07/ecu-connectors/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikely.github.io/2024/06/07/ecu-connectors/&title=车联网安全基础知识之ECU常见接插件(连接器)"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikely.github.io/2024/06/07/ecu-connectors/&title=车联网安全基础知识之ECU常见接插件(连接器)"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikely.github.io/2024/06/07/ecu-connectors/&title=车联网安全基础知识之ECU常见接插件(连接器)"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikely.github.io/2024/06/07/ecu-connectors/&title=车联网安全基础知识之ECU常见接插件(连接器)"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikely.github.io/2024/06/07/ecu-connectors/&name=车联网安全基础知识之ECU常见接插件(连接器)&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikely.github.io/2024/06/07/ecu-connectors/&text=车联网安全基础知识之ECU常见接插件(连接器)"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B9%8BECU%E5%B8%B8%E8%A7%81%E6%8E%A5%E6%8F%92%E4%BB%B6-%E8%BF%9E%E6%8E%A5%E5%99%A8"><span class="toc-number">1.</span> <span class="toc-text">车联网安全基础知识之ECU常见接插件(连接器)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HSD"><span class="toc-number">1.1.</span> <span class="toc-text">HSD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HSL-High-speed-link"><span class="toc-number">1.2.</span> <span class="toc-text">HSL(High speed link )</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#USB"><span class="toc-number">1.3.</span> <span class="toc-text">USB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FAKRA-FAKRA-Mini"><span class="toc-number">1.4.</span> <span class="toc-text">FAKRA&#x2F;FAKRA-Mini</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E7%94%A8"><span class="toc-number">1.4.1.</span> <span class="toc-text">应用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%94%AF%E6%8C%81%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.4.2.</span> <span class="toc-text">支持协议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MQS-Multi-Quadlok-System"><span class="toc-number">1.5.</span> <span class="toc-text">MQS (Multi Quadlok System)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#H-MTD"><span class="toc-number">1.6.</span> <span class="toc-text">H-MTD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MATEnet"><span class="toc-number">1.7.</span> <span class="toc-text">MATEnet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RJ45"><span class="toc-number">1.8.</span> <span class="toc-text">RJ45</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E7%BA%BF%E6%9D%9F"><span class="toc-number">1.9.</span> <span class="toc-text">其他线束</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E5%99%A8%E5%8E%82%E5%95%86%E7%A7%81%E6%9C%89%E7%B3%BB%E5%88%97"><span class="toc-number">1.9.1.</span> <span class="toc-text">连接器厂商私有系列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9D%9C%E9%82%A6%E7%BA%BF"><span class="toc-number">1.9.2.</span> <span class="toc-text">杜邦线</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8F%92%E7%B0%A7%E7%AB%AF%E5%AD%90"><span class="toc-number">1.9.3.</span> <span class="toc-text">插簧端子</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#15EDG"><span class="toc-number">1.10.</span> <span class="toc-text">15EDG</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B"><span class="toc-number">1.11.</span> <span class="toc-text">实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.12.</span> <span class="toc-text">参考</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0"><span class="toc-number">1.13.</span> <span class="toc-text">系列文章</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        车联网安全基础知识之ECU常见接插件(连接器)
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2024-06-08T02:02:28.000Z" itemprop="datePublished">2024-06-08</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Automotive/" rel="tag">Automotive</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="车联网安全基础知识之ECU常见接插件-连接器"><a href="#车联网安全基础知识之ECU常见接插件-连接器" class="headerlink" title="车联网安全基础知识之ECU常见接插件(连接器)"></a>车联网安全基础知识之ECU常见接插件(连接器)</h2><p>最近有朋友正在试图去了解ECU中的各类接插件/连接器，但不知道如何去查找相相关信息，甚至不知道接口的名称是什么，貌似不少人也有同样的困惑。正好我笔记里面有，整理出现供大家参考。以下是我个人的经验总结，难免有所不足。若有遗漏或错误的，请不吝赐教。</p>
+<p>在测试零部件，搭建台架的时候，很多情况下没有完整的接插件线束。此时需要自己识别并连接所需的接口线束。当手头没有对应的线束的时候，需要使用一些平替，如杜邦线、插簧端子等。当我们不知道对应的连接器类型的时候，可以去供应商的网站上查找。主要的连接器供应商有 TE、Molex、Rosenberger、Amphenol 等。汽车上使用了大量的连接器，主要包括两类。</p>
+<p>一种是通用型连接器，连接器的针脚数量较少，大多都有较为明确的定义，通过标准定义了物理、电气特性。本文主要介绍此类连接器。</p>
+<p><img src="image-20240607210543216.png" alt="image-20240607210543216"></p>
+<p>另外一种连接器，以定制居多，外形各异。针脚的数量较多，针脚用途由厂商自定义。本文不涉及此类连接器。在测试中缺乏此类线束的时候，可以使用杜邦线、插簧端子线束代替部分针脚使用。</p>
+<p><img src="I24709664.jpeg" alt="Connector Experts - Normal Order - Inline Junction Connector" style="zoom:80%;" />                           <img src="33511062_SPL.jpg" alt="img" style="zoom:33%;" />                       <img src="image-20240608014413515.png" alt="image-20240608014413515" style="zoom: 23%;" /> </p>
+<h3 id="HSD"><a href="#HSD" class="headerlink" title="HSD"></a>HSD</h3><p>高速数据 (HSD,High-Speed Data) 接头专为汽车市场而设计，支持高达 6 GHz 数据传输速率。适用于信息娱乐模块、LVDS摄像头、USB、和显示装置等应用上。HSD 具有多种的集成类型——单腔、双腔,以及其它一些特殊+2、+4、+8（按需求）的带电源 PIN连接器，可用于供电。</p>
+<p><img src="image-20240607210703663.png" alt="image-20240607210703663" style="zoom:60%;" /><img src="csm_hsd_selection_kit_2020_Text_2ee9efac4b.jpg" alt="img" style="zoom:45%;" /></p>
+<p>车机主机与显示器连接使用的带电源的HSD线束，如下图。</p>
+<p><img src="image-20240608124204669.png" alt="image-20240608124204669" style="zoom: 33%;" /></p>
+<p>不同颜色的连接器的外形也存在差异。TBOX 上 USB 模拟以太网一般采用 Coding Standard UP - A 公头。</p>
+<p><img src="image-20240607210725142.png" alt="image-20240607210725142"></p>
+<h3 id="HSL-High-speed-link"><a href="#HSL-High-speed-link" class="headerlink" title="HSL(High speed link )"></a>HSL(High speed link )</h3><p>支持 USB 2.0 协议、LVDS 协议 、GVIF 协议，可用于 USB 连接、显示器连接、相机连接等。在汽车中，车机 USB 通常采用此接口。</p>
+<p><img src="image-20240607210808782.png" alt="image-20240607210808782" style="zoom:50%;" /></p>
+<p>HSL 线束零售较少，测试中可用 SPH 代替使用。</p>
+<p><a target="_blank" rel="noopener" href="https://www.jst-mfg.com/product/pdf/eng/ePH.pdf">SPH</a>端子是一种用于连接电线的压接端子，SPH是其系列名称，由JST Sales America Inc.生产。</p>
+<p>线束制作可以看以前的文章 <a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/01tV6GfK8L4hNEyn0suwdw">车联网安全基础知识之USB SPH2.0线束制作</a>。</p>
+<h3 id="USB"><a href="#USB" class="headerlink" title="USB"></a>USB</h3><p>USB 很常见就不过多介绍了。</p>
+<p>目前在汽车中主要使用USB2.0, 而速度更快的USB3.0仅有少量使用。主要用于与手机、U盘等外设的连接。</p>
+<table>
+<thead>
+<tr>
+<th>USB-MIN</th>
+<th>USB-Micro B</th>
+<th>USB-C</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="车联网安全基础知识之ECU常见接插件汇总.assets/1280_wt7tduu03qh84UcT.jpg" alt="Iso of USB Mini B 5-Pin" style="zoom: 25%;" /></td>
+<td><img src="车联网安全基础知识之ECU常见接插件汇总.assets/1280_wpebJpKQsEU952dD.jpg" alt="Iso of USB Micro-A" style="zoom: 25%;" /></td>
+<td><img src="车联网安全基础知识之ECU常见接插件汇总.assets/1280_cKVClrsCe162YpIP.jpg" alt="Iso of USB-C" style="zoom: 25%;" /></td>
+</tr>
+</tbody>
+</table>
+<h3 id="FAKRA-FAKRA-Mini"><a href="#FAKRA-FAKRA-Mini" class="headerlink" title="FAKRA/FAKRA-Mini"></a>FAKRA/FAKRA-Mini</h3><p>FAKRA 用于射频模拟/数字信号的同轴连接系统，支持高达 6 GHz 数据传输速率。 2000 年时，以德国车厂为首的欧美12家车厂，共同推出的一种汽车专用的音响与天线规格接头。后来推广至具有射频特性传输信号的功能，如视频、导航、蜂窝网络、Wi-Fi、摄像头、V2X 等。在汽车行业中天线一般都采用 FAKRA 。FAKRA连接器源自罗森伯格，经过二十余年的发展，FAKRA已成为汽车行业通用的标准射频连接器。</p>
+<p><img src="csm_HFM_2021_group_2_cf132a30be.jpg" alt="img" style="zoom:40%;" /></p>
+<h4 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h4><ul>
+<li><p>4K 相机</p>
+</li>
+<li><p>传感器</p>
+</li>
+<li><p>高分辨率显示器</p>
+</li>
+<li><p>广播天线</p>
+</li>
+<li><p>WLAN 天线</p>
+</li>
+<li><p>移动互联网天线 (4G/5G)</p>
+</li>
+<li><p>V2X 天线</p>
+</li>
+</ul>
+<h4 id="支持协议"><a href="#支持协议" class="headerlink" title="支持协议"></a>支持协议</h4><ul>
+<li>GMSL2/3</li>
+<li>FPD-Link III/IV</li>
+<li>APIX3</li>
+<li>MIPI</li>
+</ul>
+<p><img src="image-20240607211133664.png" alt="image-20240607211133664"></p>
+<p>不同颜色有其特殊的定义，如紫色用于蜂窝网络，蓝色用于GPS等。</p>
+<p><img src="image-20240607211229755.png" alt="image-20240607211229755"></p>
+<h3 id="MQS-Multi-Quadlok-System"><a href="#MQS-Multi-Quadlok-System" class="headerlink" title="MQS (Multi Quadlok System)"></a>MQS (Multi Quadlok System)</h3><p>MQS 连接器是一种用于汽车应用的微型化连接器系统，由 TE Connectivity 公司开发和生产。</p>
+<p>紧凑型接插件中的就使用了多种类型的MQS连接器，用于电源以及各类信号的传输。</p>
+<p><img src="image-20240607213515935.png" alt="image-20240607213515935" style="zoom:50%;" /></p>
+<h3 id="H-MTD"><a href="#H-MTD" class="headerlink" title="H-MTD"></a>H-MTD</h3><p>High-Speed Modular Twisted-Pair Data 高速模块化双绞线数据连接器,由<a target="_blank" rel="noopener" href="https://www.rosenberger.com/product/h-mtd/">罗森伯格</a>于2017年推出。该款连接器主要针对车载差分信号链路传输，是360°全屏蔽系统。</p>
+<p>H-MTD 常用于车载以太网，支持百兆和千兆以太网。</p>
+<p><img src="image-20240607211447176.png" alt="image-20240607211447176" style="zoom:50%;" /></p>
+<h3 id="MATEnet"><a href="#MATEnet" class="headerlink" title="MATEnet"></a>MATEnet</h3><p>MATEnet 连接器是用于汽车以太网的模块化和可扩展小型化数据连接器系统。根据 IEEE 100BASE‐T1 和 1000BASE‐T1 标准，它的传输效率高达 1 Gbps，如果采用替代技术，传输速率则高达 4 Gbps。基于 TE 久经考验的 NanoMQS 端子，它能够提供真正的汽车稳健性，并兼容非屏蔽双绞线 (UTP) 和屏蔽双绞线 (STP)。多用于车载以太网络。</p>
+<p><img src="image-20240607211621735.png" alt="image-20240607211621735" style="zoom:50%;" /></p>
+<h3 id="RJ45"><a href="#RJ45" class="headerlink" title="RJ45"></a>RJ45</h3><p>常用的以太网接口除了H-MTD、MATEnet 以外，不少 ADAS 模块有使用标准 RJ45 网口。</p>
+<p><img src="93627-3601_01_0922.jpg" alt="Molex 93627-3601" style="zoom: 25%;" /></p>
+<h3 id="其他线束"><a href="#其他线束" class="headerlink" title="其他线束"></a>其他线束</h3><h4 id="连接器厂商私有系列"><a href="#连接器厂商私有系列" class="headerlink" title="连接器厂商私有系列"></a>连接器厂商私有系列</h4><p>连接器厂商自行设计的线束系列，如<a target="_blank" rel="noopener" href="https://www.molex.com/en-us/products/automotive-connectivity/automotive-pcb-wire-connectors/hsautolink-connectors">Molex HSAutoLink</a> 。</p>
+<p><img src="hsautolink-connectors.jpg" alt="img" style="zoom:30%;" /></p>
+<h4 id="杜邦线"><a href="#杜邦线" class="headerlink" title="杜邦线"></a>杜邦线</h4><p>杜邦线是一种由美国杜邦公司生产的特殊效用排线，也称为缝纫线或Jumper Wire。主要用于电子行业的电路实验中，能够非常牢靠地与插针连接，无需焊接，便于快速进行电路试验。杜邦线的三种类型为：公公线、公母线、母母线。在零部件测中常用于连接接插件中的电源和信号针脚。</p>
+<p><img src="202303031029055.png" alt="img" style="zoom:50%;" /></p>
+<h4 id="插簧端子"><a href="#插簧端子" class="headerlink" title="插簧端子"></a>插簧端子</h4><p>插簧端子是一种通用型的电气连接器件,主要用于电子设备和线缆连接。在测试中通常用于连接ECU扁平的电源接口。常使用的规格为 2.8mm。</p>
+<p><img src="O1CN016dfZ061FXDGdetNNT_!!1942800496.jpg" alt="img" style="zoom:60%;" /></p>
+<h3 id="15EDG"><a href="#15EDG" class="headerlink" title="15EDG"></a>15EDG</h3><p>插拔式接线端子，以太网适配器常用规格 3.81mm。</p>
+<p> <img src="O1CN01bQ9siH1DhcozmAIFh_!!2087020248.jpg" style="zoom:33%;" /> <img src="O1CN0156SCUt1TC3hRlVr6S_!!61672345.jpg" alt="img" style="zoom:20%;" /></p>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p><img src="image-20240608121138701.png" alt="image-20240608121138701" style="zoom: 41%;" /><img src="image-20240608122558683.png" alt="image-20240608122558683" style="zoom: 53%;" /></p>
+<p><img src="image-20240608121249456.png" alt="image-20240608121249456" style="zoom:46%;" /><img src="image-20240608115214424.png" alt="image-20240608115214424" style="zoom:58%;" /></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://www.te.com">TE Connectivity: Connectors &amp; Sensors for a Connected, Sustainable Future</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.molex.com">Molex</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.rosenberger.com/product/h-mtd/">H-MTD® – High-Speed Modular Twisted-Pair Data</a></li>
+<li><a target="_blank" rel="noopener" href="http://ectsz.com/product/auto-connector/">汽车连接器-电连技术(ECT)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.amphenol-cs.cn/connectors/automotive.html">ACS汽车连接器 - amphenol安费诺官网 </a></li>
+<li><a target="_blank" rel="noopener" href="https://amphenol.com/markets/automotive?pageNumber=1&amp;pagesize=50">Automotive | Markets | Amphenol</a></li>
+</ul>
+<h3 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIzMzUxMTkzOA==&amp;mid=2247484335&amp;idx=1&amp;sn=5ce0b721a37c835c102b9ca47f337b16&amp;scene=21#wechat_redirect">车联网安全基础知识之汽车模块化平台</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIzMzUxMTkzOA==&amp;mid=2247484353&amp;idx=1&amp;sn=42a3a81878d84d482ebe31c72a6608ea&amp;scene=21#wechat_redirect">车联网安全基础知识之大众集团汽车电子电气架构</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIzMzUxMTkzOA==&amp;mid=2247484408&amp;idx=1&amp;sn=f62282b87c004362e84bff5d5f1b2e0a&amp;scene=21#wechat_redirect">车联网安全基础知识之TBOX主要功能</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIzMzUxMTkzOA==&amp;mid=2247484435&amp;idx=1&amp;sn=efabdf6e90ca0c2d76dc8c16dd816a1d&amp;scene=21#wechat_redirect">车联网安全基础知识之大众J949(OCU/T-BOX)</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIzMzUxMTkzOA==&amp;mid=2247484497&amp;idx=1&amp;sn=bcf1a440fdfc29078a86f50c8e1b351c&amp;scene=21#wechat_redirect">车联网安全基础知识之充电基础设施</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIzMzUxMTkzOA==&amp;mid=2247484543&amp;idx=1&amp;sn=64c5bd49923ee16463ec1603dcb8651c&amp;scene=21#wechat_redirect">车联网安全基础知识之从插线端子分析车内通信网络结构</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIzMzUxMTkzOA==&amp;mid=2247484554&amp;idx=1&amp;sn=6d4242a27d8e899eec1c767bbc055cf0&amp;scene=21#wechat_redirect">车联网安全基础知识之QNX命令</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIzMzUxMTkzOA==&amp;mid=2247484578&amp;idx=1&amp;sn=058ece16bac1cc64eca0dc5236d2be7a&amp;scene=21#wechat_redirect">车联网安全基础知识之测试台架购买</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIzMzUxMTkzOA==&amp;mid=2247484612&amp;idx=1&amp;sn=f215fdcfc732dfa5aa77ba85636c3c44&amp;scene=21#wechat_redirect">车联网安全基础知识之USB SPH2.0线束制作</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIzMzUxMTkzOA==&amp;mid=2247484657&amp;idx=1&amp;sn=ddca5c8cc41b2254ec33915172cd7815&amp;scene=21#wechat_redirect">车联网安全基础知识之UDS刷写前置基础知识</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/h8W_Tf8rrkj_x1drIiETLg">车联网安全基础知识之 UDS 刷写安全</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/HoYENGmv8ahX4EbTlswffg">车联网安全进阶之整车渗透测试实践</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/R7h0BB7Plyvg4afFpRm-4Q">车联网安全进阶之跨境传输检测方法与脚本</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/mPA2akY2pYXbbG59NkbAfg">车联网安全进阶之Trick——Android车机运行Python</a></li>
+</ol>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/2018/04/11/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B9%8BECU%E5%B8%B8%E8%A7%81%E6%8E%A5%E6%8F%92%E4%BB%B6-%E8%BF%9E%E6%8E%A5%E5%99%A8"><span class="toc-number">1.</span> <span class="toc-text">车联网安全基础知识之ECU常见接插件(连接器)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HSD"><span class="toc-number">1.1.</span> <span class="toc-text">HSD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HSL-High-speed-link"><span class="toc-number">1.2.</span> <span class="toc-text">HSL(High speed link )</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#USB"><span class="toc-number">1.3.</span> <span class="toc-text">USB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FAKRA-FAKRA-Mini"><span class="toc-number">1.4.</span> <span class="toc-text">FAKRA&#x2F;FAKRA-Mini</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E7%94%A8"><span class="toc-number">1.4.1.</span> <span class="toc-text">应用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%94%AF%E6%8C%81%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.4.2.</span> <span class="toc-text">支持协议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MQS-Multi-Quadlok-System"><span class="toc-number">1.5.</span> <span class="toc-text">MQS (Multi Quadlok System)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#H-MTD"><span class="toc-number">1.6.</span> <span class="toc-text">H-MTD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MATEnet"><span class="toc-number">1.7.</span> <span class="toc-text">MATEnet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RJ45"><span class="toc-number">1.8.</span> <span class="toc-text">RJ45</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E7%BA%BF%E6%9D%9F"><span class="toc-number">1.9.</span> <span class="toc-text">其他线束</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E5%99%A8%E5%8E%82%E5%95%86%E7%A7%81%E6%9C%89%E7%B3%BB%E5%88%97"><span class="toc-number">1.9.1.</span> <span class="toc-text">连接器厂商私有系列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9D%9C%E9%82%A6%E7%BA%BF"><span class="toc-number">1.9.2.</span> <span class="toc-text">杜邦线</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8F%92%E7%B0%A7%E7%AB%AF%E5%AD%90"><span class="toc-number">1.9.3.</span> <span class="toc-text">插簧端子</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#15EDG"><span class="toc-number">1.10.</span> <span class="toc-text">15EDG</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B"><span class="toc-number">1.11.</span> <span class="toc-text">实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.12.</span> <span class="toc-text">参考</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0"><span class="toc-number">1.13.</span> <span class="toc-text">系列文章</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikely.github.io/2024/06/07/ecu-connectors/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikely.github.io/2024/06/07/ecu-connectors/&text=车联网安全基础知识之ECU常见接插件(连接器)"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikely.github.io/2024/06/07/ecu-connectors/&title=车联网安全基础知识之ECU常见接插件(连接器)"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikely.github.io/2024/06/07/ecu-connectors/&is_video=false&description=车联网安全基础知识之ECU常见接插件(连接器)"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=车联网安全基础知识之ECU常见接插件(连接器)&body=Check out this article: http://delikely.github.io/2024/06/07/ecu-connectors/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikely.github.io/2024/06/07/ecu-connectors/&title=车联网安全基础知识之ECU常见接插件(连接器)"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikely.github.io/2024/06/07/ecu-connectors/&title=车联网安全基础知识之ECU常见接插件(连接器)"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikely.github.io/2024/06/07/ecu-connectors/&title=车联网安全基础知识之ECU常见接插件(连接器)"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikely.github.io/2024/06/07/ecu-connectors/&title=车联网安全基础知识之ECU常见接插件(连接器)"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikely.github.io/2024/06/07/ecu-connectors/&name=车联网安全基础知识之ECU常见接插件(连接器)&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikely.github.io/2024/06/07/ecu-connectors/&text=车联网安全基础知识之ECU常见接插件(连接器)"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2024 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/2018/04/11/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
