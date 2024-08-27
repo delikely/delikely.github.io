@@ -22,7 +22,7 @@
 <meta property="og:image" content="http://delikely.github.io/2022/10/19/DIY-USB-SPH2-0/image-20221018100617596.png">
 <meta property="og:image" content="http://delikely.github.io/2022/10/19/DIY-USB-SPH2-0/image-20221018001231089.png">
 <meta property="article:published_time" content="2022-10-19T06:12:34.000Z">
-<meta property="article:modified_time" content="2022-11-09T09:17:31.809Z">
+<meta property="article:modified_time" content="2024-08-20T15:39:57.797Z">
 <meta property="article:author" content="Delikely">
 <meta property="article:tag" content="Automotive">
 <meta name="twitter:card" content="summary">
@@ -174,7 +174,7 @@
 <li><p><strong>万用表</strong>，用来确定线序，还可以验证制作的转接线连接状态是否完好。</p>
 </li>
 </ul>
-<h3 id="分析针脚定义"><a href="#分析针脚定义" class="headerlink" title="分析针脚定义"></a>分析针脚定义</h3><p>不同厂商的针脚定义可能不同，需要我们自己分析。首先最容易的找到的就是GND，使用万用表测试四个针脚与USB金属外壳的连通性，发出蜂鸣音量的就是GND。他的对角就是VCC(自己经验总结出来的)。剩下的就是D+ 和 D-，这两个可以看板子上的连接的芯片的引脚，很多的使用的BGA封装的不好测。还有一个简单粗暴的方法，就是D+和D-随便插，然后看电脑上的反应，看能不能识别出USB设备，如果不行就交换线序。如下是这次我需要做的线束定义，如果插错了也没关系，可以使用镊子或一字螺丝刀轻轻翘起卡扣，从SPH2.0双排带扣插件中拔出错误的SPH2.0端子，重新插入对应位置即可。</p>
+<h3 id="分析针脚定义"><a href="#分析针脚定义" class="headerlink" title="分析针脚定义"></a>分析针脚定义</h3><p>不同厂商的针脚定义可能不同，需要我们自己分析。首先最容易的找到的就是GND，使用万用表测试四个针脚与USB金属外壳的连通性，发出蜂鸣音量的就是GND。他的对角就是VCC(自己经验总结出来的),但也有例外情况，可以观察布线与GND平行排列的一般为VCC。。剩下的就是D+ 和 D-，这两个可以看板子上的连接的芯片的引脚，很多的使用的BGA封装的不好测。还有一个简单粗暴的方法，就是D+和D-随便插，然后看电脑上的反应，看能不能识别出USB设备，如果不行就交换线序。如下是这次我需要做的线束定义，如果插错了也没关系，可以使用镊子或一字螺丝刀轻轻翘起卡扣，从SPH2.0双排带扣插件中拔出错误的SPH2.0端子，重新插入对应位置即可。</p>
 <p><img src="image-20221018001231089.png" alt="image-20221018001231089"></p>
 <h3 id="制作"><a href="#制作" class="headerlink" title="制作"></a>制作</h3><ol>
 <li>取一个 SPH2.0 端子</li>
