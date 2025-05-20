@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="汽车信息安全事件时间轴: timeline 漏洞 A closer look at the Mercedes-Benz infotainment system security 0-click RCE on the IVI component: Pwn2Own Automotive edition KIA-SELTOS-Cluster-Vulnerabilities: KIA SELTOS Clu">
+    <meta name="description" content="汽车信息安全事件时间轴: timeline 漏洞 CVE-2025-24132: Car-Play Devices - Zero-Click and One-Click RCE A closer look at the Mercedes-Benz infotainment system security 0-click RCE on the IVI component: Pwn2Own Autom">
 <meta property="og:type" content="article">
 <meta property="og:title" content="汽车安全">
 <meta property="og:url" content="http://delikely.github.io/2099/01/01/automotive-security/index.html">
 <meta property="og:site_name" content="Delikely&#39;s Blog">
-<meta property="og:description" content="汽车信息安全事件时间轴: timeline 漏洞 A closer look at the Mercedes-Benz infotainment system security 0-click RCE on the IVI component: Pwn2Own Automotive edition KIA-SELTOS-Cluster-Vulnerabilities: KIA SELTOS Clu">
+<meta property="og:description" content="汽车信息安全事件时间轴: timeline 漏洞 CVE-2025-24132: Car-Play Devices - Zero-Click and One-Click RCE A closer look at the Mercedes-Benz infotainment system security 0-click RCE on the IVI component: Pwn2Own Autom">
 <meta property="og:locale">
 <meta property="article:published_time" content="2099-01-01T12:00:00.000Z">
-<meta property="article:modified_time" content="2025-03-12T15:36:02.079Z">
+<meta property="article:modified_time" content="2025-05-20T15:00:59.804Z">
 <meta property="article:author" content="Delikely">
 <meta property="article:tag" content="Automotive">
 <meta name="twitter:card" content="summary">
@@ -58,13 +58,13 @@
     <span id="nav">
       <ul>
          
-          <li><a href="/">Home</a></li>
+          <li><a href="/">首页</a></li>
          
-          <li><a href="/2018/04/11/about/">About</a></li>
+          <li><a href="/2018/04/11/about/">关于</a></li>
          
-          <li><a href="/archives/">Writing</a></li>
+          <li><a href="/archives/">归档</a></li>
          
-          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">项目</a></li>
         
       </ul>
     </span>
@@ -80,10 +80,10 @@
         <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
       </ul>
-      <span id="i-prev" class="info" style="display:none;">Previous post</span>
-      <span id="i-next" class="info" style="display:none;">Next post</span>
-      <span id="i-top" class="info" style="display:none;">Back to top</span>
-      <span id="i-share" class="info" style="display:none;">Share post</span>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
     </span>
     <br/>
     <div id="share" style="display: none">
@@ -144,6 +144,7 @@
   <div class="content" itemprop="articleBody">
     <p><a href="https://delikely.github.io/Automotive-Security-Timeline/">汽车信息安全事件时间轴</a>: <a href="https://delikely.github.io/Automotive-Security-Timeline/">timeline</a></p>
 <h2 id="漏洞"><a href="#漏洞" class="headerlink" title="漏洞"></a>漏洞</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.oligo.security/blog/airborne">CVE-2025-24132: Car-Play Devices - Zero-Click and One-Click RCE</a></li>
 <li><a target="_blank" rel="noopener" href="https://securelist.com/mercedes-benz-head-unit-security-research/115218/">A closer look at the Mercedes-Benz infotainment system security</a></li>
 <li><a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/PCAutomotive/talks/5d15f49b41c7d82979fac2fb099281fe2d160cad/2024_Hexacon_0click-RCE-on-the-IVI-component-Pwn2Own-Automotive-edition.pdf">0-click RCE on the IVI component: Pwn2Own Automotive edition</a></li>
 <li><a target="_blank" rel="noopener" href="https://github.com/nitinronge91/KIA-SELTOS-Cluster-Vulnerabilities">KIA-SELTOS-Cluster-Vulnerabilities: KIA SELTOS Cluster Exploitation</a></li>
@@ -333,8 +334,8 @@
 <li><a target="_blank" rel="noopener" href="https://www.usenix.org/conference/usenixsecurity21/presentation/groza">CANARY - a reactive defense mechanism for Controller Area Networks based on Active RelaYs</a></li>
 </ul>
 <h2 id="标准"><a href="#标准" class="headerlink" title="标准"></a>标准</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=2DB552CAA58F589705C3DC7AD47AC2AB">GB 44495-2024 汽车整车信息安全技术要求</a>  <a target="_blank" rel="noopener" href="https://www.miit.gov.cn/api-gateway/jpaas-web-server/front/document/file-download?fileUrl=/cms_files/filemanager/1226211233/attach/20233/813c94607c204368aef325ffdd37f975.docx&amp;fileName=1.《汽车整车信息安全技术要求》（征求意见稿）.docx">征求意见稿</a></li>
-<li><a target="_blank" rel="noopener" href="https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=8BC0D8B44DD4E71F9557BADE5175565A">GB 44496-2024 汽车软件升级通用技术要求</a>  <a target="_blank" rel="noopener" href="https://www.miit.gov.cn/cms_files/filemanager/1226211233/attach/20226/84d58a01e7fa48f4ad873d66542f2b1d.docx">征求意见稿</a></li>
+<li><a target="_blank" rel="noopener" href="https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=2DB552CAA58F589705C3DC7AD47AC2AB">GB 44495-2024 汽车整车信息安全技术要求</a>  <a target="_blank" rel="noopener" href="https://www.miit.gov.cn/api-gateway/jpaas-web-server/front/document/file-download?fileUrl=/cms_files/filemanager/1226211233/attach/20233/813c94607c204368aef325ffdd37f975.docx&amp;fileName=1.《汽车整车信息安全技术要求》（征求意见稿）.docx">征求意见稿</a>  <a target="_blank" rel="noopener" href="https://www.basic-china.org.cn/resources/file/2025/05678157855580229.pdf">应用指南</a></li>
+<li><a target="_blank" rel="noopener" href="https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=8BC0D8B44DD4E71F9557BADE5175565A">GB 44496-2024 汽车软件升级通用技术要求</a>  <a target="_blank" rel="noopener" href="https://www.miit.gov.cn/cms_files/filemanager/1226211233/attach/20226/84d58a01e7fa48f4ad873d66542f2b1d.docx">征求意见稿</a>  <a target="_blank" rel="noopener" href="https://www.basic-china.org.cn/resources/file/2025/05/20/678157940355141.pdf">应用指南</a></li>
 <li><a target="_blank" rel="noopener" href="https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=96DC64D0633EEFBAFCA545EF906757C2">GB 44497-2024 智能网联汽车 自动驾驶数据记录系统</a></li>
 <li><a target="_blank" rel="noopener" href="https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=D63AAC0203E9B169F74B10E547A3CBCE">GB/T 44464-2024 汽车数据通用要求</a></li>
 <li>ISO 26262 Road vehicles — Functional safety</li>
@@ -420,13 +421,13 @@
     <div id="nav-footer" style="display: none">
       <ul>
          
-          <li><a href="/">Home</a></li>
+          <li><a href="/">首页</a></li>
          
-          <li><a href="/2018/04/11/about/">About</a></li>
+          <li><a href="/2018/04/11/about/">关于</a></li>
          
-          <li><a href="/archives/">Writing</a></li>
+          <li><a href="/archives/">归档</a></li>
          
-          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">项目</a></li>
         
       </ul>
     </div>
@@ -453,10 +454,10 @@
     </div>
 
     <div id="actions-footer">
-        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
-        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
-        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
-        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
     </div>
 
   </div>
@@ -471,13 +472,13 @@
     <nav>
       <ul>
          
-          <li><a href="/">Home</a></li>
+          <li><a href="/">首页</a></li>
          
-          <li><a href="/2018/04/11/about/">About</a></li>
+          <li><a href="/2018/04/11/about/">关于</a></li>
          
-          <li><a href="/archives/">Writing</a></li>
+          <li><a href="/archives/">归档</a></li>
          
-          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">项目</a></li>
         
       </ul>
     </nav>
