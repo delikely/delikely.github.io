@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="汽车信息安全事件时间轴: timeline 漏洞 CVE-2025-24132: Car-Play Devices - Zero-Click and One-Click RCE A closer look at the Mercedes-Benz infotainment system security 0-click RCE on the IVI component: Pwn2Own Autom">
+    <meta name="description" content="汽车信息安全事件时间轴: timeline 漏洞 DriveThru Car Hacking Fast Food, Faster Data Breach Slide CVE-2025-24132: Car-Play Devices - Zero-Click and One-Click RCE A closer look at the Mercedes-Benz infotainment syste">
 <meta property="og:type" content="article">
 <meta property="og:title" content="汽车安全">
 <meta property="og:url" content="http://delikely.github.io/2099/01/01/automotive-security/index.html">
 <meta property="og:site_name" content="Delikely&#39;s Blog">
-<meta property="og:description" content="汽车信息安全事件时间轴: timeline 漏洞 CVE-2025-24132: Car-Play Devices - Zero-Click and One-Click RCE A closer look at the Mercedes-Benz infotainment system security 0-click RCE on the IVI component: Pwn2Own Autom">
+<meta property="og:description" content="汽车信息安全事件时间轴: timeline 漏洞 DriveThru Car Hacking Fast Food, Faster Data Breach Slide CVE-2025-24132: Car-Play Devices - Zero-Click and One-Click RCE A closer look at the Mercedes-Benz infotainment syste">
 <meta property="og:locale">
 <meta property="article:published_time" content="2099-01-01T12:00:00.000Z">
-<meta property="article:modified_time" content="2025-05-20T15:00:59.804Z">
+<meta property="article:modified_time" content="2025-06-10T14:32:42.771Z">
 <meta property="article:author" content="Delikely">
 <meta property="article:tag" content="Automotive">
 <meta name="twitter:card" content="summary">
@@ -58,13 +58,13 @@
     <span id="nav">
       <ul>
          
-          <li><a href="/">首页</a></li>
+          <li><a href="/">Home</a></li>
          
-          <li><a href="/2018/04/11/about/">关于</a></li>
+          <li><a href="/2018/04/11/about/">About</a></li>
          
-          <li><a href="/archives/">归档</a></li>
+          <li><a href="/archives/">Writing</a></li>
          
-          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">项目</a></li>
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
         
       </ul>
     </span>
@@ -80,10 +80,10 @@
         <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
       </ul>
-      <span id="i-prev" class="info" style="display:none;">上一篇</span>
-      <span id="i-next" class="info" style="display:none;">下一篇</span>
-      <span id="i-top" class="info" style="display:none;">返回顶部</span>
-      <span id="i-share" class="info" style="display:none;">分享文章</span>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
     </span>
     <br/>
     <div id="share" style="display: none">
@@ -103,7 +103,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text">漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%85%E7%94%B5%E6%A1%A9%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.</span> <span class="toc-text">充电桩漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%BC%8F%E6%B4%9E"><span class="toc-number">3.</span> <span class="toc-text">其他漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9A%90%E7%A7%81%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%AE%89%E5%85%A8"><span class="toc-number">4.</span> <span class="toc-text">隐私与数据安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6"><span class="toc-number">5.</span> <span class="toc-text">技术研究</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%9A%E8%AE%AE"><span class="toc-number">6.</span> <span class="toc-text">会议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BA%E6%96%87"><span class="toc-number">7.</span> <span class="toc-text">论文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86"><span class="toc-number">8.</span> <span class="toc-text">标准</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%95%E8%A7%84"><span class="toc-number">9.</span> <span class="toc-text">法规</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E5%A7%94%E9%80%9A%E7%9F%A5%E5%85%AC%E5%91%8A"><span class="toc-number">10.</span> <span class="toc-text">部委通知公告</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BD%E7%9A%AE%E4%B9%A6"><span class="toc-number">11.</span> <span class="toc-text">白皮书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E5%8D%97"><span class="toc-number">12.</span> <span class="toc-text">指南</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7"><span class="toc-number">13.</span> <span class="toc-text">工具</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text">漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%85%E7%94%B5%E6%A1%A9%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.</span> <span class="toc-text">充电桩漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%BC%8F%E6%B4%9E"><span class="toc-number">3.</span> <span class="toc-text">其他漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Slides"><span class="toc-number">4.</span> <span class="toc-text">Slides</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9A%90%E7%A7%81%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%AE%89%E5%85%A8"><span class="toc-number">5.</span> <span class="toc-text">隐私与数据安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6"><span class="toc-number">6.</span> <span class="toc-text">技术研究</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%9A%E8%AE%AE"><span class="toc-number">7.</span> <span class="toc-text">会议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BA%E6%96%87"><span class="toc-number">8.</span> <span class="toc-text">论文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86"><span class="toc-number">9.</span> <span class="toc-text">标准</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%95%E8%A7%84"><span class="toc-number">10.</span> <span class="toc-text">法规</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E5%A7%94%E9%80%9A%E7%9F%A5%E5%85%AC%E5%91%8A"><span class="toc-number">11.</span> <span class="toc-text">部委通知公告</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BD%E7%9A%AE%E4%B9%A6"><span class="toc-number">12.</span> <span class="toc-text">白皮书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E5%8D%97"><span class="toc-number">13.</span> <span class="toc-text">指南</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7"><span class="toc-number">14.</span> <span class="toc-text">工具</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -144,6 +144,7 @@
   <div class="content" itemprop="articleBody">
     <p><a href="https://delikely.github.io/Automotive-Security-Timeline/">汽车信息安全事件时间轴</a>: <a href="https://delikely.github.io/Automotive-Security-Timeline/">timeline</a></p>
 <h2 id="漏洞"><a href="#漏洞" class="headerlink" title="漏洞"></a>漏洞</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://i.blackhat.com/Asia-25/Asia-25-Chen-Drive-Thru-Car-Hacking-wp.pdf">DriveThru Car Hacking Fast Food, Faster Data Breach</a> <a target="_blank" rel="noopener" href="https://i.blackhat.com/Asia-25/Asia-25-Chen-DriveThru-Car-Hacking.pdf">Slide</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.oligo.security/blog/airborne">CVE-2025-24132: Car-Play Devices - Zero-Click and One-Click RCE</a></li>
 <li><a target="_blank" rel="noopener" href="https://securelist.com/mercedes-benz-head-unit-security-research/115218/">A closer look at the Mercedes-Benz infotainment system security</a></li>
 <li><a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/PCAutomotive/talks/5d15f49b41c7d82979fac2fb099281fe2d160cad/2024_Hexacon_0click-RCE-on-the-IVI-component-Pwn2Own-Automotive-edition.pdf">0-click RCE on the IVI component: Pwn2Own Automotive edition</a></li>
@@ -245,6 +246,13 @@
 <li><a target="_blank" rel="noopener" href="https://maxwelldulin.com/BlogPost?post=5370931200">Sears Garage Door Signal Reverse Engineering</a></li>
 <li><a target="_blank" rel="noopener" href="https://github.com/closethe/AG550QCN_CommandInjection_ql_atfwd">AG550QCN模组ql_atfwd AT指令命令注入’AT+QABFOTA=“package”,1&amp;&amp;reboot’</a></li>
 </ul>
+<h2 id="Slides"><a href="#Slides" class="headerlink" title="Slides"></a>Slides</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://i.blackhat.com/Asia-25/Asia-25-Evdokimov-Remote-Exploitation-of-Nissan-Leaf.pdf">Remote Exploitation of Nissan Leaf: Controlling Critical Body Elements from the Internet</a></li>
+<li><p><a target="_blank" rel="noopener" href="https://i.blackhat.com/Asia-25/Asia-25-Cao-DoubleTap-Blackbox.pdf">Double Tap at the Blackbox Hacking a Car Remotely Twice with MiTM</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.nccgroup.com/media/h41lavk2/romhack-revving-up_the-journey-to-pwn2own-automotive-2024.pdf">Revving up the journey to pwn2own automotive 2024</a></p>
+</li>
+</ul>
 <h2 id="隐私与数据安全"><a href="#隐私与数据安全" class="headerlink" title="隐私与数据安全"></a>隐私与数据安全</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://foundation.mozilla.org/en/privacynotincluded/categories/cars/">Cars | Privacy &amp; security guide | Mozilla Foundation</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.top10vpn.com/research/electric-vehicle-privacy/">Privacy Investigation: Chinese Electric Vehicle Exports</a></li>
@@ -320,6 +328,7 @@
 <li><a target="_blank" rel="noopener" href="https://media.ccc.de/v/37c3-12144-back_in_the_driver_s_seat_recovering_critical_data_from_tesla_autopilot_using_voltage_glitching">Back in the Driver’s Seat - Recovering Critical Data from Tesla Autopilot Using Voltage Glitching</a></li>
 </ul>
 <h2 id="论文"><a href="#论文" class="headerlink" title="论文"></a>论文</h2><ul>
+<li>[FirmCAN: Sensitive CAN Knowledge Leakage from Automotive ECUs](<a target="_blank" rel="noopener" href="https://dl.acm.org/doi/pdf/10.1145/3711832">https://dl.acm.org/doi/pdf/10.1145/3711832</a></li>
 <li><a target="_blank" rel="noopener" href="https://arxiv.org/html/2406.11707">A First Physical-World Trajectory Prediction Attack via LiDAR-induced Deceptions in Autonomous Driving</a></li>
 <li><a target="_blank" rel="noopener" href="https://vincentni0107.github.io/BadVLMDriver/">Physical Backdoor Attack can Jeopardize Driving with Vision-Large-Language Models</a></li>
 <li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2311.16024">MadRadar: A Black-Box Physical Layer Attack Framework on mmWave Automotive FMCW Radars</a></li>
@@ -421,19 +430,19 @@
     <div id="nav-footer" style="display: none">
       <ul>
          
-          <li><a href="/">首页</a></li>
+          <li><a href="/">Home</a></li>
          
-          <li><a href="/2018/04/11/about/">关于</a></li>
+          <li><a href="/2018/04/11/about/">About</a></li>
          
-          <li><a href="/archives/">归档</a></li>
+          <li><a href="/archives/">Writing</a></li>
          
-          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">项目</a></li>
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
         
       </ul>
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text">漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%85%E7%94%B5%E6%A1%A9%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.</span> <span class="toc-text">充电桩漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%BC%8F%E6%B4%9E"><span class="toc-number">3.</span> <span class="toc-text">其他漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9A%90%E7%A7%81%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%AE%89%E5%85%A8"><span class="toc-number">4.</span> <span class="toc-text">隐私与数据安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6"><span class="toc-number">5.</span> <span class="toc-text">技术研究</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%9A%E8%AE%AE"><span class="toc-number">6.</span> <span class="toc-text">会议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BA%E6%96%87"><span class="toc-number">7.</span> <span class="toc-text">论文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86"><span class="toc-number">8.</span> <span class="toc-text">标准</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%95%E8%A7%84"><span class="toc-number">9.</span> <span class="toc-text">法规</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E5%A7%94%E9%80%9A%E7%9F%A5%E5%85%AC%E5%91%8A"><span class="toc-number">10.</span> <span class="toc-text">部委通知公告</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BD%E7%9A%AE%E4%B9%A6"><span class="toc-number">11.</span> <span class="toc-text">白皮书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E5%8D%97"><span class="toc-number">12.</span> <span class="toc-text">指南</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7"><span class="toc-number">13.</span> <span class="toc-text">工具</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text">漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%85%E7%94%B5%E6%A1%A9%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.</span> <span class="toc-text">充电桩漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%BC%8F%E6%B4%9E"><span class="toc-number">3.</span> <span class="toc-text">其他漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Slides"><span class="toc-number">4.</span> <span class="toc-text">Slides</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9A%90%E7%A7%81%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%AE%89%E5%85%A8"><span class="toc-number">5.</span> <span class="toc-text">隐私与数据安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6"><span class="toc-number">6.</span> <span class="toc-text">技术研究</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%9A%E8%AE%AE"><span class="toc-number">7.</span> <span class="toc-text">会议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BA%E6%96%87"><span class="toc-number">8.</span> <span class="toc-text">论文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86"><span class="toc-number">9.</span> <span class="toc-text">标准</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%95%E8%A7%84"><span class="toc-number">10.</span> <span class="toc-text">法规</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E5%A7%94%E9%80%9A%E7%9F%A5%E5%85%AC%E5%91%8A"><span class="toc-number">11.</span> <span class="toc-text">部委通知公告</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BD%E7%9A%AE%E4%B9%A6"><span class="toc-number">12.</span> <span class="toc-text">白皮书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E5%8D%97"><span class="toc-number">13.</span> <span class="toc-text">指南</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7"><span class="toc-number">14.</span> <span class="toc-text">工具</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
@@ -454,10 +463,10 @@
     </div>
 
     <div id="actions-footer">
-        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
-        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
-        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
-        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
     </div>
 
   </div>
@@ -472,13 +481,13 @@
     <nav>
       <ul>
          
-          <li><a href="/">首页</a></li>
+          <li><a href="/">Home</a></li>
          
-          <li><a href="/2018/04/11/about/">关于</a></li>
+          <li><a href="/2018/04/11/about/">About</a></li>
          
-          <li><a href="/archives/">归档</a></li>
+          <li><a href="/archives/">Writing</a></li>
          
-          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">项目</a></li>
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
         
       </ul>
     </nav>
